@@ -4,7 +4,7 @@
 <p align="center">
     <a href="https://Lexxy24.github.io">
         <img
-            src="https://readme-typing-svg.herokuapp.com?size=15&width=280&lines=Created+By+Lexxy+Official+🇲🇨"
+            src="https://readme-typing-svg.herokuapp.com?size=15&width=280&lines=Created+By+Lexxy+Official+🙏"
             alt="YT Lexxy Official"
         />
     </a>
