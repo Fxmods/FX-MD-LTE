@@ -1,15 +1,16 @@
-g src="https://telegra.ph/file/8c988b0bd80b582673019.jpg" alt="LEXXY BOT" width="200"/>
+<p align="center">
+<img src="https://telegra.ph/file/8c988b0bd80b582673019.jpg" alt="LEXXY BOT" width="200"/>
 
 <p align="center">
     <a href="https://Lexxy24.github.io">
         <img
             src="https://readme-typing-svg.herokuapp.com?size=15&width=280&lines=Created+By+Lexxy+Official+🌐"
-            alt="Lexxy Official"
+            alt="YT Lexxy Official"
         />
     </a>
 </p>
 
-# BOTV13
+# BOTWA-MD
 ## Heroku Buildpack
 
 Click the deploy icon below !
