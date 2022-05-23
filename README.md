@@ -37,3 +37,10 @@ Click the deploy icon below !
 > yarn
 > npm start
 ```
+
+# My Sosial
+- [Group 1](https://chat.whatsapp.com/CT5mUKSNRmMB3yuNfjGPso)
+- [Group 2](https://chat.whatsapp.com/E3zewfxrc5pKE6Rzb3BuqG)
+- [Group 3](https://chat.whatsapp.com/EDYV3OK6wHaDAb6J1iMnUa)
+- [YouTube ](https://youtube.com/c/LEX4YOUU)
+- [Whatsapp ](https://wa.me/6285789004732)
