@@ -10,7 +10,7 @@
     </a>
 </p>
 
-# BOTWA-MD2022
+# BOTWA >(MULTI-DEVICE)
 ## Heroku Buildpack
 
 Click the deploy icon below !
