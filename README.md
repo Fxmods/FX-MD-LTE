@@ -38,6 +38,14 @@ Click the deploy icon below !
 > npm start
 ```
 
+## RDP/VPS
+```bash
+> git clone https://github.com/Lexxy24/BOTMD.git
+> cd BOTMD
+> npm install
+> npm start
+```
+
 # My Sosial
 - [Group Bot Wa 1](https://chat.whatsapp.com/CT5mUKSNRmMB3yuNfjGPso)
 - [Group Bot Wa 2](https://chat.whatsapp.com/E3zewfxrc5pKE6Rzb3BuqG)
