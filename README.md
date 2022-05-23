@@ -10,7 +10,7 @@
     </a>
 </p>
 
-# BOTWA-MD
+# BOTWA-MD2022
 ## Heroku Buildpack
 
 Click the deploy icon below !
@@ -23,7 +23,7 @@ Click the deploy icon below !
  > https://github.com/clhuang/heroku-buildpack-webp-binaries.git
 ```
 
-## Termux
+## TERMUX USER
 ```bash
 > pkg update && pkg upgrade
 > pkg install nodejs
@@ -38,8 +38,9 @@ Click the deploy icon below !
 > npm start
 ```
 
-## RDP/VPS
-```bash > git clone https://github.com/Lexxy24/BOTMD.git
+## RDP/VPS USER
+```bash 
+> git clone https://github.com/Lexxy24/BOTMD.git
 > cd BOTMD
 > npm install
 > npm start
