@@ -1,3 +1,6 @@
+# BOT WHATSAPP
+## (MULTI-DEVICE)
+
 <p align="center">
 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGJDcHPHsij7anNGZCHUw3xdzpsjSOWm17d_U7rFrXxpoxESk1tEbwJ_Zk&s=10" alt="LEXXY BOT" width="200"/>
 
@@ -10,8 +13,6 @@
     </a>
 </p>
 
-# BOT WHATSAPP
-## (MULTI-DEVICE)
 ## Heroku Buildpack
 
 Click the deploy icon below !
