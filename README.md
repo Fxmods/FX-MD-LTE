@@ -39,8 +39,7 @@ Click the deploy icon below !
 ```
 
 ## RDP/VPS
-```bash
-> git clone https://github.com/Lexxy24/BOTMD.git
+```bash > git clone https://github.com/Lexxy24/BOTMD.git
 > cd BOTMD
 > npm install
 > npm start
