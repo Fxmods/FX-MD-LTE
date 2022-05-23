@@ -25,14 +25,13 @@ Click the deploy icon below !
 
 ## Termux
 ```bash
-> pkg install bash
+> pkg update && pkg upgrade
 > pkg install nodejs
 > pkg install libwebp
 > pkg install git
 > pkg install ffmpeg
 > pkg install yarn
 > termux-setup-storage
-> cd /sdcard/v13
 > git clone https://github.com/Lexxy24/BOTMD.git
 > cd BOTMD
 > yarn
