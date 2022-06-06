@@ -1587,8 +1587,8 @@ break
         break
             case 'emojimix': {
 		let [emoji1, emoji2] = text.split`+`
-		if (!emoji1) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 😅+🤔`
-		if (!emoji2) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 😅+🤔`
+		if (!emoji1) throw `Example : ${prefix + command} 😅+🤔`
+		if (!emoji2) throw `Example : ${prefix + command} 😅+🤔`
 		let anu = await fetchJson(`https://tenor.googleapis.com/v2/featured?key=AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ&contentfilter=high&media_filter=png_transparent&component=proactive&collection=emoji_kitchen_v5&q=${encodeURIComponent(emoji1)}_${encodeURIComponent(emoji2)}`)
 		for (let res of anu.results) {
 		    let encmedia = await kagura.sendImageAsSticker(m.chat, res.url, m, { packname: global.packname, author: global.author, categories: res.tags })
@@ -1597,7 +1597,7 @@ break
 	    }
 	    break
 	    case 'emojimix2': {
-	    if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 😅`
+	    if (!text) throw `Example : ${prefix + command} 😅`
 		let anu = await fetchJson(`https://tenor.googleapis.com/v2/featured?key=AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ&contentfilter=high&media_filter=png_transparent&component=proactive&collection=emoji_kitchen_v5&q=${encodeURIComponent(text)}`)
 		for (let res of anu.results) {
 		    let encmedia = await kagura.sendImageAsSticker(m.chat, res.url, m, { packname: global.packname, author: global.author, categories: res.tags })
@@ -1606,13 +1606,13 @@ break
 	    }
 	    break
 	       case 'attp': case 'ttp': {
-           if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
+           if (!text) throw `Example : ${prefix + command} text`
            await kagura.sendMedia(m.chat, `https://xteam.xyz/${command}?file&text=${text}`, 'kagura', 'morou', m, {asSticker: true})
 
          }
          break
 	       case 'smeme': case 'stickmeme': case 'stikmeme': case 'stickermeme': case 'stikermeme': {
-	        let respond = `Menciona una imagen/sticker con el mensaje ${prefix + command} text1|text2`
+	        let respond = `Kirim/reply image/sticker dengan caption ${prefix + command} text1|text2`
 	        if (!/image/.test(mime)) throw respond
             if (!text) throw respond
 	        m.reply(mess.wait)
@@ -1627,14 +1627,14 @@ break
             }
 	       break     
 	        case 'simih': case 'simisimi': {
-            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
+            if (!text) throw `Example : ${prefix + command} text`
             hm = await fetchJson(api('zenz', '/api/simisimi', { text : text }, 'apikey'))
             m.reply(hm.result.message)
             }
             break
             case 'toimage': case 'toimg': {
-                if (!quoted) throw 'Responde a una imagen.'
-                if (!/webp/.test(mime)) throw `Menciona un sticker con el mensaje *${prefix + command}*`
+                if (!quoted) throw 'Reply Image'
+                if (!/webp/.test(mime)) throw `Balas sticker dengan caption *${prefix + command}*`
                 m.reply(mess.wait)
                 let media = await kagura.downloadAndSaveMediaMessage(quoted)
                 let ran = await getRandom('.png')
@@ -1648,8 +1648,8 @@ break
             }
             break
 	        case 'tomp4': case 'tovideo': {
-                if (!quoted) throw 'Responde a una imagen.'
-                if (!/webp/.test(mime)) throw `Menciona un sticker con el mensaje *${prefix + command}*`
+                if (!quoted) throw 'Reply Image'
+                if (!/webp/.test(mime)) throw `balas stiker dengan caption *${prefix + command}*`
                 m.reply(mess.wait)
 		let { webp2mp4File } = require('./lib/uploader')
                 let media = await kagura.downloadAndSaveMediaMessage(quoted)
@@ -1659,8 +1659,8 @@ break
             }
             break
             case 'toaud': case 'toaudio': {
-            if (!/video/.test(mime) && !/audio/.test(mime)) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
-            if (!quoted) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
+            if (!/video/.test(mime) && !/audio/.test(mime)) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan Audio Dengan Caption ${prefix + command}`
+            if (!quoted) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan Audio Dengan Caption ${prefix + command}`
             m.reply(mess.wait)
             let media = await quoted.download()
             let { toAudio } = require('./lib/converter')
@@ -1669,9 +1669,9 @@ break
             }
             break
             case 'tomp3': {
-            if (/document/.test(mime)) throw `Responde a un Video/Audio que quieras convertir en MP3`
-            if (!/video/.test(mime) && !/audio/.test(mime)) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
-            if (!quoted) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
+            if (/document/.test(mime)) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`
+            if (!/video/.test(mime) && !/audio/.test(mime)) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`
+            if (!quoted) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`
             m.reply(mess.wait)
             let media = await quoted.download()
             let { toAudio } = require('./lib/converter')
@@ -1680,8 +1680,8 @@ break
             }
             break
             case 'tovn': case 'toptt': {
-            if (!/video/.test(mime) && !/audio/.test(mime)) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
-            if (!quoted) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
+            if (!/video/.test(mime) && !/audio/.test(mime)) throw `Reply Video/Audio Yang Ingin Dijadikan VN Dengan Caption ${prefix + command}`
+            if (!quoted) throw `Reply Video/Audio Yang Ingin Dijadikan VN Dengan Caption ${prefix + command}`
             m.reply(mess.wait)
             let media = await quoted.download()
             let { toPTT } = require('./lib/converter')
@@ -1690,8 +1690,8 @@ break
             }
             break
             case 'togif': {
-                if (!quoted) throw 'Responde a una imagen'
-                if (!/webp/.test(mime)) throw `Responde a*${prefix + command}*`
+                if (!quoted) throw 'Reply Image'
+                if (!/webp/.test(mime)) throw `balas stiker dengan caption *${prefix + command}*`
                 m.reply(mess.wait)
 		let { webp2mp4File } = require('./lib/uploader')
                 let media = await kagura.downloadAndSaveMediaMessage(quoted)
@@ -1715,9 +1715,9 @@ break
             }
             break
             case 'imagenobg': case 'removebg': case 'remove-bg': {
-	    if (!quoted) throw `Responde a una Imagen con el mensaje ${prefix + command}`
-	    if (!/image/.test(mime)) throw `Responde a una Imagen con el mensaje ${prefix + command}`
-	    if (/webp/.test(mime)) throw `Responde a una Imagen con el mensaje ${prefix + command}`
+	    if (!quoted) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
+	    if (!/image/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
+	    if (/webp/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
 	    let remobg = require('remove.bg')
 	    let apirnobg = ['q61faXzzR5zNU6cvcrwtUkRU','S258diZhcuFJooAtHTaPEn4T','5LjfCVAp4vVNYiTjq9mXJWHF','aT7ibfUsGSwFyjaPZ9eoJc61','BY63t7Vx2tS68YZFY6AJ4HHF','5Gdq1sSWSeyZzPMHqz7ENfi8','86h6d6u4AXrst4BVMD9dzdGZ','xp8pSDavAgfE5XScqXo9UKHF','dWbCoCb3TacCP93imNEcPxcL']
 	    let apinobg = apirnobg[Math.floor(Math.random() * apirnobg.length)]
@@ -1740,43 +1740,45 @@ break
 	    }
 	    break
 	    case 'yts': case 'ytsearch': {
-                if (!text) throw `Example : ${prefix + command} Anime edit`
+                if (!text) throw `Example : ${prefix + command} story wa anime`
                 let yts = require("yt-search")
                 let search = await yts(text)
                 let teks = 'YouTube Search\n\n Result From '+text+'\n\n'
                 let no = 1
                 for (let i of search.all) {
-                    teks += `⭔ No : ${no++}\n⭔ Tipo : ${i.type}\n⭔ Video ID : ${i.videoId}\n⭔ Titull : ${i.title}\n⭔ Vistas : ${i.views}\n⭔ Duración : ${i.timestamp}\n⭔ Fecha de Publicación : ${i.ago}\n⭔ Autor : ${i.author.name}\n⭔ Enlace : ${i.url}\n\n─────────────────\n\n`
+                    teks += `⭔ No : ${no++}\n⭔ Type : ${i.type}\n⭔ Video ID : ${i.videoId}\n⭔ Title : ${i.title}\n⭔ Views : ${i.views}\n⭔ Duration : ${i.timestamp}\n⭔ Upload At : ${i.ago}\n⭔ Author : ${i.author.name}\n⭔ Url : ${i.url}\n\n─────────────────\n\n`
                 }
                 kagura.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: teks }, { quoted: m })
             }
             break
         case 'google': {
-                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} Anime`
+                if (!text) throw `Example : ${prefix + command} fatih arridho`
                 let google = require('google-it')
                 google({'query': text}).then(res => {
-                let teks = `🔎 *Busqueda* : ${text}\n\n`
+                let teks = `Google Search From : ${text}\n\n`
                 for (let g of res) {
-                teks += `📌 *Titulo* : ${g.title}\n`
-                teks += `🏷️ *Descripcion* : ${g.snippet}\n`
-                teks += `📎 *Enlace* : ${g.link}\n\n────────────────────────\n\n`
+                teks += `⭔ *Title* : ${g.title}\n`
+                teks += `⭔ *Description* : ${g.snippet}\n`
+                teks += `⭔ *Link* : ${g.link}\n\n────────────────────────\n\n`
                 } 
                 m.reply(teks)
                 })
                 }
                 break
         case 'gimage': {
-        if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} Anime Demon Slayer`
+        if (!text) throw `Example : ${prefix + command} kaori cicak`
         let gis = require('g-i-s')
         gis(text, async (error, result) => {
         n = result
         images = n[Math.floor(Math.random() * n.length)].url
-        let buttons = [{buttonId: `gimage ${text}`, buttonText: {displayText: '𝘚𝘐𝘎𝘜𝘐𝘌𝘕𝘛𝘌 ⏩'}, type: 1}
+        let buttons = [
+                    {buttonId: `gimage ${text}`, buttonText: {displayText: 'Next Image'}, type: 1}
                 ]
                 let buttonMessage = {
                     image: { url: images },
-                    caption: `*-------「 GIMAGE BUSQUEDA 」-------*
-🔗 *Enlace* : ${images}`,
+                    caption: `*-------「 GIMAGE SEARCH 」-------*
+🤠 *Query* : ${text}
+🔗 *Media Url* : ${images}`,
                     footer: kagura.user.name,
                     buttons: buttons,
                     headerType: 4
