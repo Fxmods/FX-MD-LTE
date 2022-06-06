@@ -12,32 +12,32 @@ global.APIKeys = {
 }
 
 // Other
-global.owner = ['6283160624440','6282279915237']
-global.premium = ['6282279915237']
-global.botname = 'Feyza Botz'
-global.ownername = 'Feyza Botz'
-global.packname = 'Feyza'
-global.author = 'WhatsApp Bot'
+global.owner = ['529984646983']
+global.premium = ['529984646983']
+global.botname = '🚀 ᭄𝐹𝑋 𝐵𝑜𝑡'
+global.ownername = '✨ 𝘐𝘮 𝘍𝘦𝘭𝘪𝘹 ✨'
+global.packname = '✨ 𝘐𝘮 𝘍𝘦𝘭𝘪𝘹 ✨'
+global.author = 'FX - BOT'
 global.sessionName = 'session'
 global.prefa = ['','!','.','🐦','🐤','🗿']
 global.sp = '⭔'
 global.mess = {
 success: '✓ Success',
-admin: 'Fitur Khusus Admin Group!',
-botAdmin: 'Bot Harus Menjadi Admin Terlebih Dahulu!',
-owner: 'Fitur Khusus Owner Bot',
-group: 'Fitur Digunakan Hanya Untuk Group!',
-private: 'Fitur Digunakan Hanya Untuk Private Chat!',
-bot: 'Fitur Khusus Pengguna Nomor Bot',
-wait: 'Loading...',
-endLimit: 'Limit Harian Anda Telah Habis, Limit Akan Direset Setiap Jam 12',
+admin: '            ｢ *NO ERES ADMINISTRADOR* ｣\n\n_Lo siento, para poder utilizar este comando necesitas ser un administrador del grupo._',
+botAdmin: '     ｢ *EL BOT NO ES UN ADMINISTRADOR* ｣\n\n_Lo siento, para poder utilizar este comando el bot necesita ser un administrador del grupo._',
+owner: '                        ｢ *SOLO DUEÑOS* ｣\n\n_Lo siento, este comando solo esta disponible para los desarrolladores de FX - BOT._',
+group: '                           ｢ *SOLO GRUPOS* ｣\n\n_Lo siento, este comando solo esta disponible para grupos._',
+private: '                     ｢ *SOLO EN PRIVADO* ｣\n\n_Lo siento, este comando solo esta disponible en chats privados._',
+bot: '                               ｢ *S E L F* ｣\n\n_Lo siento, este comando solo esta disponible desde el número del bot._',
+    wait: '             ｢ *ESPERA UN MOMENTO* ｣\n\n_Espere un momento, procesando su solicitud._',
+endLimit: 'Su límite diario ha expirado, el límite se restablecerá cada 12 horas',
 }
 global.limitawal = {
 premium: "Infinity",
 free: 20
 }
 global.thumb = fs.readFileSync('./media/thumb.jpg')
-global.visoka = { url: 'https://telegra.ph/file/15209657f9d4f59c7ca1e.mp4' }
+global.visoka = { url: 'https://a.uguu.se/llXUljgB.mp4' }
 
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {
