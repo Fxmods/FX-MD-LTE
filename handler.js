@@ -94,9 +94,9 @@ module.exports = kagura = async (kagura, m, chatUpdate, store) => {
 	    if (setting) {
 		if (!isNumber(setting.status)) setting.status = 0
 		if (!('autobio' in setting)) setting.autobio = false
-		if (!('templateImage' in setting)) setting.templateImage = true
+		if (!('templateImage' in setting)) setting.templateImage = false 
 		if (!('templateVideo' in setting)) setting.templateVideo = false
-		if (!('templateGif' in setting)) setting.templateGif = false
+		if (!('templateGif' in setting)) setting.templateGif = true
 		if (!('templateMsg' in setting)) setting.templateMsg = false	
 	    } else global.db.data.settings[botNumber] = {
 		status: 0,
@@ -3019,10 +3019,10 @@ let capt = `⭔ Title: ${judul}
                 {
                 title: "CHANGE MENU BOT",
                 rows: [
-                {title: "Template Image", rowId: `setmenu templateImage`, description: `Change menu bot to Template Image`},
-                {title: "Template Video", rowId: `setmenu templateVideo`, description: `Change menu bot to Template Video`},
-                {title: "Template Gif", rowId: `setmenu templateGif`, description: `Change menu bot to Template Gif`},
-                {title: "Template Message", rowId: `setmenu templateMessage`, description: `Change menu bot to Template Message`}
+                {title: "Template Image", rowId: `setmenu templateImage`, description: `\nChange menu bot to Template Image`},
+                {title: "Template Video", rowId: `setmenu templateVideo`, description: `\nChange menu bot to Template Video`},
+                {title: "Template Gif", rowId: `setmenu templateGif`, description: `\nChange menu bot to Template Gif`},
+                {title: "Template Message", rowId: `setmenu templateMessage`, description: `\nChange menu bot to Template Message`}
                 ]
                 },
                 ]
@@ -3062,19 +3062,35 @@ case 'fiturlist': {
             }
             break
             case 'list': case 'menu': case 'help': case '?': {
-                anu = `Selamat ${salam} ${pushname} 👋
-Saya *${botname}*, Bot Ini Adalah Beta Multi-Device WhatsApp.
-Jika Ada Fitur Error Atau Bug Segera Lapor Ke Owner Bot
+                anu = `
+¡Hola! ${salam} ${pushname} 👋
+
+Bienvenido al menu, mi nombre es ${botname}.
+
+𝑭𝒆𝒍𝒊𝒛 𝒆𝒔 𝒂𝒒𝒖𝒆𝒍 𝒒𝒖𝒆 𝒂 𝒂𝒑𝒓𝒆𝒏𝒅𝒊𝒅𝒐 𝒂 𝒂𝒅𝒎𝒊𝒓𝒂𝒓 𝒚 𝒏𝒐 𝒂 𝒆𝒏𝒗𝒊𝒅𝒊𝒂𝒓... 🥀
 ──────────────
-  _> *INFO BOT*_
-👑 Creator : *Lexxy Official*
+ _<𝖨𝗇𝖿𝗈 𝖣𝖾𝗅 𝖡𝗈𝗍>_
+👑 Creator : *𝘐𝘮 𝘍𝘦𝘭𝘪𝘹*
 👤 Owner : *${ownername}*
 🤖 Bot Name : *${botname}*
-📑 Tanggal : *${tanggal}*
-⏰ Waktu : *${time}*
+📑 Fecha : *${tanggal}*
+⏰ Hora : *${time}*
 🗒 ️Prefix : *Multi Prefix*
 ──────────────
- ❏ *Group Menu*
+▢ *𝖬𝖾𝗇𝗎 𝖯𝗋𝗂𝗇𝖼𝗂𝗉𝖺𝗅*
+• #ping
+• #owner
+• #menu
+• #help
+• #delete
+• #infochat
+• #quoted
+• #listpc
+• #listgc
+• #listonline
+• #speedtest
+
+ ▢ *𝖬𝖾𝗇𝗎 𝖯𝖺𝗋𝖺 𝖦𝗋𝗎𝗉𝗈𝗌*
 • #linkgroup
 • #ephemeral [option]
 • #setppgc [image]
@@ -3096,20 +3112,7 @@ Jika Ada Fitur Error Atau Bug Segera Lapor Ke Owner Bot
 • #cekvote
 • #hapusvote
  
- ❏ *Main Menu*
-• #ping
-• #owner
-• #menu
-• #help
-• #delete
-• #infochat
-• #quoted
-• #listpc
-• #listgc
-• #listonline
-• #speedtest
- 
- ❏ *Owner Menu*
+ ▢ *𝖣𝗎𝖾𝗇̃𝗈𝗌 & 𝖣𝖾𝗌𝖺𝗋𝗋𝖺𝗅𝗅𝖺𝖽𝗈𝗋𝖾𝗌*
 • #react [emoji]
 • #chat [option]
 • #join [link]
@@ -3122,7 +3125,7 @@ Jika Ada Fitur Error Atau Bug Segera Lapor Ke Owner Bot
 • #setexif
 • #setmenu [option]
 
- ❏ *Webzone Menu*
+ ▢ *𝖶𝖾𝖻 𝖬𝖾𝗇𝗎*
 • #playstore
 • #gsmarena
 • #jadwalbioskop
@@ -3132,7 +3135,7 @@ Jika Ada Fitur Error Atau Bug Segera Lapor Ke Owner Bot
 • #webtoons
 • #drakor
 
- ❏ *Downloader Menu*
+ ▢ *𝖬𝖾𝗇𝗎 𝖣𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗌*
 • #tiktoknowm [url]
 • #tiktokwm [url]
 • #tiktokmp3 [url]
@@ -3149,7 +3152,7 @@ Jika Ada Fitur Error Atau Bug Segera Lapor Ke Owner Bot
 • #joox [query]
 • #soundcloud [url]
 
- ❏ *Search Menu*
+ ▢ *𝖬𝖾𝗇𝗎 𝖡𝗎𝗌𝗊𝗎𝖾𝖽𝖺*
 • #play [query]
 • #yts [query]
 • #google [query]
@@ -3161,7 +3164,7 @@ Jika Ada Fitur Error Atau Bug Segera Lapor Ke Owner Bot
 • #ringtone [query]
 • #stalk [option] [query]
 
- ❏ *Random Menu*
+ ▢ *𝖱𝖺𝗇𝖽𝗈𝗆 𝖬𝖾𝗇𝗎*
 • #coffe
 • #quotesanime
 • #motivasi
@@ -3180,7 +3183,7 @@ Jika Ada Fitur Error Atau Bug Segera Lapor Ke Owner Bot
 • #trap (nsfw)
 • #blowjob (nsfw)
 
- ❏ *Text Pro Menu*
+ ▢ *𝖳𝖾𝗑𝗍𝖯𝖱𝖮 𝖬𝖾𝗇𝗎*
 • #3dchristmas
 • #3ddeepsea
 • #americanflag
@@ -3213,7 +3216,7 @@ Jika Ada Fitur Error Atau Bug Segera Lapor Ke Owner Bot
 • #blackpink
 • #gluetext
 
- ❏ *Photo Oxy Menu*
+ ▢ *𝖯𝗁𝗈𝗍𝗈𝖮𝖷𝖸 𝖬𝖾𝗇𝗎*
 • #shadow
 • #romantic
 • #smoke
@@ -3227,7 +3230,7 @@ Jika Ada Fitur Error Atau Bug Segera Lapor Ke Owner Bot
 • #harrypotter
 • #retrolol
 
- ❏ *Ephoto Menu*
+ ▢ *𝖤𝖯𝗁𝗈𝗍𝗈 𝖬𝖾𝗇𝗎*
 • #ffcover
 • #crossfire
 • #galaxy
@@ -3238,7 +3241,7 @@ Jika Ada Fitur Error Atau Bug Segera Lapor Ke Owner Bot
 • #igcertificate
 • #ytcertificate
 
- ❏ *Fun Menu*
+ ▢ *𝖥𝗎𝗇 𝖬𝖾𝗇𝗎*
 • #simih
 • #halah
 • #hilih
@@ -3254,39 +3257,7 @@ Jika Ada Fitur Error Atau Bug Segera Lapor Ke Owner Bot
 • #math [mode]
 • #suitpvp [@tag]
 
- ❏ *Primbon Menu*
-• #nomorhoki
-• #artimimpi
-• #artinama
-• #ramaljodoh
-• #ramaljodohbali
-• #suamiistri
-• #ramalcinta
-• #cocoknama
-• #pasangan
-• #jadiannikah
-• #sifatusaha
-• #rezeki
-• #pekerjaan
-• #nasib
-• #penyakit
-• #tarot
-• #fengshui
-• #haribaik
-• #harisangar
-• #harisial
-• #nagahari
-• #arahrezeki
-• #peruntungan
-• #weton
-• #karakter
-• #keberuntungan
-• #memancing
-• #masasubur
-• #zodiak
-• #shio
-
- ❏ *Convert Menu*
+ ▢ *𝖢𝗋𝖾𝖺𝗍𝗈𝗋 𝖬𝖾𝗇𝗎*
 • #attp
 • #ttp
 • #toimage
@@ -3305,7 +3276,7 @@ Jika Ada Fitur Error Atau Bug Segera Lapor Ke Owner Bot
 • #styletext
 • #smeme
 
- ❏ *Database Menu*
+ ▢ *𝖣𝖺𝗍𝖺𝖻𝖺𝗌𝖾 𝖬𝖾𝗇𝗎*
 • #setcmd
 • #listcmd
 • #delcmd
@@ -3315,20 +3286,13 @@ Jika Ada Fitur Error Atau Bug Segera Lapor Ke Owner Bot
 • #getmsg
 • #delmsg
 
- ❏ *Anonymous Menu*
+ ▢ *𝖠𝗇𝗈𝗇𝗒𝗆𝗈𝗎𝗌 𝖬𝖾𝗇𝗎*
 • #anonymous
 • #start
 • #next
 • #keluar
 
- ❏ *Islamic Menu*
-• #iqra
-• #hadist
-• #alquran
-• #juzamma
-• #tafsirsurah
-
- ❏ *Voice Changer*
+ ▢ *𝖤𝖽𝗂𝗍𝗈𝗋 𝖣𝖾 𝖵𝗈𝗓*
 • #bass
 • #blown
 • #deep
@@ -3343,39 +3307,39 @@ Jika Ada Fitur Error Atau Bug Segera Lapor Ke Owner Bot
 `
                 let btn = [{
                                 urlButton: {
-                                    displayText: 'Source Code',
-                                    url: 'https://github.com/Lexxy24/KaguraMD'
+                                    displayText: '𝘐𝘯𝘴𝘵𝘢𝘨𝘳𝘢𝘮',
+                                    url: 'https://instagram.com/im.felix409'
                                 }
                             }, {
-                                callButton: {
-                                    displayText: 'Number Phone Owner',
-                                    phoneNumber: '+62 822-7991-5237'
+                                urlButton: {
+                                    displayText: '𝘗𝘢𝘺𝘗𝘢𝘭',
+                                    url: 'https://www.paypal.com/paypalme/felixcrack409'
                                 }
                             },{
                                 quickReplyButton: {
-                                    displayText: 'Status Bot',
+                                    displayText: '🚀 𝘚𝘱𝘦𝘦𝘥',
                                     id: 'ping'
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Contact Owner',
+                                    displayText: '👑 𝘖𝘸𝘯𝘦𝘳',
                                     id: 'owner'
                                 }  
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'List Menu',
-                                    id: 'fiturlist'
+                                    displayText: '📌 𝘚𝘤𝘳𝘪𝘱𝘵',
+                                    id: 'redessociales'
                                 }
                             }]
                          let setbot = db.data.settings[botNumber]
                         if (setbot.templateImage) {
-                        kagura.send5ButImg(m.chat, anu, `© 𝘊𝘳𝘦𝘢𝘵𝘦𝘥 𝘉𝘺 𝘓𝘦𝘹𝘹𝘺 𝘖𝘧𝘧𝘪𝘤𝘪𝘢𝘭`, global.thumb, btn)
+                        kagura.send5ButImg(m.chat, anu, `© 𝘍𝘟𝘛𝘦𝘢𝘮 || 𝘐𝘮 𝘍𝘦𝘭𝘪𝘹𝘹𝘹𝘹𝘹`, global.thumb, btn)
                         } else if (setbot.templateGif) {
-                        kagura.send5ButGif(m.chat, anu, `© 𝘊𝘳𝘦𝘢𝘵𝘦𝘥 𝘉𝘺 𝘓𝘦𝘹𝘹𝘺 𝘖𝘧𝘧𝘪𝘤𝘪𝘢𝘭`, global.visoka, btn)
+                        kagura.send5ButGif(m.chat, anu, `© 𝘍𝘟𝘛𝘦𝘢𝘮 || 𝘐𝘮 𝘍𝘦𝘭𝘪𝘹𝘹𝘹𝘹𝘹`, global.visoka, btn)
                         } else if (setbot.templateVid) {
-                        kagura.send5ButVid(m.chat, anu, `© 𝘊𝘳𝘦𝘢𝘵𝘦𝘥 𝘉𝘺 𝘓𝘦𝘹𝘹𝘺 𝘖𝘧𝘧𝘪𝘤𝘪𝘢𝘭`, global.visoka, btn)
+                        kagura.send5ButVid(m.chat, anu, `© 𝘍𝘟𝘛𝘦𝘢𝘮 || 𝘐𝘮 𝘍𝘦𝘭𝘪𝘹𝘹𝘹𝘹𝘹`, global.visoka, btn)
                         } else if (setbot.templateMsg) {
-                        kagura.send5ButMsg(m.chat, anu, `© 𝘊𝘳𝘦𝘢𝘵𝘦𝘥 𝘉𝘺 𝘓𝘦𝘹𝘹𝘺 𝘖𝘧𝘧𝘪𝘤𝘪𝘢𝘭`, btn)
+                        kagura.send5ButMsg(m.chat, anu, `© 𝘍𝘟𝘛𝘦𝘢𝘮 || 𝘐𝘮 𝘍𝘦𝘭𝘪𝘹𝘹𝘹𝘹𝘹`, btn)
                         }
                      }
             break
