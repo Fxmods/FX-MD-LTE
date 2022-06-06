@@ -982,36 +982,22 @@ break
             }
             break
             case 'kuismath': case 'math': {
-                if (kuismath.hasOwnProperty(m.sender.split('@')[0])) throw "Masih Ada Sesi Yang Belum Diselesaikan!"
+                if (kuismath.hasOwnProperty(m.sender.split('@')[0])) throw "¡Aun no se responde la pregunta anterior!"
                 let { genMath, modes } = require('./src/math')
-                if (!text) throw `Mode: ${Object.keys(modes).join(' | ')}\nContoh penggunaan: ${prefix}math medium`
+                if (!text) throw `Seleccione un modo de juego : ${Object.keys(modes).join(' | ')}\nEjemplo : ${prefix}math medium`
                 let result = await genMath(text.toLowerCase())
-                kagura.sendText(m.chat, `*Berapa hasil dari: ${result.soal.toLowerCase()}*?\n\nWaktu: ${(result.waktu / 1000).toFixed(2)} detik`, m).then(() => {
+                kagura.sendText(m.chat, `*¿Cuál es el resultado de : ${result.soal.toLowerCase()}?*\n\nTiempo : ${(result.waktu / 1000).toFixed(2)} segundos`, m).then(() => {
                     kuismath[m.sender.split('@')[0]] = result.jawaban
                 })
                 await sleep(result.waktu)
                 if (kuismath.hasOwnProperty(m.sender.split('@')[0])) {
-                    console.log("Jawaban: " + result.jawaban)
-                    m.reply("Waktu Habis\nJawaban: " + kuismath[m.sender.split('@')[0]])
+                    console.log("Respuesta: " + result.jawaban)
+                    m.reply("El tiempo se ha acabado\nLa respuesta era : " + kuismath[m.sender.split('@')[0]])
                     delete kuismath[m.sender.split('@')[0]]
                 }
             }
             break
-            case 'jodohku': {
-            if (!m.isGroup) throw mess.group
-            let member = participants.map(u => u.id)
-            let me = m.sender
-            let jodoh = member[Math.floor(Math.random() * member.length)]
-            let jawab = `👫Jodoh mu adalah
-
-@${me.split('@')[0]} ❤️ @${jodoh.split('@')[0]}`
-            let ments = [me, jodoh]
-            let buttons = [
-                        { buttonId: 'jodohku', buttonText: { displayText: 'Jodohku' }, type: 1 }
-                    ]
-                    await kagura.sendButtonText(m.chat, buttons, jawab, kagura.user.name, m, {mentions: ments})
-            }
-            break
+             
             case 'jadian': {
             if (!m.isGroup) throw mess.group
             let member = participants.map(u => u.id)
@@ -1040,8 +1026,8 @@ break
             break  
             case 'join': {
                 if (!isCreator) throw mess.owner
-                if (!text) throw 'Masukkan Link Group!'
-                if (!isUrl(args[0]) && !args[0].includes('whatsapp.com')) throw 'Link Invalid!'
+                if (!text) throw '¡Ingrese un enlace de un grupo de WhatsApp!'
+                if (!isUrl(args[0]) && !args[0].includes('whatsapp.com')) throw 'Enlace invalido.'
                 m.reply(mess.wait)
                 let result = args[0].split('https://chat.whatsapp.com/')[1]
                 await kagura.groupAcceptInvite(result).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
@@ -1057,7 +1043,7 @@ break
                if (!text) throw `Example : ${prefix + command} packname|author`
           global.packname = text.split("|")[0]
           global.author = text.split("|")[1]
-          m.reply(`Exif berhasil diubah menjadi\n\n⭔ Packname : ${global.packname}\n⭔ Author : ${global.author}`)
+          m.reply(`La nueva descripción de los stickers sera :\n\n⭔ Packname : ${global.packname}\n⭔ Author : ${global.author}`)
             }
             break
 	case 'kick': {
@@ -1108,7 +1094,7 @@ break
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
-                if (!text) throw 'Text ?'
+                if (!text) throw '¿Cual quieres que sea el nuevo nombre del grupo?'
                 await kagura.groupUpdateSubject(m.chat, text).then((res) => m.reply(mess.success)).catch((err) => m.reply(jsonformat(err)))
             }
             break
@@ -1116,15 +1102,15 @@ break
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
-                if (!text) throw 'Text ?'
+                if (!text) throw '¿Cual quieres que sea oa nueva descripción del grupo?'
                 await kagura.groupUpdateDescription(m.chat, text).then((res) => m.reply(mess.success)).catch((err) => m.reply(jsonformat(err)))
             }
             break
           case 'setppbot': {
                 if (!isCreator) throw mess.owner
-                if (!quoted) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
-                if (!/image/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
-                if (/webp/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
+                if (!quoted) throw `Menciona/Envia una Imagen con el mensaje ${prefix + command}`
+                if (!/image/.test(mime)) throw `Menciona/Envia una Imagen con el mensaje ${prefix + command}`
+                if (/webp/.test(mime)) throw `Menciona/Envia una Imagen con el mensaje ${prefix + command}`
                 let media = await kagura.downloadAndSaveMediaMessage(quoted)
                 await kagura.updateProfilePicture(botNumber, { url: media }).catch((err) => fs.unlinkSync(media))
                 m.reply(mess.success)
@@ -1133,9 +1119,9 @@ break
            case 'setppgroup': case 'setppgrup': case 'setppgc': {
                 if (!m.isGroup) throw mess.group
                 if (!isAdmins) throw mess.admin
-                if (!quoted) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
-                if (!/image/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
-                if (/webp/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
+                if (!quoted) throw `Menciona/Envia una Imagen con el mensaje ${prefix + command}`
+                if (!/image/.test(mime)) throw `Menciona/Envia una Imagen con el mensaje ${prefix + command}`
+                if (/webp/.test(mime)) throw `Menciona/Envia una Imagen con el mensaje ${prefix + command}`
                 let media = await kagura.downloadAndSaveMediaMessage(quoted)
                 await kagura.updateProfilePicture(m.chat, { url: media }).catch((err) => fs.unlinkSync(media))
                 m.reply(mess.success)
@@ -1145,11 +1131,11 @@ break
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
-let teks = `══✪〘 *👥 Tag All* 〙✪══
- 
- ➲ *Pesan : ${q ? q : 'kosong'}*\n\n`
+let teks = `▢ *Grupo : ${groupName}*
+▢ *Miembros : ${groupMetadata.participants.length}*
+▢ *Mensaje : ${q ? q : 'Undefined'}*\n\n`
                 for (let mem of participants) {
-                teks += `⭔ @${mem.id.split('@')[0]}\n`
+                teks += `▢ @${mem.id.split('@')[0]}\n`
                 }
                 kagura.sendMessage(m.chat, { text: teks, mentions: participants.map(a => a.id) }, { quoted: m })
                 }
@@ -1165,9 +1151,9 @@ let teks = `══✪〘 *👥 Tag All* 〙✪══
 	        if (!isPremium && global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // respon ketika limit habis
 		db.data.users[m.sender].limit -= 1 // -1 limit
 		let { styletext } = require('./lib/scraper')
-		if (!text) throw 'Masukkan Query text!'
+		if (!text) throw '¡Ingrese un texto!'
                 let anu = await styletext(text)
-                let teks = `Srtle Text From ${text}\n\n`
+                let teks = `Style Text De : ${text}\n\n`
                 for (let i of anu) {
                     teks += `⭔ *${i.name}* : ${i.result}\n\n`
                 }
@@ -1336,20 +1322,20 @@ break
             m.reply('Berhasil Menghapus Sesi Vote Di Grup Ini')
 	    }
             break
-               case 'group': case 'grup': {
+               case 'group': case 'grupo': case 'grup': {
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
                 if (args[0] === 'close'){
-                    await kagura.groupSettingUpdate(m.chat, 'announcement').then((res) => m.reply(`Sukses Menutup Group`)).catch((err) => m.reply(jsonformat(err)))
+                    await kagura.groupSettingUpdate(m.chat, 'announcement').then((res) => m.reply(`𝘎𝘳𝘶𝘱𝘰 𝘤𝘦𝘳𝘳𝘢𝘥𝘰 𝘤𝘰𝘯 𝘦𝘹𝘪𝘵𝘰.`)).catch((err) => m.reply(jsonformat(err)))
                 } else if (args[0] === 'open'){
-                    await kagura.groupSettingUpdate(m.chat, 'not_announcement').then((res) => m.reply(`Sukses Membuka Group`)).catch((err) => m.reply(jsonformat(err)))
+                    await kagura.groupSettingUpdate(m.chat, 'not_announcement').then((res) => m.reply(`𝘎𝘳𝘶𝘱𝘰 𝘢𝘣𝘪𝘦𝘳𝘵𝘰 𝘤𝘰𝘯 𝘦𝘹𝘪𝘵𝘰.`)).catch((err) => m.reply(jsonformat(err)))
                 } else {
                 let buttons = [
-                        { buttonId: 'group open', buttonText: { displayText: 'Open' }, type: 1 },
-                        { buttonId: 'group close', buttonText: { displayText: 'Close' }, type: 1 }
+                        { buttonId: 'group open', buttonText: { displayText: '𝘈𝘣𝘳𝘪𝘳 𝘎𝘳𝘶𝘱𝘰' }, type: 1 },
+                        { buttonId: 'group close', buttonText: { displayText: '𝘊𝘦𝘳𝘳𝘢𝘳 𝘎𝘳𝘶𝘱𝘰' }, type: 1 }
                     ]
-                    await kagura.sendButtonText(m.chat, buttons, `Mode Group`, kagura.user.name, m)
+                    await kagura.sendButtonText(m.chat, buttons, `¿Desea abrir el grupo para que todos los participantes puedan hablar?`, kagura.user.name, m)
 
              }
             }
@@ -1359,15 +1345,15 @@ break
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
              if (args[0] === 'open'){
-                await kagura.groupSettingUpdate(m.chat, 'unlocked').then((res) => m.reply(`Sukses Membuka Edit Info Group`)).catch((err) => m.reply(jsonformat(err)))
+                await kagura.groupSettingUpdate(m.chat, 'unlocked').then((res) => m.reply(`𝘊𝘰𝘯𝘧𝘪𝘨𝘶𝘳𝘢𝘤𝘪𝘰𝘯 𝘤𝘢𝘮𝘣𝘪𝘢𝘥𝘢 𝘱𝘢𝘳𝘢 𝘲𝘶𝘦 𝘵𝘰𝘥𝘰𝘴 𝘭𝘰𝘴 𝘱𝘢𝘳𝘵𝘪𝘤𝘪𝘱𝘢𝘯𝘵𝘦𝘴 𝘱𝘶𝘦𝘥𝘢𝘯 𝘦𝘥𝘪𝘵𝘢𝘳 𝘭𝘢 𝘪𝘯𝘧𝘰 𝘥𝘦𝘭 𝘨𝘳𝘶𝘱𝘰.`)).catch((err) => m.reply(jsonformat(err)))
              } else if (args[0] === 'close'){
-                await kagura.groupSettingUpdate(m.chat, 'locked').then((res) => m.reply(`Sukses Menutup Edit Info Group`)).catch((err) => m.reply(jsonformat(err)))
+                await kagura.groupSettingUpdate(m.chat, 'locked').then((res) => m.reply(`𝘊𝘰𝘯𝘧𝘪𝘨𝘶𝘳𝘢𝘤𝘪𝘰𝘯 𝘤𝘢𝘮𝘣𝘪𝘢𝘥𝘢 𝘱𝘢𝘳𝘢 𝘲𝘶𝘦 𝘯𝘪𝘯𝘨𝘶𝘯𝘰 𝘥𝘦 𝘭𝘰𝘴 𝘱𝘢𝘳𝘵𝘪𝘤𝘪𝘱𝘢𝘯𝘵𝘦𝘴 𝘱𝘶𝘦𝘥𝘢𝘯 𝘦𝘥𝘪𝘵𝘢𝘳 𝘭𝘢 𝘪𝘯𝘧𝘰 𝘥𝘦𝘭 𝘨𝘳𝘶𝘱𝘰.`)).catch((err) => m.reply(jsonformat(err)))
              } else {
              let buttons = [
-                        { buttonId: 'editinfo open', buttonText: { displayText: 'Open' }, type: 1 },
-                        { buttonId: 'editinfo close', buttonText: { displayText: 'Close' }, type: 1 }
+                        { buttonId: 'editinfo open', buttonText: { displayText: '𝘗𝘦𝘳𝘮𝘪𝘵𝘪𝘳' }, type: 1 },
+                        { buttonId: 'editinfo close', buttonText: { displayText: '𝘕𝘰 𝘗𝘦𝘳𝘮𝘪𝘵𝘪𝘳' }, type: 1 }
                     ]
-                    await kagura.sendButtonText(m.chat, buttons, `Mode Edit Info`, kagura.user.name, m)
+                    await kagura.sendButtonText(m.chat, buttons, `¿Permitir que todos los participantes editen la info del grupo?`, kagura.user.name, m)
 
             }
             }
@@ -1377,19 +1363,19 @@ break
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
                 if (args[0] === "on") {
-                if (db.data.chats[m.chat].antilink) return m.reply(`Sudah Aktif Sebelumnya`)
+                if (db.data.chats[m.chat].antilink) return m.reply(`¡Actualmente activo!`)
                 db.data.chats[m.chat].antilink = true
                 m.reply(`Antilink Aktif !`)
                 } else if (args[0] === "off") {
-                if (!db.data.chats[m.chat].antilink) return m.reply(`Sudah Tidak Aktif Sebelumnya`)
+                if (!db.data.chats[m.chat].antilink) return m.reply(`¡Actualmente activo!`)
                 db.data.chats[m.chat].antilink = false
                 m.reply(`Antilink Tidak Aktif !`)
                 } else {
                  let buttons = [
-                        { buttonId: 'antilink on', buttonText: { displayText: 'On' }, type: 1 },
-                        { buttonId: 'antilink off', buttonText: { displayText: 'Off' }, type: 1 }
+                        { buttonId: 'antilink on', buttonText: { displayText: '𝘏𝘢𝘣𝘪𝘭𝘪𝘵𝘢𝘳 𝘈𝘯𝘵𝘪-𝘌𝘯𝘭𝘢𝘤𝘦' }, type: 1 },
+                        { buttonId: 'antilink off', buttonText: { displayText: '𝘋𝘦𝘴𝘩𝘢𝘣𝘪𝘭𝘪𝘵𝘢𝘳 𝘈𝘯𝘵𝘪-𝘌𝘯𝘭𝘢𝘤𝘦' }, type: 1 }
                     ]
-                    await kagura.sendButtonText(m.chat, buttons, `Mode Antilink`, kagura.user.name, m)
+                    await kagura.sendButtonText(m.chat, buttons, `El Anti-Enlace eliminara a todos los miembros del grupo que envien cualquier tipo de enlace.\n\nEsto excluye a los administradores del grupo.`, kagura.user.name, m)
                 }
              }
              break
