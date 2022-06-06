@@ -147,14 +147,14 @@ module.exports = kagura = async (kagura, m, chatUpdate, store) => {
 	  // Anti Link
         if (db.data.chats[m.chat].antilink) {
         if (budy.match(`chat.whatsapp.com`)) {
-        m.reply(`「 ANTI LINK 」\n\nKamu terdeteksi mengirim link group, maaf kamu akan di kick !`)
-        if (!isBotAdmins) return m.reply(`Ehh bot gak admin T_T`)
-        let gclink = (`https://chat.whatsapp.com/`+await kagura.groupInviteCode(m.chat))
+        m.reply(`「 ANTI LINK 」\n\nSe te ha detectado enviando un enlace de grupo, lo siento, ¡SERÁS EXPULSADO!`)
+        if (!isBotAdmins) return m.reply(`Necesito ser administrador de este grupo para poder cumplir esta función.`)
+        let gclink = (`https://chat.whatsapp.com/`+await ka gura.groupInviteCode(m.chat))
         let isLinkThisGc = new RegExp(gclink, 'i')
         let isgclink = isLinkThisGc.test(m.text)
-        if (isgclink) return m.reply(`Ehh maaf gak jadi, karena kamu ngirim link group ini`)
-        if (isAdmins) return m.reply(`Ehh maaf kamu admin`)
-        if (isCreator) return m.reply(`Ehh maaf kamu owner bot ku`)
+        if (isgclink) return m.reply(`El enlace enviado pertenece a este grupo.\n\n ¡Te has salvado!\n\nNO SERAS ELIMINADO.`)
+        if (isAdmins) return m.reply(`Eres un administrador de este grupo, no te puedo eliminar.`)
+        if (isCreator) return m.reply(`Eres mi creador, no te puedo eliminar.`)
         kagura.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
         }
         }
@@ -542,11 +542,11 @@ Silahkan @${m.mentionedJid[0].split`@`[0]} untuk ketik terima/tolak`
             }
             }
             break
-	    case 'donasi': case 'sewabot': case 'sewa': case 'buypremium': case 'donate': {
+	    case 'donddasi': case 'sedddwabot': case 'sewdda': case 'buypreddddmium': case 'donddate': {
                 kagura.sendMessage(m.chat, { image: { url: 'https://telegra.ph/file/74fd634010128be37972c.jpg' }, caption: `*Hai Kak ${m.pushName}*\n\n Bot Rental Prices\n⭔ 13k Per Group via E-Walet 1 Month\n⭔ 18k via pulsa 1 Month\n\n Premium Price Bot\n⭔ 8k per User 1 bulan\n\nPayment can be via Paypal/link aja/pulsa\n\nFor more details, you can chat with the owner\nhttps://wa.me/6288292024190 (Owner)\n\nDonate For Me : \n\n⭔ Paypal : https://www.paypal.me/Cakhaho\n⭔ Saweria : https://saweria.co/DikaArdnt` }, { quoted: m })
             }
             break
-            case 'sc': {
+            case 'sddddsdc': {
                 m.reply('*Script Bot :*\nhttps://youtu.be/tbWY5hncgwc')
             }
             break
@@ -984,7 +984,7 @@ break
             case 'kuismath': case 'math': {
                 if (kuismath.hasOwnProperty(m.sender.split('@')[0])) throw "¡Aun no se responde la pregunta anterior!"
                 let { genMath, modes } = require('./src/math')
-                if (!text) throw `Seleccione un modo de juego : ${Object.keys(modes).join(' | ')}\nEjemplo : ${prefix}math medium`
+                if (!text) throw `Seleccione un modo de juego : ${Object.keys(modes).join(' | ')}\n𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix}math medium`
                 let result = await genMath(text.toLowerCase())
                 kagura.sendText(m.chat, `*¿Cuál es el resultado de : ${result.soal.toLowerCase()}?*\n\nTiempo : ${(result.waktu / 1000).toFixed(2)} segundos`, m).then(() => {
                     kuismath[m.sender.split('@')[0]] = result.jawaban
@@ -1365,11 +1365,11 @@ break
                 if (args[0] === "on") {
                 if (db.data.chats[m.chat].antilink) return m.reply(`¡Actualmente activo!`)
                 db.data.chats[m.chat].antilink = true
-                m.reply(`Antilink Aktif !`)
+                m.reply(`¡El Anti-Enlace ha sido habilitado en este grupo!`)
                 } else if (args[0] === "off") {
                 if (!db.data.chats[m.chat].antilink) return m.reply(`¡Actualmente activo!`)
                 db.data.chats[m.chat].antilink = false
-                m.reply(`Antilink Tidak Aktif !`)
+                m.reply(`¡El Anti-Enlace ha sido deshabilitado en este grupo!`)
                 } else {
                  let buttons = [
                         { buttonId: 'antilink on', buttonText: { displayText: '𝘏𝘢𝘣𝘪𝘭𝘪𝘵𝘢𝘳 𝘈𝘯𝘵𝘪-𝘌𝘯𝘭𝘢𝘤𝘦' }, type: 1 },
@@ -1384,11 +1384,11 @@ break
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
                 if (args[0] === "on") {
-                if (db.data.chats[m.chat].mute) return m.reply(`Sudah Aktif Sebelumnya`)
+                if (db.data.chats[m.chat].mute) return m.reply(`¡Actualmente activo!`)
                 db.data.chats[m.chat].mute = true
-                m.reply(`${kagura.user.name} telah di mute di group ini !`)
+                m.reply(`${kagura.user.name} ha sido silenciado en este grupo !`)
                 } else if (args[0] === "off") {
-                if (!db.data.chats[m.chat].mute) return m.reply(`Sudah Tidak Aktif Sebelumnya`)
+                if (!db.data.chats[m.chat].mute) return m.reply(`¡Actualmente activo!`)
                 db.data.chats[m.chat].mute = false
                 m.reply(`${kagura.user.name} telah di unmute di group ini !`)
                 } else {
@@ -1411,7 +1411,7 @@ break
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
-                if (!text) throw 'Masukkan value enable/disable'
+                if (!text) throw 'Ingresa un valor enable/disable'
                 if (args[0] === 'enable') {
                     await kagura.sendMessage(m.chat, { disappearingMessagesInChat: WA_DEFAULT_EPHEMERAL }).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
                 } else if (args[0] === 'disable') {
@@ -1420,51 +1420,51 @@ break
             }
             break
             case 'delete': case 'del': {
-                if (!m.quoted) throw false
+                if (!m.quoted) throw false 
                 let { chat, fromMe, id, isBaileys } = m.quoted
-                if (!isBaileys) throw 'Pesan tersebut bukan dikirim oleh bot!'
+                if (!isBaileys) throw 'Este mensaje no ha sido enviado por un bot.'
                 kagura.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: true, id: m.quoted.id, participant: m.quoted.sender } })
             }
             break
             case 'bcgc': case 'bcgroup': {
                 if (!isCreator) throw mess.owner
-                if (!text) throw `Text mana?\n\nExample : ${prefix + command} fatih-san`
+                if (!text) throw `¿Que desea anunciar?`
                 let getGroups = await kagura.groupFetchAllParticipating()
                 let groups = Object.entries(getGroups).slice(0).map(entry => entry[1])
                 let anu = groups.map(v => v.id)
-                m.reply(`Mengirim Broadcast Ke ${anu.length} Group Chat, Waktu Selesai ${anu.length * 1.5} detik`)
+                m.reply(`Enviando anuncio a : ${anu.length} Grupos, Tiempo Estimado : ${anu.length * 1.5} segundos.`)
                 for (let i of anu) {
                     await sleep(1500)
                     let btn = [{
                                 urlButton: {
-                                    displayText: 'Source Code',
-                                    url: 'https://github.com/Lexxy24/KaguraMD'
+                                    displayText: '𝘐𝘯𝘴𝘵𝘢𝘨𝘳𝘢𝘮',
+                                    url: 'https://instagram.com/im.felix409'
                                 }
                             }, {
-                                callButton: {
-                                    displayText: 'Number Phone Owner',
-                                    phoneNumber: ' +62 822-7991-5237'
+                                urlButton: {
+                                    displayText: '𝘗𝘢𝘺𝘗𝘢𝘭',
+                                    url: 'https://www.paypal.com/paypalme/felixcrack409'
                                 }
-                            }, {
+                            },{
                                 quickReplyButton: {
-                                    displayText: 'Status Bot',
+                                    displayText: '🚀 𝘚𝘱𝘦𝘦𝘥',
                                     id: 'ping'
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Contact Owner',
+                                    displayText: '👑 𝘖𝘸𝘯𝘦𝘳',
                                     id: 'owner'
                                 }  
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'List Menu',
-                                    id: 'fiturlist'
+                                    displayText: '📌 𝘔𝘦𝘯𝘶',
+                                    id: 'menu'
                                 }
                             }]
-                      let txt = `「 Broadcast Bot 」\n\n${text}`
+                      let txt = `「 𝗔𝗻𝘂𝗻𝗰𝗶𝗼 𝗗𝗲𝗹 𝗕𝗼𝘁 」\n\n${text}`
                       kagura.send5ButImg(i, txt, kagura.user.name, global.thumb, btn)
                     }
-                m.reply(`Sukses Mengirim Broadcast Ke ${anu.length} Group`)
+                m.reply(`Se ha enviado correctam el anuncio a ${anu.length} grupos.`)
             }
             break
             case 'bc': case 'broadcast': case 'bcall': {
@@ -1476,74 +1476,74 @@ break
 		    await sleep(1500)
 		    let btn = [{
                                 urlButton: {
-                                    displayText: 'Source Code',
-                                    url: 'https://github.com/Lexxy24/KaguraMD'
+                                    displayText: '𝘐𝘯𝘴𝘵𝘢𝘨𝘳𝘢𝘮',
+                                    url: 'https://instagram.com/im.felix409'
                                 }
                             }, {
-                                callButton: {
-                                    displayText: 'Number Phone Owner',
-                                    phoneNumber: ' +62 822-7991-5237'
+                                urlButton: {
+                                    displayText: '𝘗𝘢𝘺𝘗𝘢𝘭',
+                                    url: 'https://www.paypal.com/paypalme/felixcrack409'
                                 }
-                            }, {
+                            },{
                                 quickReplyButton: {
-                                    displayText: 'Status Bot',
+                                    displayText: '🚀 𝘚𝘱𝘦𝘦𝘥',
                                     id: 'ping'
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Contact Owner',
+                                    displayText: '👑 𝘖𝘸𝘯𝘦𝘳',
                                     id: 'owner'
                                 }  
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'List Menu',
-                                    id: 'fiturlist'
+                                    displayText: '📌 𝘔𝘦𝘯𝘶',
+                                    id: 'menu'
                                 }
                             }]
-                      let txt = `「 Broadcast Bot 」\n\n${text}`
+                      let txt = `「 𝗔𝗻𝘂𝗻𝗰𝗶𝗼 𝗗𝗲𝗹 𝗕𝗼𝘁 」\n\n${text}`
                       kagura.send5ButImg(yoi, txt, kagura.user.name, global.thumb, btn)
 		}
-		m.reply('Sukses Broadcast')
+		m.reply('Anuncio enviado con éxito.')
             }
             break
             case 'infochat': {
-                if (!m.quoted) m.reply('Reply Pesan')
+                if (!m.quoted) m.reply('¡Menciona un mensaje!')
                 let msg = await m.getQuotedObj()
-                if (!m.quoted.isBaileys) throw 'Pesan tersebut bukan dikirim oleh bot!'
+                if (!m.quoted.isBaileys) throw '¡El mensaje no fue enviado por un bot!'
                 let teks = ''
                 for (let i of msg.userReceipt) {
                     let read = i.readTimestamp
                     let unread = i.receiptTimestamp
                     let waktu = read ? read : unread
-                    teks += `⭔ @${i.userJid.split('@')[0]}\n`
-                    teks += ` ┗━⭔ *Waktu :* ${moment(waktu * 1000).format('DD/MM/YY HH:mm:ss')} ⭔ *Status :* ${read ? 'Dibaca' : 'Terkirim'}\n\n`
+                    teks += `▢ @${i.userJid.split('@')[0]}\n`
+                    teks += ` ┗━⭔ *Tiempo :* ${moment(waktu * 1000).format('DD/MM/YY HH:mm:ss')} ⭔ *Status :* ${read ? 'Leido' : 'Enviado'}\n\n`
                 }
                 kagura.sendTextWithMentions(m.chat, teks, m)
             }
             break
             case 'q': case 'quoted': {
-		if (!m.quoted) return m.reply('Reply Pesannya!!')
+		if (!m.quoted) return m.reply('¡Responde a un mensaje!')
 		let wokwol = await kagura.serializeM(await m.getQuotedObj())
-		if (!wokwol.quoted) return m.reply('Pesan Yang anda reply tidak mengandung reply')
+		if (!wokwol.quoted) return m.reply('El mensaje al que respondió no contiene una respuesta.')
 		await wokwol.quoted.copyNForward(m.chat, true)
             }
 	    break
             case 'listpc': {
                  let anu = await store.chats.all().filter(v => v.id.endsWith('.net')).map(v => v.id)
-                 let teks = `⬣ *LIST PERSONAL CHAT*\n\nTotal Chat : ${anu.length} Chat\n\n`
+                 let teks = `▢ *CHATS PERSONALES*\n\nTotal Chat : ${anu.length} Chats\n\n`
                  for (let i of anu) {
                      let nama = store.messages[i].array[0].pushName
-                     teks += `⬡ *Nama :* ${nama}\n⬡ *User :* @${i.split('@')[0]}\n⬡ *Chat :* https://wa.me/${i.split('@')[0]}\n\n────────────────────────\n\n`
+                     teks += `▢ *Nombre :* ${nama}\n▢ *Usuario :* @${i.split('@')[0]}\n⬡ *Chat :* https://wa.me/${i.split('@')[0]}\n\n────────────────────────\n\n`
                  }
                  kagura.sendTextWithMentions(m.chat, teks, m)
              }
              break
                 case 'listgc': {
                  let anu = await store.chats.all().filter(v => v.id.endsWith('@g.us')).map(v => v.id)
-                 let teks = `⬣ *LIST GROUP CHAT*\n\nTotal Group : ${anu.length} Group\n\n`
+                 let teks = `▢ *CHATS DE GRUPOS*\n\nTotal Group : ${anu.length} Group\n\n`
                  for (let i of anu) {
                      let metadata = await kagura.groupMetadata(i)
-                     teks += `⬡ *Nama :* ${metadata.subject}\n⬡ *Owner :* ${metadata.owner !== undefined ? '@' + metadata.owner.split`@`[0] : 'Tidak diketahui'}\n⬡ *ID :* ${metadata.id}\n⬡ *Dibuat :* ${moment(metadata.creation * 1000).tz('Asia/Jakarta').format('DD/MM/YYYY HH:mm:ss')}\n⬡ *Member :* ${metadata.participants.length}\n\n────────────────────────\n\n`
+                     teks += `▢ *Nombre :* ${metadata.subject}\n⬡ *Creador :* ${metadata.owner !== undefined ? '@' + metadata.owner.split`@`[0] : 'Desconocido'}\n⬡ *ID :* ${metadata.id}\n⬡ *Fecha de creación :* ${moment(metadata.creation * 1000).tz('America/México').format('HH:mm:ss')}\n⬡ *Miembros :* ${metadata.participants.length}\n\n────────────────────────\n\n`
                  }
                  kagura.sendTextWithMentions(m.chat, teks, m)
              }
@@ -1551,35 +1551,35 @@ break
              case 'listonline': case 'liston': {
                     let id = args && /\d+\-\d+@g.us/.test(args[0]) ? args[0] : m.chat
                     let online = [...Object.keys(store.presences[id]), botNumber]
-                    kagura.sendText(m.chat, 'List Online:\n\n' + online.map(v => '⭔ @' + v.replace(/@.+/, '')).join`\n`, m, { mentions: online })
+                    kagura.sendText(m.chat, 'Personas en linea :\n\n' + online.map(v => '▢ @' + v.replace(/@.+/, '')).join`\n`, m, { mentions: online })
              }
              break
             case 'sticker': case 's': case 'stickergif': case 'sgif': {
-            if (!quoted) throw `Balas Video/Image Dengan Caption ${prefix + command}`
+            if (!quoted) throw `Menciona un Video/Image Con el mensaje : ${prefix + command}`
             m.reply(mess.wait)
                     if (/image/.test(mime)) {
                 let media = await quoted.download()
                 let encmedia = await kagura.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
                 await fs.unlinkSync(encmedia)
             } else if (/video/.test(mime)) {
-                if ((quoted.msg || quoted).seconds > 11) return m.reply('Maksimal 10 detik!')
+                if ((quoted.msg || quoted).seconds > 11) return m.reply('Duracion máxima 10s')
                 let media = await quoted.download()
                 let encmedia = await kagura.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
                 await fs.unlinkSync(encmedia)
             } else {
-                throw `Kirim Gambar/Video Dengan Caption ${prefix + command}\nDurasi Video 1-9 Detik`
+                throw `Menciona un Video/Image Con el mensaje : ${prefix + command}`
                 }
             }
             break
             case 'ebinary': {
-            if (!text) throw `Example : ${prefix + command} text`
+            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
             let { eBinary } = require('./lib/binary')
             let eb = await eBinary(text)
             m.reply(eb)
         }
         break
             case 'dbinary': {
-            if (!text) throw `Example : ${prefix + command} text`
+            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
             let { dBinary } = require('./lib/binary')
             let db = await dBinary(text)
             m.reply(db)
@@ -1587,8 +1587,8 @@ break
         break
             case 'emojimix': {
 		let [emoji1, emoji2] = text.split`+`
-		if (!emoji1) throw `Example : ${prefix + command} 😅+🤔`
-		if (!emoji2) throw `Example : ${prefix + command} 😅+🤔`
+		if (!emoji1) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 😅+🤔`
+		if (!emoji2) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 😅+🤔`
 		let anu = await fetchJson(`https://tenor.googleapis.com/v2/featured?key=AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ&contentfilter=high&media_filter=png_transparent&component=proactive&collection=emoji_kitchen_v5&q=${encodeURIComponent(emoji1)}_${encodeURIComponent(emoji2)}`)
 		for (let res of anu.results) {
 		    let encmedia = await kagura.sendImageAsSticker(m.chat, res.url, m, { packname: global.packname, author: global.author, categories: res.tags })
@@ -1597,7 +1597,7 @@ break
 	    }
 	    break
 	    case 'emojimix2': {
-	    if (!text) throw `Example : ${prefix + command} 😅`
+	    if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 😅`
 		let anu = await fetchJson(`https://tenor.googleapis.com/v2/featured?key=AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ&contentfilter=high&media_filter=png_transparent&component=proactive&collection=emoji_kitchen_v5&q=${encodeURIComponent(text)}`)
 		for (let res of anu.results) {
 		    let encmedia = await kagura.sendImageAsSticker(m.chat, res.url, m, { packname: global.packname, author: global.author, categories: res.tags })
@@ -1606,13 +1606,13 @@ break
 	    }
 	    break
 	       case 'attp': case 'ttp': {
-           if (!text) throw `Example : ${prefix + command} text`
+           if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
            await kagura.sendMedia(m.chat, `https://xteam.xyz/${command}?file&text=${text}`, 'kagura', 'morou', m, {asSticker: true})
 
          }
          break
 	       case 'smeme': case 'stickmeme': case 'stikmeme': case 'stickermeme': case 'stikermeme': {
-	        let respond = `Kirim/reply image/sticker dengan caption ${prefix + command} text1|text2`
+	        let respond = `Menciona una imagen/sticker con el mensaje ${prefix + command} text1|text2`
 	        if (!/image/.test(mime)) throw respond
             if (!text) throw respond
 	        m.reply(mess.wait)
@@ -1627,14 +1627,14 @@ break
             }
 	       break     
 	        case 'simih': case 'simisimi': {
-            if (!text) throw `Example : ${prefix + command} text`
+            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
             hm = await fetchJson(api('zenz', '/api/simisimi', { text : text }, 'apikey'))
             m.reply(hm.result.message)
             }
             break
             case 'toimage': case 'toimg': {
-                if (!quoted) throw 'Reply Image'
-                if (!/webp/.test(mime)) throw `Balas sticker dengan caption *${prefix + command}*`
+                if (!quoted) throw 'Responde a una imagen.'
+                if (!/webp/.test(mime)) throw `Menciona un sticker con el mensaje *${prefix + command}*`
                 m.reply(mess.wait)
                 let media = await kagura.downloadAndSaveMediaMessage(quoted)
                 let ran = await getRandom('.png')
@@ -1648,8 +1648,8 @@ break
             }
             break
 	        case 'tomp4': case 'tovideo': {
-                if (!quoted) throw 'Reply Image'
-                if (!/webp/.test(mime)) throw `balas stiker dengan caption *${prefix + command}*`
+                if (!quoted) throw 'Responde a una imagen.'
+                if (!/webp/.test(mime)) throw `Menciona un sticker con el mensaje *${prefix + command}*`
                 m.reply(mess.wait)
 		let { webp2mp4File } = require('./lib/uploader')
                 let media = await kagura.downloadAndSaveMediaMessage(quoted)
@@ -1659,8 +1659,8 @@ break
             }
             break
             case 'toaud': case 'toaudio': {
-            if (!/video/.test(mime) && !/audio/.test(mime)) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan Audio Dengan Caption ${prefix + command}`
-            if (!quoted) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan Audio Dengan Caption ${prefix + command}`
+            if (!/video/.test(mime) && !/audio/.test(mime)) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
+            if (!quoted) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
             m.reply(mess.wait)
             let media = await quoted.download()
             let { toAudio } = require('./lib/converter')
@@ -1669,9 +1669,9 @@ break
             }
             break
             case 'tomp3': {
-            if (/document/.test(mime)) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`
-            if (!/video/.test(mime) && !/audio/.test(mime)) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`
-            if (!quoted) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`
+            if (/document/.test(mime)) throw `Responde a un Video/Audio que quieras convertir en MP3`
+            if (!/video/.test(mime) && !/audio/.test(mime)) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
+            if (!quoted) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
             m.reply(mess.wait)
             let media = await quoted.download()
             let { toAudio } = require('./lib/converter')
@@ -1680,8 +1680,8 @@ break
             }
             break
             case 'tovn': case 'toptt': {
-            if (!/video/.test(mime) && !/audio/.test(mime)) throw `Reply Video/Audio Yang Ingin Dijadikan VN Dengan Caption ${prefix + command}`
-            if (!quoted) throw `Reply Video/Audio Yang Ingin Dijadikan VN Dengan Caption ${prefix + command}`
+            if (!/video/.test(mime) && !/audio/.test(mime)) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
+            if (!quoted) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
             m.reply(mess.wait)
             let media = await quoted.download()
             let { toPTT } = require('./lib/converter')
@@ -1690,8 +1690,8 @@ break
             }
             break
             case 'togif': {
-                if (!quoted) throw 'Reply Image'
-                if (!/webp/.test(mime)) throw `balas stiker dengan caption *${prefix + command}*`
+                if (!quoted) throw 'Responde a una imagen'
+                if (!/webp/.test(mime)) throw `Responde a*${prefix + command}*`
                 m.reply(mess.wait)
 		let { webp2mp4File } = require('./lib/uploader')
                 let media = await kagura.downloadAndSaveMediaMessage(quoted)
@@ -1715,9 +1715,9 @@ break
             }
             break
             case 'imagenobg': case 'removebg': case 'remove-bg': {
-	    if (!quoted) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
-	    if (!/image/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
-	    if (/webp/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
+	    if (!quoted) throw `Responde a una Imagen con el mensaje ${prefix + command}`
+	    if (!/image/.test(mime)) throw `Responde a una Imagen con el mensaje ${prefix + command}`
+	    if (/webp/.test(mime)) throw `Responde a una Imagen con el mensaje ${prefix + command}`
 	    let remobg = require('remove.bg')
 	    let apirnobg = ['q61faXzzR5zNU6cvcrwtUkRU','S258diZhcuFJooAtHTaPEn4T','5LjfCVAp4vVNYiTjq9mXJWHF','aT7ibfUsGSwFyjaPZ9eoJc61','BY63t7Vx2tS68YZFY6AJ4HHF','5Gdq1sSWSeyZzPMHqz7ENfi8','86h6d6u4AXrst4BVMD9dzdGZ','xp8pSDavAgfE5XScqXo9UKHF','dWbCoCb3TacCP93imNEcPxcL']
 	    let apinobg = apirnobg[Math.floor(Math.random() * apirnobg.length)]
@@ -1740,45 +1740,43 @@ break
 	    }
 	    break
 	    case 'yts': case 'ytsearch': {
-                if (!text) throw `Example : ${prefix + command} story wa anime`
+                if (!text) throw `Example : ${prefix + command} Anime edit`
                 let yts = require("yt-search")
                 let search = await yts(text)
                 let teks = 'YouTube Search\n\n Result From '+text+'\n\n'
                 let no = 1
                 for (let i of search.all) {
-                    teks += `⭔ No : ${no++}\n⭔ Type : ${i.type}\n⭔ Video ID : ${i.videoId}\n⭔ Title : ${i.title}\n⭔ Views : ${i.views}\n⭔ Duration : ${i.timestamp}\n⭔ Upload At : ${i.ago}\n⭔ Author : ${i.author.name}\n⭔ Url : ${i.url}\n\n─────────────────\n\n`
+                    teks += `⭔ No : ${no++}\n⭔ Tipo : ${i.type}\n⭔ Video ID : ${i.videoId}\n⭔ Titull : ${i.title}\n⭔ Vistas : ${i.views}\n⭔ Duración : ${i.timestamp}\n⭔ Fecha de Publicación : ${i.ago}\n⭔ Autor : ${i.author.name}\n⭔ Enlace : ${i.url}\n\n─────────────────\n\n`
                 }
                 kagura.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: teks }, { quoted: m })
             }
             break
         case 'google': {
-                if (!text) throw `Example : ${prefix + command} fatih arridho`
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} Anime`
                 let google = require('google-it')
                 google({'query': text}).then(res => {
-                let teks = `Google Search From : ${text}\n\n`
+                let teks = `🔎 *Busqueda* : ${text}\n\n`
                 for (let g of res) {
-                teks += `⭔ *Title* : ${g.title}\n`
-                teks += `⭔ *Description* : ${g.snippet}\n`
-                teks += `⭔ *Link* : ${g.link}\n\n────────────────────────\n\n`
+                teks += `📌 *Titulo* : ${g.title}\n`
+                teks += `🏷️ *Descripcion* : ${g.snippet}\n`
+                teks += `📎 *Enlace* : ${g.link}\n\n────────────────────────\n\n`
                 } 
                 m.reply(teks)
                 })
                 }
                 break
         case 'gimage': {
-        if (!text) throw `Example : ${prefix + command} kaori cicak`
+        if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} Anime Demon Slayer`
         let gis = require('g-i-s')
         gis(text, async (error, result) => {
         n = result
         images = n[Math.floor(Math.random() * n.length)].url
-        let buttons = [
-                    {buttonId: `gimage ${text}`, buttonText: {displayText: 'Next Image'}, type: 1}
+        let buttons = [{buttonId: `gimage ${text}`, buttonText: {displayText: '𝘚𝘐𝘎𝘜𝘐𝘌𝘕𝘛𝘌 ⏩'}, type: 1}
                 ]
                 let buttonMessage = {
                     image: { url: images },
-                    caption: `*-------「 GIMAGE SEARCH 」-------*
-🤠 *Query* : ${text}
-🔗 *Media Url* : ${images}`,
+                    caption: `*-------「 GIMAGE BUSQUEDA 」-------*
+🔗 *Enlace* : ${images}`,
                     footer: kagura.user.name,
                     buttons: buttons,
                     headerType: 4
@@ -1788,34 +1786,59 @@ break
         }
         break
 	    case 'play': case 'ytplay': {
-                if (!text) throw `Example : ${prefix + command} story wa anime`
-                let yts = require("yt-search")
-                let search = await yts(text)
-                let anu = search.videos[Math.floor(Math.random() * search.videos.length)]
-                let buttons = [
-                    {buttonId: `ytmp3 ${anu.url}`, buttonText: {displayText: '♫ Audio'}, type: 1},
-                    {buttonId: `ytmp4 ${anu.url}`, buttonText: {displayText: '► Video'}, type: 1}
-                ]
-                let buttonMessage = {
-                    image: { url: anu.thumbnail },
-                    caption: `
-⭔ Title : ${anu.title}
-⭔ Ext : Search
-⭔ ID : ${anu.videoId}
-⭔ Duration : ${anu.timestamp}
-⭔ Viewers : ${anu.views}
-⭔ Upload At : ${anu.ago}
-⭔ Author : ${anu.author.name}
-⭔ Channel : ${anu.author.url}
-⭔ Description : ${anu.description}
-⭔ Url : ${anu.url}`,
-                    footer: kagura.user.name,
-                    buttons: buttons,
-                    headerType: 4
-                }
-                kagura.sendMessage(m.chat, buttonMessage, { quoted: m })
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} Anime Edit`
+                let yts = require('yt-search')
+let anu = await (await yts.search(text)).all[0]
+                
+                    zakki = `
+🔎 *Busqueda* : ${text}
+
+📌 *Titulo* : ${anu.title}
+🧃 *Ext* : Search
+🔑 *ID* : ${anu.videoId}
+⌛ *Duracion* : ${anu.timestamp}
+👁️ *Vistas* : ${anu.views}
+⏲️ *Publicado* : ${anu.ago.replace('years', 'Años').replace('year', 'Año').replace('ago', 'Atras').replace('months', 'Meses').replace('month', 'Mes').replace('day', 'Dia').replace('days', 'Días').replace('weeks', 'Semanas').replace('week', 'Semana').replace('minutes', 'Minutos').replace('hours', 'Horas')}
+🍭 *Autor* : ${anu.author.name}
+🏷️ *Descripcion* : ${anu.description}`
+message = await prepareWAMessageMedia({ image : { url: anu.thumbnail } }, { upload:   kagura.waUploadToServer })
+                template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
+                    templateMessage: {
+                        hydratedTemplate: {
+                            imageMessage: message.imageMessage,
+                            hydratedContentText: zakki,
+                            hydratedFooterText: `Sᴜʙsᴄʀɪʙᴇ Tᴏ Fᴇʟɪxᴄʀᴀᴄᴋ`,
+                            hydratedButtons: [{
+                                urlButton: {
+                                    displayText: '📺 Reproducir en YouTube',
+                                    url: `${anu.url}`
+                                }
+                            }, {
+                            	urlButton: {
+                                displayText: '📌 Enlace del Canal',
+                                    url: `${anu.author.url}`
+                                }
+                            }, {
+                                quickReplyButton: {
+                                    displayText: '🎧 Audio',
+                                    id: `ytmp3 ${anu.url} 128kbps`
+                                    }
+                                },{quickReplyButton: {
+                                    displayText: '🎥 Video',
+                                    id: `ytmp4 ${anu.url}`
+                                    }
+                                },{quickReplyButton: {
+                                    displayText: '📦 Video HD',
+                                    id: `ythd ${anu.url}`
+                                }
+                            }]
+                        }
+                    }
+                }), { userJid: m.chat, quoted: m })
+                  kagura.relayMessage(m.chat, template.message, { messageId: template.key.id })
             }
             break
+
 	    case 'ytmp3': case 'ytaudio': {
                 let { yta } = require('./lib/y2mate')
                 if (!text) throw `Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 128kbps`
