@@ -1789,56 +1789,30 @@ break
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} Anime Edit`
                 let yts = require('yt-search')
 let anu = await (await yts.search(text)).all[0]
-                
-                    zakki = `
-🔎 *Busqueda* : ${text}
-
-📌 *Titulo* : ${anu.title}
-🧃 *Ext* : Search
-🔑 *ID* : ${anu.videoId}
-⌛ *Duracion* : ${anu.timestamp}
-👁️ *Vistas* : ${anu.views}
-⏲️ *Publicado* : ${anu.ago.replace('years', 'Años').replace('year', 'Año').replace('ago', 'Atras').replace('months', 'Meses').replace('month', 'Mes').replace('day', 'Dia').replace('days', 'Días').replace('weeks', 'Semanas').replace('week', 'Semana').replace('minutes', 'Minutos').replace('hours', 'Horas')}
-🍭 *Autor* : ${anu.author.name}
-🏷️ *Descripcion* : ${anu.description}`
-message = await prepareWAMessageMedia({ image : { url: anu.thumbnail } }, { upload:   kagura.waUploadToServer })
-                template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-                    templateMessage: {
-                        hydratedTemplate: {
-                            imageMessage: message.imageMessage,
-                            hydratedContentText: zakki,
-                            hydratedFooterText: `Sᴜʙsᴄʀɪʙᴇ Tᴏ Fᴇʟɪxᴄʀᴀᴄᴋ`,
-                            hydratedButtons: [{
-                                urlButton: {
-                                    displayText: '📺 Reproducir en YouTube',
-                                    url: `${anu.url}`
-                                }
-                            }, {
-                            	urlButton: {
-                                displayText: '📌 Enlace del Canal',
-                                    url: `${anu.author.url}`
-                                }
-                            }, {
-                                quickReplyButton: {
-                                    displayText: '🎧 Audio',
-                                    id: `ytmp3 ${anu.url} 128kbps`
-                                    }
-                                },{quickReplyButton: {
-                                    displayText: '🎥 Video',
-                                    id: `ytmp4 ${anu.url}`
-                                    }
-                                },{quickReplyButton: {
-                                    displayText: '📦 Video HD',
-                                    id: `ythd ${anu.url}`
-                                }
-                            }]
-                        }
-                    }
-                }), { userJid: m.chat, quoted: m })
-                  kagura.relayMessage(m.chat, template.message, { messageId: template.key.id })
+                let buttons = [
+                    {buttonId: `ytmp3 ${anu.url}`, buttonText: {displayText: '♫ Audio'}, type: 1},
+                    {buttonId: `ytmp4 ${anu.url}`, buttonText: {displayText: '► Video'}, type: 1}
+                ]
+                let buttonMessage = {
+                    image: { url: anu.thumbnail },
+                    caption: `
+⭔ Title : ${anu.title}
+⭔ Ext : Search
+⭔ ID : ${anu.videoId}
+⭔ Duration : ${anu.timestamp}
+⭔ Viewers : ${anu.views}
+⭔ Upload At : ${anu.ago}
+⭔ Author : ${anu.author.name}
+⭔ Channel : ${anu.author.url}
+⭔ Description : ${anu.description}
+⭔ Url : ${anu.url}`,
+                    footer: kagura.user.name,
+                    buttons: buttons,
+                    headerType: 4
+                }
+                kagura.sendMessage(m.chat, buttonMessage, { quoted: m })
             }
             break
-
 	    case 'ytmp3': case 'ytaudio': {
                 let { yta } = require('./lib/y2mate')
                 if (!text) throw `Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 128kbps`
