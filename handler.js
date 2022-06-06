@@ -101,9 +101,9 @@ module.exports = kagura = async (kagura, m, chatUpdate, store) => {
 	    } else global.db.data.settings[botNumber] = {
 		status: 0,
 		autobio: false,
-		templateImage: true,
+		templateImage: false,
 		templateVideo: false,
-		templateGif: false,
+		templateGif: true,
 		templateMsg: false,
 	    }
 	    
