@@ -147,14 +147,14 @@ module.exports = kagura = async (kagura, m, chatUpdate, store) => {
 	  // Anti Link
         if (db.data.chats[m.chat].antilink) {
         if (budy.match(`chat.whatsapp.com`)) {
-        m.reply(`「 ANTI LINK 」\n\nSe te ha detectado enviando un enlace de grupo, lo siento, ¡SERÁS EXPULSADO!`)
-        if (!isBotAdmins) return m.reply(`Necesito ser administrador de este grupo para poder cumplir esta función.`)
-        let gclink = (`https://chat.whatsapp.com/`+await ka gura.groupInviteCode(m.chat))
+        m.reply(`「 ANTI LINK 」\n\nKamu terdeteksi mengirim link group, maaf kamu akan di kick !`)
+        if (!isBotAdmins) return m.reply(`Ehh bot gak admin T_T`)
+        let gclink = (`https://chat.whatsapp.com/`+await kagura.groupInviteCode(m.chat))
         let isLinkThisGc = new RegExp(gclink, 'i')
         let isgclink = isLinkThisGc.test(m.text)
-        if (isgclink) return m.reply(`El enlace enviado pertenece a este grupo.\n\n ¡Te has salvado!\n\nNO SERAS ELIMINADO.`)
-        if (isAdmins) return m.reply(`Eres un administrador de este grupo, no te puedo eliminar.`)
-        if (isCreator) return m.reply(`Eres mi creador, no te puedo eliminar.`)
+        if (isgclink) return m.reply(`Ehh maaf gak jadi, karena kamu ngirim link group ini`)
+        if (isAdmins) return m.reply(`Ehh maaf kamu admin`)
+        if (isCreator) return m.reply(`Ehh maaf kamu owner bot ku`)
         kagura.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
         }
         }
