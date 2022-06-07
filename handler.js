@@ -896,7 +896,7 @@ break
             m.reply(tex.replace(/[aiueo]/g, ter).replace(/[AIUEO]/g, ter.toUpperCase()))
             break
             case 'tebak': {
-                if (!text) throw `Example : ${prefix + command} lagu\n\nOption : \n1. lagu\n2. gambar\n3. kata\n4. kalimat\n5. lirik\n6.lontong`
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} lagu\n\nOption : \n1. lagu\n2. gambar\n3. kata\n4. kalimat\n5. lirik\n6.lontong`
                 if (args[0] === "lagu") {
                     if (tebaklagu.hasOwnProperty(m.sender.split('@')[0])) throw "Masih Ada Sesi Yang Belum Diselesaikan!"
                     let anu = await fetchJson('https://fatiharridho.github.io/tebaklagu.json')
@@ -1040,7 +1040,7 @@ break
             break
             case 'setexif': {
                if (!isCreator) throw mess.owner
-               if (!text) throw `Example : ${prefix + command} packname|author`
+               if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} packname|author`
           global.packname = text.split("|")[0]
           global.author = text.split("|")[1]
           m.reply(`La nueva descripción de los stickers sera :\n\n⭔ Packname : ${global.packname}\n⭔ Author : ${global.author}`)
@@ -1163,7 +1163,7 @@ let teks = `▢ *Grupo : ${groupName}*
                case 'vote': {
             if (!m.isGroup) throw mess.group
             if (m.chat in vote) throw `_Masih ada vote di chat ini!_\n\n*${prefix}hapusvote* - untuk menghapus vote`
-            if (!text) throw `Masukkan Alasan Melakukan Vote, Example: *${prefix + command} Owner Ganteng*`
+            if (!text) throw `Masukkan Alasan Melakukan Vote, 𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈: *${prefix + command} Owner Ganteng*`
             m.reply(`Vote dimulai!\n\n*${prefix}upvote* - untuk ya\n*${prefix}devote* - untuk tidak\n*${prefix}cekvote* - untuk mengecek vote\n*${prefix}hapusvote* - untuk menghapus vote`)
             vote[m.chat] = [q, [], []]
             await sleep(1000)
@@ -1470,7 +1470,7 @@ break
             break
             case 'bc': case 'broadcast': case 'bcall': {
                 if (!isCreator) throw mess.owner
-                if (!text) throw `Text mana?\n\nExample : ${prefix + command} fatih-san`
+                if (!text) throw `Text mana?\n\n𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} fatih-san`
                 let anu = await store.chats.all().map(v => v.id)
                 m.reply(`Mengirim Broadcast Ke ${anu.length} Chat\nWaktu Selesai ${anu.length * 1.5} detik`)
 		for (let yoi of anu) {
@@ -1742,7 +1742,7 @@ break
 	    break
 	    
 	    case 'yts': case 'ytsearch': {
-                if (!text) throw `Example : ${prefix + command} Anime edit`
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} Anime edit`
                 let yts = require("yt-search")
                 let search = await yts(text)
                 let teks = 'YouTube Search\n\n Result From '+text+'\n\n'
@@ -1788,7 +1788,7 @@ break
         }
         break
 	    case 'play': case 'ytplay': {
-                if (!text) throw `Example : ${prefix + command} story wa anime`
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} story wa anime`
                 
                 let yts = require('yt-search')
 let anu = await (await yts.search(text)).all[0]
@@ -1799,16 +1799,17 @@ let anu = await (await yts.search(text)).all[0]
                 let buttonMessage = {
                     image: { url: anu.thumbnail },
                     caption: `
-⭔ Title : ${anu.title}
-⭔ Ext : Search
-⭔ ID : ${anu.videoId}
-⭔ Duration : ${anu.timestamp}
-⭔ Viewers : ${anu.views}
-⭔ Upload At : ${anu.ago}
-⭔ Author : ${anu.author.name}
-⭔ Channel : ${anu.author.url}
-⭔ Description : ${anu.description}
-⭔ Url : ${anu.url}`,
+🔎 *Busqueda* : ${text}                   
+
+📌 *Titulo* : ${anu.title}
+🧃 *Ext* : Search
+🔑 *ID* : ${anu.videoId}
+⌛ *Duracion* : ${anu.timestamp}
+👁️ *Vistas* : ${anu.views}
+⏲️ *Publicado* : ${anu.ago.replace('years', 'Años').replace('year', 'Año').replace('ago', 'Atras').replace('months', 'Meses').replace('month', 'Mes').replace('day', 'Dia').replace('days', 'Días').replace('weeks', 'Semanas').replace('week', 'Semana').replace('minutes', 'Minutos').replace('hours', 'Horas')}
+🍭 *Autor* : ${anu.author.name}
+📎 * Url* : ${anu.url}
+🏷️ *Descripcion* : ${anu.description}`,
                     footer: kagura.user.name,
                     buttons: buttons,
                     headerType: 4
@@ -1818,26 +1819,26 @@ let anu = await (await yts.search(text)).all[0]
             break
 	    case 'ytmp3': case 'ytaudio': {
                 let { yta } = require('./lib/y2mate')
-                if (!text) throw `Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 128kbps`
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 128kbps`
                 let quality = args[1] ? args[1] : '128kbps'
                 let media = await yta(text, quality)
-                if (media.filesize >= 100000) return m.reply('File Melebihi Batas '+util.format(media))
-                kagura.sendImage(m.chat, media.thumb, `⭔ Title : ${media.title}\n⭔ File Size : ${media.filesizeF}\n⭔ Url : ${isUrl(text)}\n⭔ Ext : MP3\n⭔ Resolusi : ${args[1] || '128kbps'}`, m)
+                if (media.filesize >= 100000) return m.reply('Lo lamento, el archivo supera el límite.'+util.format(media))
+                kagura.sendImage(m.chat, media.thumb, `📌 *Titulo* : ${media.title}\n🚀 *Tamaño* : ${media.filesizeF}\n📎 *Enlace* : ${isUrl(text)}\n🧃 *Ext* : MP3\n💸 *Calidad* : ${args[1] || '128kbps'}`, m)
                 kagura.sendMessage(m.chat, { audio: { url: media.dl_link }, mimetype: 'audio/mpeg', fileName: `${media.title}.mp3` }, { quoted: m })
             }
             break
             case 'ytmp4': case 'ytvideo': {
                 let { ytv } = require('./lib/y2mate')
-                if (!text) throw `Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 360p`
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 360p`
                 let quality = args[1] ? args[1] : '360p'
                 let media = await ytv(text, quality)
-                if (media.filesize >= 100000) return m.reply('File Melebihi Batas '+util.format(media))
-                kagura.sendMessage(m.chat, { video: { url: media.dl_link }, mimetype: 'video/mp4', fileName: `${media.title}.mp4`, caption: `⭔ Title : ${media.title}\n⭔ File Size : ${media.filesizeF}\n⭔ Url : ${isUrl(text)}\n⭔ Ext : MP3\n⭔ Resolusi : ${args[1] || '360p'}` }, { quoted: m })
+                if (media.filesize >= 100000) return m.reply('Lo lamento, el archivo supera el límite.'+util.format(media))
+                kagura.sendMessage(m.chat, { video: { url: media.dl_link }, mimetype: 'video/mp4', fileName: `${media.title}.mp4`, caption: `📌 *Titulo* : ${media.title}\n🚀 *Tamaño* : ${media.filesizeF}\n📎 *Enlace* : ${isUrl(text)}\n🧃 *Ext* : MP4\n💸 *Calidad* : ${args[1] || '360p'}` }, { quoted: m })
             }
             break
 	    case 'getmusic': {
                 let { yta } = require('./lib/y2mate')
-                if (!text) throw `Example : ${prefix + command} 1`
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 1`
                 if (!m.quoted) return m.reply('Reply Pesan')
                 if (!m.quoted.isBaileys) throw `Hanya Bisa Membalas Pesan Dari Bot`
 		let urls = quoted.text.match(new RegExp(/(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch|v|embed|shorts)(?:\.php)?(?:\?.*v=|\/))([a-zA-Z0-9\_-]+)/, 'gi'))
@@ -1851,7 +1852,7 @@ let anu = await (await yts.search(text)).all[0]
             break
             case 'getvideo': {
                 let { ytv } = require('./lib/y2mate')
-                if (!text) throw `Example : ${prefix + command} 1`
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 1`
                 if (!m.quoted) return m.reply('Reply Pesan')
                 if (!m.quoted.isBaileys) throw `Hanya Bisa Membalas Pesan Dari Bot`
                 let urls = quoted.text.match(new RegExp(/(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch|v|embed|shorts)(?:\.php)?(?:\?.*v=|\/))([a-zA-Z0-9\_-]+)/, 'gi'))
@@ -1964,7 +1965,7 @@ let anu = await (await yts.search(text)).all[0]
             }
             break
             case '3dchristmas': case '3ddeepsea': case 'americanflag': case '3dscifi': case '3drainbow': case '3dwaterpipe': case 'halloweenskeleton': case 'sketch': case 'bluecircuit': case 'space': case 'metallic': case 'fiction': case 'greenhorror': case 'transformer': case 'berry': case 'thunder': case 'magma': case '3dcrackedstone': case '3dneonlight': case 'impressiveglitch': case 'naturalleaves': case 'fireworksparkle': case 'matrix': case 'dropwater':  case 'harrypotter': case 'foggywindow': case 'neondevils': case 'christmasholiday': case '3dgradient': case 'blackpink': case 'gluetext': {
-                if (!text) throw `Example : ${prefix + command} text`
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
                 m.reply(mess.wait)
                 kagura.sendMessage(m.chat, { image: { url: api('zenz', '/textpro/' + command, { text: text }, 'apikey') }, caption: `Text Pro ${command}` }, { quoted: m})
 	    }
@@ -1982,7 +1983,7 @@ let anu = await (await yts.search(text)).all[0]
             }
             break
 	    case 'nomerhoki': case 'nomorhoki': {
-                if (!Number(text)) throw `Example : ${prefix + command} 6288292024190`
+                if (!Number(text)) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 6288292024190`
                 let anu = await primbon.nomer_hoki(Number(text))
                 if (anu.status == false) return m.reply(anu.message)
                 kagura.sendText(m.chat, `⭔ *Nomor HP :* ${anu.message.nomer_hp}\n⭔ *Angka Shuzi :* ${anu.message.angka_shuzi}\n⭔ *Energi Positif :*\n- Kekayaan : ${anu.message.energi_positif.kekayaan}\n- Kesehatan : ${anu.message.energi_positif.kesehatan}\n- Cinta : ${anu.message.energi_positif.cinta}\n- Kestabilan : ${anu.message.energi_positif.kestabilan}\n- Persentase : ${anu.message.energi_positif.persentase}\n⭔ *Energi Negatif :*\n- Perselisihan : ${anu.message.energi_negatif.perselisihan}\n- Kehilangan : ${anu.message.energi_negatif.kehilangan}\n- Malapetaka : ${anu.message.energi_negatif.malapetaka}\n- Kehancuran : ${anu.message.energi_negatif.kehancuran}\n- Persentase : ${anu.message.energi_negatif.persentase}`, m)
@@ -1990,7 +1991,7 @@ let anu = await (await yts.search(text)).all[0]
             break
             
             case 'zodiak': case 'zodiac': {
-                if (!text) throw `Example : ${prefix+ command} 7 7 2005`
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix+ command} 7 7 2005`
                 let zodiak = [
                     ["capricorn", new Date(1970, 0, 1)],
                     ["aquarius", new Date(1970, 0, 20)],
@@ -2025,7 +2026,7 @@ let anu = await (await yts.search(text)).all[0]
             }
             break
             case 'shio': {
-                if (!text) throw `Example : ${prefix + command} tikus\n\nNote : For Detail https://primbon.com/shio.htm`
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} tikus\n\nNote : For Detail https://primbon.com/shio.htm`
                 let anu = await primbon.shio(text)
                 if (anu.status == false) return m.reply(anu.message)
                 kagura.sendText(m.chat, `⭔ *Hasil :* ${anu.message}`, m)
@@ -2033,53 +2034,53 @@ let anu = await (await yts.search(text)).all[0]
             break
 	    case 'stalker': case 'stalk': {
 		if (!isPremium && global.db.data.users[m.sender].limit < 1) return m.reply('Limit Harian Anda Telah Habis')
-                if (!text) return m.reply(`Example : ${prefix +command} type id\n\nList Type :\n1. ff (Free Fire)\n2. ml (Mobile Legends)\n3. aov (Arena Of Valor)\n4. cod (Call Of Duty)\n5. pb (point Blank)\n6. ig (Instagram)\n7. npm (https://npmjs.com)`)
+                if (!text) return m.reply(`𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix +command} type id\n\nList Type :\n1. ff (Free Fire)\n2. ml (Mobile Legends)\n3. aov (Arena Of Valor)\n4. cod (Call Of Duty)\n5. pb (point Blank)\n6. ig (Instagram)\n7. npm (https://npmjs.com)`)
                 let [type, id, zone] = args
                 if (type.toLowerCase() == 'ff') {
-                    if (!id) throw `No Query id, Example ${prefix + command} ff 552992060`
+                    if (!id) throw `No Query id, 𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 ${prefix + command} ff 552992060`
                     let anu = await fetchJson(api('zenz', '/api/nickff', { apikey: global.APIKeys[global.APIs['zenz']], query: id }))
                     if (anu.status == false) return m.reply(anu.result.message)
                     m.reply(`ID : ${anu.result.gameId}\nUsername : ${anu.result.userName}`)
 		    db.data.users[m.sender].limit -= 1
                 } else if (type.toLowerCase() == 'ml') {
-                    if (!id) throw `No Query id, Example : ${prefix + command} ml 214885010 2253`
-                    if (!zone) throw `No Query id, Example : ${prefix + command} ml 214885010 2253`
+                    if (!id) throw `No Query id, 𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} ml 214885010 2253`
+                    if (!zone) throw `No Query id, 𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} ml 214885010 2253`
                     let anu = await fetchJson(api('zenz', '/api/nickml', { apikey: global.APIKeys[global.APIs['zenz']], query: id, query2: zone }))
                     if (anu.status == false) return m.reply(anu.result.message)
                     m.reply(`ID : ${anu.result.gameId}\nZone : ${anu.result.zoneId}\nUsername : ${anu.result.userName}`)
 		    db.data.users[m.sender].limit -= 1
                 } else if (type.toLowerCase() == 'aov') {
-                    if (!id) throw `No Query id, Example ${prefix + command} aov 293306941441181`
+                    if (!id) throw `No Query id, 𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 ${prefix + command} aov 293306941441181`
                     let anu = await fetchJson(api('zenz', '/api/nickaov', { apikey: global.APIKeys[global.APIs['zenz']], query: id }))
                     if (anu.status == false) return m.reply(anu.result.message)
                     m.reply(`ID : ${anu.result.gameId}\nUsername : ${anu.result.userName}`)
 		    db.data.users[m.sender].limit -= 1
                 } else if (type.toLowerCase() == 'cod') {
-                    if (!id) throw `No Query id, Example ${prefix + command} cod 6290150021186841472`
+                    if (!id) throw `No Query id, 𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 ${prefix + command} cod 6290150021186841472`
                     let anu = await fetchJson(api('zenz', '/api/nickcod', { apikey: global.APIKeys[global.APIs['zenz']], query: id }))
                     if (anu.status == false) return m.reply(anu.result.message)
                     m.reply(`ID : ${anu.result.gameId}\nUsername : ${anu.result.userName}`)
 		    db.data.users[m.sender].limit -= 1
                 } else if (type.toLowerCase() == 'pb') {
-                    if (!id) throw `No Query id, Example ${prefix + command} pb riio46`
+                    if (!id) throw `No Query id, 𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 ${prefix + command} pb riio46`
                     let anu = await fetchJson(api('zenz', '/api/nickpb', { apikey: global.APIKeys[global.APIs['zenz']], query: id }))
                     if (anu.status == false) return m.reply(anu.result.message)
                     m.reply(`ID : ${anu.result.gameId}\nUsername : ${anu.result.userName}`)
 		    db.data.users[m.sender].limit -= 1
                 } else if (type.toLowerCase() == 'ig') {
-                    if (!id) throw `No Query username, Example : ${prefix + command} ig cak_haho`
+                    if (!id) throw `No Query username, 𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} ig cak_haho`
                     let { result: anu } = await fetchJson(api('zenz', '/api/stalker/ig', { username: id }, 'apikey'))
                     if (anu.status == false) return m.reply(anu.result.message)
                     kagura.sendMedia(m.chat, anu.caption.profile_hd, '', `⭔ Full Name : ${anu.caption.full_name}\n⭔ User Name : ${anu.caption.user_name}\n⭔ ID ${anu.caption.user_id}\n⭔ Followers : ${anu.caption.followers}\n⭔ Following : ${anu.caption.following}\n⭔ Bussines : ${anu.caption.bussines}\n⭔ Profesional : ${anu.caption.profesional}\n⭔ Verified : ${anu.caption.verified}\n⭔ Private : ${anu.caption.private}\n⭔ Bio : ${anu.caption.biography}\n⭔ Bio Url : ${anu.caption.bio_url}`, m)
 		    db.data.users[m.sender].limit -= 1
                 } else if (type.toLowerCase() == 'npm') {
-                    if (!id) throw `No Query username, Example : ${prefix + command} npm scrape-primbon`
+                    if (!id) throw `No Query username, 𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} npm scrape-primbon`
                     let { result: anu } = await fetchJson(api('zenz', '/api/stalker/npm', { query: id }, 'apikey'))
                     if (anu.status == false) return m.reply(anu.result.message)
                     m.reply(`⭔ Name : ${anu.name}\n⭔ Version : ${Object.keys(anu.versions)}\n⭔ Created : ${tanggal(anu.time.created)}\n⭔ Modified : ${tanggal(anu.time.modified)}\n⭔ Maintainers :\n ${anu.maintainers.map(v => `- ${v.name} : ${v.email}`).join('\n')}\n\n⭔ Description : ${anu.description}\n⭔ Homepage : ${anu.homepage}\n⭔ Keywords : ${anu.keywords}\n⭔ Author : ${anu.author.name}\n⭔ License : ${anu.license}\n⭔ Readme : ${anu.readme}`)
 		    db.data.users[m.sender].limit -= 1
                 } else {
-                    m.reply(`Example : ${prefix +command} type id\n\nList Type :\n1. ff (Free Fire)\n2. ml (Mobile Legends)\n3. aov (Arena Of Valor)\n4. cod (Call Of Duty)\n5. pb (point Blank)\n6. ig (Instagram)\n7. npm (https://npmjs.com)`)
+                    m.reply(`𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix +command} type id\n\nList Type :\n1. ff (Free Fire)\n2. ml (Mobile Legends)\n3. aov (Arena Of Valor)\n4. cod (Call Of Duty)\n5. pb (point Blank)\n6. ig (Instagram)\n7. npm (https://npmjs.com)`)
                 }
             }
             break
@@ -2215,7 +2216,7 @@ let anu = await (await yts.search(text)).all[0]
             }
             break
             case 'umma': case 'ummadl': {
-	        if (!text) throw `Example : ${prefix + command} https://umma.id/channel/video/post/gus-arafat-sumber-kecewa-84464612933698`
+	        if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} https://umma.id/channel/video/post/gus-arafat-sumber-kecewa-84464612933698`
                 let { umma } = require('./lib) scraper')
 		let anu = await umma(isUrl(text)[0])
 		if (anu.type == 'video') {
@@ -2268,75 +2269,13 @@ Untuk Download Media Silahkan Klik salah satu Button dibawah ini atau masukkan c
 		m.reply(mess.wait)
 		kagura.sendMessage(m.chat, {document: {url: 'https://fatiharridho.my.id/database/islam/juz-amma-arab-latin-indonesia.xlsx'}, mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName: 'juz-amma-arab-latin-indonesia.xlsx'}, {quoted:m})
 		} else {
-		m.reply(`Mau format apa ? Example : ${prefix + command} pdf
+		m.reply(`Mau format apa ? 𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} pdf
 
 Format yang tersedia : pdf, docx, pptx, xlsx`)
 		}
 		}
 		break
-		case 'hadis': case 'hadist': {
-		if (!args[0]) throw `Contoh:
-${prefix + command} bukhari 1
-${prefix + command} abu-daud 1
-
-Pilihan tersedia:
-abu-daud
-1 - 4590
-ahmad
-1 - 26363
-bukhari
-1 - 7008
-darimi
-1 - 3367
-ibnu-majah
-1 - 4331
-nasai
-1 - 5662
-malik
-1 - 1594
-muslim
-1 - 5362`
-		if (!args[1]) throw `Hadis yang ke berapa?\n\ncontoh:\n${prefix + command} muslim 1`
-		try {
-		let res = await fetchJson(`https://islamic-api-indonesia.herokuapp.com/api/data/json/hadith/${args[0]}`)
-		let { number, arab, id } = res.find(v => v.number == args[1])
-		m.reply(`No. ${number}
-
-${arab}
-
-${id}`)
-		} catch (e) {
-		m.reply(`Hadis tidak ditemukan !`)
-		}
-		}
-		break
-		case 'alquran': {
-		if (!args[0]) throw `Contoh penggunaan:\n${prefix + command} 1 2\n\nmaka hasilnya adalah surah Al-Fatihah ayat 2 beserta audionya, dan ayatnya 1 aja`
-		if (!args[1]) throw `Contoh penggunaan:\n${prefix + command} 1 2\n\nmaka hasilnya adalah surah Al-Fatihah ayat 2 beserta audionya, dan ayatnya 1 aja`
-		let res = await fetchJson(`https://islamic-api-indonesia.herokuapp.com/api/data/quran?surah=${args[0]}&ayat=${args[1]}`)
-		let txt = `*Arab* : ${res.result.data.text.arab}
-*English* : ${res.result.data.translation.en}
-*Indonesia* : ${res.result.data.translation.id}
-
-( Q.S ${res.result.data.surah.name.transliteration.id} : ${res.result.data.number.inSurah} )`
-		m.reply(txt)
-		kagura.sendMessage(m.chat, {audio: { url: res.result.data.audio.primary }, mimetype: 'audio/mpeg'}, { quoted : m })
-		}
-		break
-		case 'tafsirsurah': {
-		if (!args[0]) throw `Contoh penggunaan:\n${prefix + command} 1 2\n\nmaka hasilnya adalah tafsir surah Al-Fatihah ayat 2`
-		if (!args[1]) throw `Contoh penggunaan:\n${prefix + command} 1 2\n\nmaka hasilnya adalah tafsir surah Al-Fatihah ayat 2`
-		let res = await fetchJson(`https://islamic-api-indonesia.herokuapp.com/api/data/quran?surah=${args[0]}&ayat=${args[1]}`)
-		let txt = `「 *Tafsir Surah*  」
-
-*Pendek* : ${res.result.data.tafsir.id.short}
-
-*Panjang* : ${res.result.data.tafsir.id.long}
-
-( Q.S ${res.result.data.surah.name.transliteration.id} : ${res.result.data.number.inSurah} )`
-		m.reply(txt)
-		}
-		break
+		 
 		   case 'bass': case 'blown': case 'deep': case 'earrape': case 'fast': case 'fat': case 'nightcore': case 'reverse': case 'robot': case 'slow': case 'smooth': case 'tupai':
                 try {
                 let set
@@ -2413,7 +2352,7 @@ ${Object.entries(global.db.data.sticker).map(([key, value], index) => `${index +
             break
             case 'addmsg': {
                 if (!m.quoted) throw 'Reply Message Yang Ingin Disave Di Database'
-                if (!text) throw `Example : ${prefix + command} nama file`
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} nama file`
                 let msgs = global.db.data.database
                 if (text.toLowerCase() in msgs) throw `'${text}' telah terdaftar di list pesan`
                 msgs[text.toLowerCase()] = quoted.fakeObj
@@ -2425,7 +2364,7 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
             }
             break
             case 'getmsg': {
-                if (!text) throw `Example : ${prefix + command} file name\n\nLihat list pesan dengan ${prefix}listmsg`
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} file name\n\n𝖯𝖺𝗋𝖺 𝗏𝖾𝗋 𝗅𝗈𝗌 𝗆𝖾𝗇𝗌𝖺𝗃𝖾𝗌 𝗀𝗎𝖺𝗋𝖽𝖺𝖽𝗈𝗌 𝗎𝗌𝖺 : ${prefix}listmsg`
                 let msgs = global.db.data.database
                 if (!(text.toLowerCase() in msgs)) throw `'${text}' tidak terdaftar di list pesan`
                 kagura.copyNForward(m.chat, msgs[text.toLowerCase()], true)
@@ -2434,9 +2373,9 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
             case 'listmsg': {
                 let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
 	        let seplit = Object.entries(global.db.data.database).map(([nama, isi]) => { return { nama, ...isi } })
-		let teks = '「 LIST DATABASE 」\n\n'
+		let teks = '「 BASE DE DATOS 」\n\n'
 		for (let i of seplit) {
-		    teks += `⬡ *Name :* ${i.nama}\n⬡ *Type :* ${getContentType(i.message).replace(/Message/i, '')}\n────────────────────────\n\n`
+		    teks += `⬡ *Nombre :* ${i.nama}\n⬡ *Tipo :* ${getContentType(i.message).replace(/Message/i, '')}\n────────────────────────\n\n`
 	        }
 	        m.reply(teks)
 	    }
@@ -2445,131 +2384,20 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
 	        let msgs = global.db.data.database
 	        if (!(text.toLowerCase() in msgs)) return m.reply(`'${text}' tidak terdaftar didalam list pesan`)
 		delete msgs[text.toLowerCase()]
-		m.reply(`Berhasil menghapus '${text}' dari list pesan`)
+		m.reply(`Se ha eliminado : '${text}' de la base de datos.`)
             }
 	    break
-	    case 'anonymous': {
-                if (m.isGroup) return m.reply('Fitur Tidak Dapat Digunakan Untuk Group!')
-				this.anonymous = this.anonymous ? this.anonymous : {}
-				let buttons = [
-                    { buttonId: 'start', buttonText: { displayText: 'Start' }, type: 1 }
-                ]
-                kagura.sendButtonText(m.chat, buttons, `\`\`\`Hi ${await kagura.getName(m.sender)} Welcome To Anonymous Chat\n\nKlik Button Dibawah Ini Untuk Mencari Partner\`\`\``, kagura.user.name, m)
-            }
-			break
-            case 'keluar': case 'leave': {
-                if (m.isGroup) return m.reply('Fitur Tidak Dapat Digunakan Untuk Group!')
-                this.anonymous = this.anonymous ? this.anonymous : {}
-                let room = Object.values(this.anonymous).find(room => room.check(m.sender))
-                if (!room) {
-                    let buttons = [
-                        { buttonId: 'start', buttonText: { displayText: 'Start' }, type: 1 }
-                    ]
-                    await kagura.sendButtonText(m.chat, buttons, `\`\`\`Kamu Sedang Tidak Berada Di Sesi Anonymous, Tekan Button Untuk Mencari Partner \`\`\``)
-                    throw false
-                }
-                m.reply('Ok')
-                let other = room.other(m.sender)
-                if (other) await kagura.sendText(other, `\`\`\`Partner Telah Meninggalkan Sesi Anonymous\`\`\``, m)
-                delete this.anonymous[room.id]
-                if (command === 'leave') break
-            }
-            case 'mulai': case 'start': {
-                if (m.isGroup) return m.reply('Fitur Tidak Dapat Digunakan Untuk Group!')
-                this.anonymous = this.anonymous ? this.anonymous : {}
-                if (Object.values(this.anonymous).find(room => room.check(m.sender))) {
-                    let buttons = [
-                        { buttonId: 'keluar', buttonText: { displayText: 'Stop' }, type: 1 }
-                    ]
-                    await kagura.sendButtonText(m.chat, buttons, `\`\`\`Kamu Masih Berada Di dalam Sesi Anonymous, Tekan Button Dibawah Ini Untuk Menghentikan Sesi Anonymous Anda\`\`\``, kagura.user.name, m)
-                    throw false
-                }
-                let room = Object.values(this.anonymous).find(room => room.state === 'WAITING' && !room.check(m.sender))
-                if (room) {
-                    let buttons = [
-                        { buttonId: 'next', buttonText: { displayText: 'Skip' }, type: 1 },
-                        { buttonId: 'keluar', buttonText: { displayText: 'Stop' }, type: 1 }
-                    ]
-                    await kagura.sendButtonText(room.a, buttons, `\`\`\`Berhasil Menemukan Partner, sekarang kamu dapat mengirim pesan\`\`\``, kagura.user.name, m)
-                    room.b = m.sender
-                    room.state = 'CHATTING'
-                    await kagura.sendButtonText(room.b, buttons, `\`\`\`Berhasil Menemukan Partner, sekarang kamu dapat mengirim pesan\`\`\``, kagura.user.name, m)
-                } else {
-                    let id = + new Date
-                    this.anonymous[id] = {
-                        id,
-                        a: m.sender,
-                        b: '',
-                        state: 'WAITING',
-                        check: function (who = '') {
-                            return [this.a, this.b].includes(who)
-                        },
-                        other: function (who = '') {
-                            return who === this.a ? this.b : who === this.b ? this.a : ''
-                        },
-                    }
-                    let buttons = [
-                        { buttonId: 'keluar', buttonText: { displayText: 'Stop' }, type: 1 }
-                    ]
-                    await kagura.sendButtonText(m.chat, buttons, `\`\`\`Mohon Tunggu Sedang Mencari Partner\`\`\``, kagura.user.name, m)
-                }
-                break
-            }
-            case 'next': case 'lanjut': {
-                if (m.isGroup) return m.reply('Fitur Tidak Dapat Digunakan Untuk Group!')
-                this.anonymous = this.anonymous ? this.anonymous : {}
-                let romeo = Object.values(this.anonymous).find(room => room.check(m.sender))
-                if (!romeo) {
-                    let buttons = [
-                        { buttonId: 'start', buttonText: { displayText: 'Start' }, type: 1 }
-                    ]
-                    await kagura.sendButtonText(m.chat, buttons, `\`\`\`Kamu Sedang Tidak Berada Di Sesi Anonymous, Tekan Button Untuk Mencari Partner\`\`\``)
-                    throw false
-                }
-                let other = romeo.other(m.sender)
-                if (other) await kagura.sendText(other, `\`\`\`Partner Telah Meninggalkan Sesi Anonymous\`\`\``, m)
-                delete this.anonymous[romeo.id]
-                let room = Object.values(this.anonymous).find(room => room.state === 'WAITING' && !room.check(m.sender))
-                if (room) {
-                    let buttons = [
-                        { buttonId: 'next', buttonText: { displayText: 'Skip' }, type: 1 },
-                        { buttonId: 'keluar', buttonText: { displayText: 'Stop' }, type: 1 }
-                    ]
-                    await kagura.sendButtonText(room.a, buttons, `\`\`\`Berhasil Menemukan Partner, sekarang kamu dapat mengirim pesan\`\`\``, kagura.user.name, m)
-                    room.b = m.sender
-                    room.state = 'CHATTING'
-                    await kagura.sendButtonText(room.b, buttons, `\`\`\`Berhasil Menemukan Partner, sekarang kamu dapat mengirim pesan\`\`\``, kagura.user.name, m)
-                } else {
-                    let id = + new Date
-                    this.anonymous[id] = {
-                        id,
-                        a: m.sender,
-                        b: '',
-                        state: 'WAITING',
-                        check: function (who = '') {
-                            return [this.a, this.b].includes(who)
-                        },
-                        other: function (who = '') {
-                            return who === this.a ? this.b : who === this.b ? this.a : ''
-                        },
-                    }
-                    let buttons = [
-                        { buttonId: 'keluar', buttonText: { displayText: 'Stop' }, type: 1 }
-                    ]
-                    await kagura.sendButtonText(m.chat, buttons, `\`\`\`Mohon Tunggu Sedang Mencari Partner\`\`\``, kagura.user.name, m)
-                }
-                break
-            }
+	     
             case 'public': {
                 if (!isCreator) throw mess.owner
                 kagura.public = true
-                m.reply('Sukse Change To Public Usage')
+                m.reply('Se ha cambiado al modo público.')
             }
             break
             case 'self': {
                 if (!isCreator) throw mess.owner
                 kagura.public = false
-                m.reply('Sukses Change To Self Usage')
+                m.reply('Se ha cambiado al modo privado.')
             }
             break
             case 'ping': case 'botstatus': case 'statusbot': {
@@ -2603,7 +2431,7 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
                 neww = performance.now()
                 oldd = performance.now()
                 respon = `
-Kecepatan Respon ${latensi.toFixed(4)} _Second_ \n ${oldd - neww} _miliseconds_\n\nRuntime : ${runtime(process.uptime())}
+Velocidad de respuesta ${latensi.toFixed(4)} _Second_ \n ${oldd - neww} _miliseconds_\n\nRuntime : ${runtime(process.uptime())}
 
 💻 Info Server
 RAM: ${formatp(os.totalmem() - os.freemem())} / ${formatp(os.totalmem())}
@@ -2641,7 +2469,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
             }
             break
             case 'playstore': {
-            if (!text) throw `Example : ${prefix + command} clash of clans`
+            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} clash of clans`
             let res = await fetchJson(api('zenz', '/webzone/playstore', { query: text }, 'apikey'))
             let teks = `⭔ Playstore Search From : ${text}\n\n`
             for (let i of res.result) {
@@ -2654,7 +2482,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
             }
             break
             case 'gsmarena': {
-            if (!text) throw `Example : ${prefix + command} samsung`
+            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} samsung`
             let res = await fetchJson(api('zenz', '/webzone/gsmarena', { query: text }, 'apikey'))
             let { judul, rilis, thumb, ukuran, type, storage, display, inchi, pixel, videoPixel, ram, chipset, batrai, merek_batre, detail } = res.result
 let capt = `⭔ Title: ${judul}
@@ -2675,7 +2503,7 @@ let capt = `⭔ Title: ${judul}
             }
             break
             case 'jadwalbioskop': {
-            if (!text) throw `Example: ${prefix + command} jakarta`
+            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈: ${prefix + command} jakarta`
             let res = await fetchJson(api('zenz', '/webzone/jadwalbioskop', { kota: text }, 'apikey'))
             let capt = `Jadwal Bioskop From : ${text}\n\n`
             for (let i of res.result){
@@ -2698,7 +2526,7 @@ let capt = `⭔ Title: ${judul}
             }
             break
             case 'aminio': {
-            if (!text) throw `Example: ${prefix + command} free fire`
+            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈: ${prefix + command} free fire`
             let res = await fetchJson(api('zenz', '/webzone/amino', { query: text }, 'apikey'))
             let capt = `Amino Search From : ${text}\n\n`
             for (let i of res.result){
@@ -2712,7 +2540,7 @@ let capt = `⭔ Title: ${judul}
             }
             break
             case 'wattpad': {
-            if (!text) throw `Example : ${prefix + command} love`
+            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} love`
             let res = await fetchJson(api('zenz', '/webzone/wattpad', { query: text }, 'apikey'))
             let { judul, dibaca, divote, bab, waktu, url, thumb, description } = res.result[0]
             let capt = `Wattpad From ${text}\n\n`
@@ -2727,7 +2555,7 @@ let capt = `⭔ Title: ${judul}
             }
             break
             case 'webtoons': {
-            if (!text) throw `Example : ${prefix + command} love`
+            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} love`
             let res = await fetchJson(api('zenz', '/webzone/webtoons', { query: text }, 'apikey'))
             let capt = `Webtoons Search From : ${text}\n\n`
             for (let i of res.result) {
@@ -2741,7 +2569,7 @@ let capt = `⭔ Title: ${judul}
             }
             break
             case 'drakor': {
-            if (!text) throw `Example : ${prefix + command} love`
+            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} love`
             let res = await fetchJson(api('zenz', '/webzone/drakor', { query: text }, 'apikey'))
             let capt = `Drakor Search From : ${text}\n\n`
             for (let i of res.result) {
@@ -2836,7 +2664,8 @@ Bienvenido al menu, mi nombre es ${botname}.
 
 𝑭𝒆𝒍𝒊𝒛 𝒆𝒔 𝒂𝒒𝒖𝒆𝒍 𝒒𝒖𝒆 𝒂 𝒂𝒑𝒓𝒆𝒏𝒅𝒊𝒅𝒐 𝒂 𝒂𝒅𝒎𝒊𝒓𝒂𝒓 𝒚 𝒏𝒐 𝒂 𝒆𝒏𝒗𝒊𝒅𝒊𝒂𝒓... 🥀
 ──────────────
- _<𝖨𝗇𝖿𝗈 𝖣𝖾𝗅 𝖡𝗈𝗍>_
+                    _<𝖨𝗇𝖿𝗈 𝖣𝖾𝗅 𝖡𝗈𝗍>_
+                    
 👑 Creator : *𝘐𝘮 𝘍𝘦𝘭𝘪𝘹*
 👤 Owner : *${ownername}*
 🤖 Bot Name : *${botname}*
