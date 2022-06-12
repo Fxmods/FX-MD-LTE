@@ -2779,79 +2779,10 @@ Bienvenido al menu, mi nombre es ${botname}.
 • #trap (nsfw)
 • #blowjob (nsfw)
 
- ▢ *𝖳𝖾𝗑𝗍𝖯𝖱𝖮 𝖬𝖾𝗇𝗎*
-• #3dchristmas
-• #3ddeepsea
-• #americanflag
-• #3dscifi
-• #3drainbow
-• #3dwaterpipe
-• #halloweenskeleton
-• #sketch
-• #bluecircuit
-• #space
-• #metallic
-• #fiction
-• #greenhorror
-• #transformer
-• #berry
-• #thunder
-• #magma
-• #3dcrackedstone
-• #3dneonlight
-• #impressiveglitch
-• #naturalleaves
-• #fireworksparkle
-• #matrix
-• #dropwater
-• #harrypotter
-• #foggywindow
-• #neondevils
-• #christmasholiday
-• #3dgradient
-• #blackpink
-• #gluetext
-
- ▢ *𝖯𝗁𝗈𝗍𝗈𝖮𝖷𝖸 𝖬𝖾𝗇𝗎*
-• #shadow
-• #romantic
-• #smoke
-• #burnpapper
-• #naruto
-• #lovemsg
-• #grassmsg
-• #lovetext
-• #coffecup
-• #butterfly
-• #harrypotter
-• #retrolol
-
- ▢ *𝖤𝖯𝗁𝗈𝗍𝗈 𝖬𝖾𝗇𝗎*
-• #ffcover
-• #crossfire
-• #galaxy
-• #glass
-• #neon
-• #beach
-• #blackpink
-• #igcertificate
-• #ytcertificate
-
  ▢ *𝖥𝗎𝗇 𝖬𝖾𝗇𝗎*
-• #simih
-• #halah
-• #hilih
-• #huluh
-• #heleh
-• #holoh
-• #jadian
-• #jodohku
 • #delttt
 • #tictactoe
-• #family100
-• #tebak [option]
 • #math [mode]
-• #suitpvp [@tag]
 
  ▢ *𝖢𝗋𝖾𝖺𝗍𝗈𝗋 𝖬𝖾𝗇𝗎*
 • #attp
@@ -2881,12 +2812,6 @@ Bienvenido al menu, mi nombre es ${botname}.
 • #listmsg
 • #getmsg
 • #delmsg
-
- ▢ *𝖠𝗇𝗈𝗇𝗒𝗆𝗈𝗎𝗌 𝖬𝖾𝗇𝗎*
-• #anonymous
-• #start
-• #next
-• #keluar
 
  ▢ *𝖤𝖽𝗂𝗍𝗈𝗋 𝖣𝖾 𝖵𝗈𝗓*
 • #bass
