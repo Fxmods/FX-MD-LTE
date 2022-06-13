@@ -13,6 +13,8 @@ const { exec, spawn, execSync } = require("child_process")
 const axios = require('axios')
 const path = require('path')
 const os = require('os')
+const { aiovideodl } = require('./lib/scraper.js')
+const thiccysapi = require('textmaker-thiccy')
 const moment = require('moment-timezone')
 const { JSDOM } = require('jsdom')
 const speed = require('performance-now')
@@ -43,8 +45,8 @@ module.exports = kagura = async (kagura, m, chatUpdate, store) => {
         const command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase()
         const args = body.trim().split(/ +/).slice(1)
         const pushname = m.pushName || "No Name"
-        const time = moment(Date.now()).tz('Asia/Jakarta').locale('id').format('HH:mm:ss z')
-        const salam = moment(Date.now()).tz('Asia/Jakarta').locale('id').format('a')
+        const time = moment(Date.now()).tz('America/Mexico_City').locale('id').format('HH:mm')
+        const salam = moment(Date.now()).tz('America/Mexico_City').locale('id').format('HH:mm')
         const tanggal = moment.tz('Asia/Jakarta').format('dddd') + ', ' + moment.tz('Asia/Jakarta').format('LL')
         const botNumber = await kagura.decodeJid(kagura.user.id)
         const isCreator = [botNumber, ...global.owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
@@ -212,7 +214,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             if (budy.toLowerCase() == jawaban) {
                 await kagura.sendButtonText(m.chat, [{ buttonId: 'tebak lagu', buttonText: { displayText: 'Tebak Lagu' }, type: 1 }], `🎮 Tebak Lagu 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, kagura.user.name, m)
                 delete tebaklagu[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
+            } else m.reply('*¡Respuesta incorrecta!*')
         }
 
         if (kuismath.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
@@ -221,7 +223,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             if (budy.toLowerCase() == jawaban) {
                 await m.reply(`🎮 Kuis Matematika  🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}math mode`)
                 delete kuismath[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
+            } else m.reply('*¡Respuesta incorrecta!*')
         }
 
         if (tebakgambar.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
@@ -230,7 +232,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             if (budy.toLowerCase() == jawaban) {
                 await kagura.sendButtonText(m.chat, [{ buttonId: 'tebak gambar', buttonText: { displayText: 'Tebak Gambar' }, type: 1 }], `🎮 Tebak Gambar 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, kagura.user.name, m)
                 delete tebakgambar[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
+            } else m.reply('*¡Respuesta incorrecta!*')
         }
 
         if (tebakkata.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
@@ -239,7 +241,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             if (budy.toLowerCase() == jawaban) {
                 await kagura.sendButtonText(m.chat, [{ buttonId: 'tebak kata', buttonText: { displayText: 'Tebak Kata' }, type: 1 }], `🎮 Tebak Kata 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, kagura.user.name, m)
                 delete tebakkata[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
+            } else m.reply('*¡Respuesta incorrecta!*')
         }
 
         if (caklontong.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
@@ -250,7 +252,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                 await kagura.sendButtonText(m.chat, [{ buttonId: 'tebak lontong', buttonText: { displayText: 'Tebak Lontong' }, type: 1 }], `🎮 Cak Lontong 🎮\n\nJawaban Benar 🎉\n*${deskripsi}*\n\nIngin bermain lagi? tekan button dibawah`, kagura.user.name, m)
                 delete caklontong[m.sender.split('@')[0]]
 		delete caklontong_desk[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
+            } else m.reply('*¡Respuesta incorrecta!*')
         }
 
         if (tebakkalimat.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
@@ -259,7 +261,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             if (budy.toLowerCase() == jawaban) {
                 await kagura.sendButtonText(m.chat, [{ buttonId: 'tebak kalimat', buttonText: { displayText: 'Tebak Kalimat' }, type: 1 }], `🎮 Tebak Kalimat 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, kagura.user.name, m)
                 delete tebakkalimat[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
+            } else m.reply('*¡Respuesta incorrecta!*')
         }
 
         if (tebaklirik.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
@@ -268,7 +270,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             if (budy.toLowerCase() == jawaban) {
                 await kagura.sendButtonText(m.chat, [{ buttonId: 'tebak lirik', buttonText: { displayText: 'Tebak Lirik' }, type: 1 }], `🎮 Tebak Lirik 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, kagura.user.name, m)
                 delete tebaklirik[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
+            } else m.reply('*¡Respuesta incorrecta!*')
         }
 	    
 	if (tebaktebakan.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
@@ -277,7 +279,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             if (budy.toLowerCase() == jawaban) {
                 await kagura.sendButtonText(m.chat, [{ buttonId: 'tebak tebakan', buttonText: { displayText: 'Tebak Tebakan' }, type: 1 }], `🎮 Tebak Tebakan 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, kagura.user.name, m)
                 delete tebaktebakan[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
+            } else m.reply('*¡Respuesta incorrecta!*')
         }
         
         //TicTacToe
@@ -743,7 +745,7 @@ m.reply(`  ❏ *Fun Menu*
  › #huluh
  › #heleh
  › #holoh
- › #jadian
+ › #ship
  › #jodohku
  › #delttt
  › #tictactoe
@@ -764,7 +766,7 @@ m.reply(`  ❏ *Primbon Menu*
  › #ramalcinta
  › #cocoknama
  › #pasangan
- › #jadiannikah
+ › #shipnikah
  › #sifatusaha
  › #rezeki
  › #pekerjaan
@@ -872,115 +874,7 @@ break
                 }
             }
             break
-	    case 'family100': {
-                if ('family100'+m.chat in _family100) {
-                    m.reply('Masih Ada Sesi Yang Belum Diselesaikan!')
-                    throw false
-                }
-                let anu = await fetchJson('https://raw.githubusercontent.com/BochilTeam/database/master/games/family100.json')
-                let random = anu[Math.floor(Math.random() * anu.length)]
-                let hasil = `*Jawablah Pertanyaan Berikut :*\n${random.soal}\n\nTerdapat *${random.jawaban.length}* Jawaban ${random.jawaban.find(v => v.includes(' ')) ? `(beberapa Jawaban Terdapat Spasi)` : ''}`.trim()
-                _family100['family100'+m.chat] = {
-                    id: 'family100'+m.chat,
-                    pesan: await kagura.sendText(m.chat, hasil, m),
-                    ...random,
-                    terjawab: Array.from(random.jawaban, () => false),
-                    hadiah: 6,
-                }
-            }
-            break
-            case 'halah': case 'hilih': case 'huluh': case 'heleh': case 'holoh':
-            if (!m.quoted && !text) throw `Kirim/reply text dengan caption ${prefix + command}`
-            ter = command[1].toLowerCase()
-            tex = m.quoted ? m.quoted.text ? m.quoted.text : q ? q : m.text : q ? q : m.text
-            m.reply(tex.replace(/[aiueo]/g, ter).replace(/[AIUEO]/g, ter.toUpperCase()))
-            break
-            case 'tebak': {
-                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} lagu\n\nOption : \n1. lagu\n2. gambar\n3. kata\n4. kalimat\n5. lirik\n6.lontong`
-                if (args[0] === "lagu") {
-                    if (tebaklagu.hasOwnProperty(m.sender.split('@')[0])) throw "Masih Ada Sesi Yang Belum Diselesaikan!"
-                    let anu = await fetchJson('https://fatiharridho.github.io/tebaklagu.json')
-                    let result = anu[Math.floor(Math.random() * anu.length)]
-                    let msg = await kagura.sendMessage(m.chat, { audio: { url: result.link_song }, mimetype: 'audio/mpeg' }, { quoted: m })
-                    kagura.sendText(m.chat, `Lagu Tersebut Adalah Lagu dari?\n\nArtist : ${result.artist}\nWaktu : 60s`, msg).then(() => {
-                    tebaklagu[m.sender.split('@')[0]] = result.jawaban.toLowerCase()
-                    })
-                    await sleep(60000)
-                    if (tebaklagu.hasOwnProperty(m.sender.split('@')[0])) {
-                    console.log("Jawaban: " + result.jawaban)
-                    kagura.sendButtonText(m.chat, [{ buttonId: 'tebak lagu', buttonText: { displayText: 'Tebak Lagu' }, type: 1 }], `Waktu Habis\nJawaban:  ${tebaklagu[m.sender.split('@')[0]]}\n\nIngin bermain? tekan button dibawah`, kagura.user.name, m)
-                    delete tebaklagu[m.sender.split('@')[0]]
-                    }
-                } else if (args[0] === 'gambar') {
-                    if (tebakgambar.hasOwnProperty(m.sender.split('@')[0])) throw "Masih Ada Sesi Yang Belum Diselesaikan!"
-                    let anu = await fetchJson('https://raw.githubusercontent.com/BochilTeam/database/master/games/tebakgambar.json')
-                    let result = anu[Math.floor(Math.random() * anu.length)]
-                    kagura.sendImage(m.chat, result.img, `Silahkan Jawab Soal Di Atas Ini\n\nDeskripsi : ${result.deskripsi}\nWaktu : 60s`, m).then(() => {
-                    tebakgambar[m.sender.split('@')[0]] = result.jawaban.toLowerCase()
-                    })
-                    await sleep(60000)
-                    if (tebakgambar.hasOwnProperty(m.sender.split('@')[0])) {
-                    console.log("Jawaban: " + result.jawaban)
-                    kagura.sendButtonText(m.chat, [{ buttonId: 'tebak gambar', buttonText: { displayText: 'Tebak Gambar' }, type: 1 }], `Waktu Habis\nJawaban:  ${tebakgambar[m.sender.split('@')[0]]}\n\nIngin bermain? tekan button dibawah`, kagura.user.name, m)
-                    delete tebakgambar[m.sender.split('@')[0]]
-                    }
-                } else if (args[0] === 'kata') {
-                    if (tebakkata.hasOwnProperty(m.sender.split('@')[0])) throw "Masih Ada Sesi Yang Belum Diselesaikan!"
-                    let anu = await fetchJson('https://raw.githubusercontent.com/BochilTeam/database/master/games/tebakkata.json')
-                    let result = anu[Math.floor(Math.random() * anu.length)]
-                    kagura.sendText(m.chat, `Silahkan Jawab Pertanyaan Berikut\n\n${result.soal}\nWaktu : 60s`, m).then(() => {
-                    tebakkata[m.sender.split('@')[0]] = result.jawaban.toLowerCase()
-                    })
-                    await sleep(60000)
-                    if (tebakkata.hasOwnProperty(m.sender.split('@')[0])) {
-                    console.log("Jawaban: " + result.jawaban)
-                    kagura.sendButtonText(m.chat, [{ buttonId: 'tebak kata', buttonText: { displayText: 'Tebak Kata' }, type: 1 }], `Waktu Habis\nJawaban:  ${tebakkata[m.sender.split('@')[0]]}\n\nIngin bermain? tekan button dibawah`, kagura.user.name, m)
-                    delete tebakkata[m.sender.split('@')[0]]
-                    }
-                } else if (args[0] === 'kalimat') {
-                    if (tebakkalimat.hasOwnProperty(m.sender.split('@')[0])) throw "Masih Ada Sesi Yang Belum Diselesaikan!"
-                    let anu = await fetchJson('https://raw.githubusercontent.com/BochilTeam/database/master/games/tebakkalimat.json')
-                    let result = anu[Math.floor(Math.random() * anu.length)]
-                    kagura.sendText(m.chat, `Silahkan Jawab Pertanyaan Berikut\n\n${result.soal}\nWaktu : 60s`, m).then(() => {
-                    tebakkalimat[m.sender.split('@')[0]] = result.jawaban.toLowerCase()
-                    })
-                    await sleep(60000)
-                    if (tebakkalimat.hasOwnProperty(m.sender.split('@')[0])) {
-                    console.log("Jawaban: " + result.jawaban)
-                    kagura.sendButtonText(m.chat, [{ buttonId: 'tebak kalimat', buttonText: { displayText: 'Tebak Kalimat' }, type: 1 }], `Waktu Habis\nJawaban:  ${tebakkalimat[m.sender.split('@')[0]]}\n\nIngin bermain? tekan button dibawah`, kagura.user.name, m)
-                    delete tebakkalimat[m.sender.split('@')[0]]
-                    }
-                } else if (args[0] === 'lirik') {
-                    if (tebaklirik.hasOwnProperty(m.sender.split('@')[0])) throw "Masih Ada Sesi Yang Belum Diselesaikan!"
-                    let anu = await fetchJson('https://raw.githubusercontent.com/BochilTeam/database/master/games/tebaklirik.json')
-                    let result = anu[Math.floor(Math.random() * anu.length)]
-                    kagura.sendText(m.chat, `Ini Adalah Lirik Dari Lagu? : *${result.soal}*?\nWaktu : 60s`, m).then(() => {
-                    tebaklirik[m.sender.split('@')[0]] = result.jawaban.toLowerCase()
-                    })
-                    await sleep(60000)
-                    if (tebaklirik.hasOwnProperty(m.sender.split('@')[0])) {
-                    console.log("Jawaban: " + result.jawaban)
-                    kagura.sendButtonText(m.chat, [{ buttonId: 'tebak lirik', buttonText: { displayText: 'Tebak Lirik' }, type: 1 }], `Waktu Habis\nJawaban:  ${tebaklirik[m.sender.split('@')[0]]}\n\nIngin bermain? tekan button dibawah`, kagura.user.name, m)
-                    delete tebaklirik[m.sender.split('@')[0]]
-                    }
-                } else if (args[0] === 'lontong') {
-                    if (caklontong.hasOwnProperty(m.sender.split('@')[0])) throw "Masih Ada Sesi Yang Belum Diselesaikan!"
-                    let anu = await fetchJson('https://raw.githubusercontent.com/BochilTeam/database/master/games/caklontong.json')
-                    let result = anu[Math.floor(Math.random() * anu.length)]
-                    kagura.sendText(m.chat, `*Jawablah Pertanyaan Berikut :*\n${result.soal}*\nWaktu : 60s`, m).then(() => {
-                    caklontong[m.sender.split('@')[0]] = result.jawaban.toLowerCase()
-		    caklontong_desk[m.sender.split('@')[0]] = result.deskripsi
-                    })
-                    await sleep(60000)
-                    if (caklontong.hasOwnProperty(m.sender.split('@')[0])) {
-                    console.log("Jawaban: " + result.jawaban)
-                    kagura.sendButtonText(m.chat, [{ buttonId: 'tebak lontong', buttonText: { displayText: 'Tebak Lontong' }, type: 1 }], `Waktu Habis\nJawaban:  ${caklontong[m.sender.split('@')[0]]}\nDeskripsi : ${caklontong_desk[m.sender.split('@')[0]]}\n\nIngin bermain? tekan button dibawah`, kagura.user.name, m)
-                    delete caklontong[m.sender.split('@')[0]]
-		    delete caklontong_desk[m.sender.split('@')[0]]
-                    }
-                }
-            }
-            break
+	     
             case 'kuismath': case 'math': {
                 if (kuismath.hasOwnProperty(m.sender.split('@')[0])) throw "¡Aun no se responde la pregunta anterior!"
                 let { genMath, modes } = require('./src/math')
@@ -997,18 +891,19 @@ break
                 }
             }
             break
-             
-            case 'jadian': {
+
+
+            case 'ship': {
             if (!m.isGroup) throw mess.group
             let member = participants.map(u => u.id)
             let orang = member[Math.floor(Math.random() * member.length)]
             let jodoh = member[Math.floor(Math.random() * member.length)]
-            let jawab = `Ciee yang Jadian💖 Jangan lupa pajak jadiannya🐤
+            let jawab = `                𝐿𝑎 𝑝𝑎𝑟𝑒𝑗𝑎 𝑑𝑒𝑙 𝑑𝑖𝑎ꨄ︎
 
 @${orang.split('@')[0]} ❤️ @${jodoh.split('@')[0]}`
             let menst = [orang, jodoh]
             let buttons = [
-                        { buttonId: 'jadian', buttonText: { displayText: 'Jodohku' }, type: 1 }
+                        { buttonId: 'ship', buttonText: { displayText: '𝘍𝘰𝘳𝘮𝘢𝘳 𝘕𝘶𝘦𝘷𝘢 𝘗𝘢𝘳𝘦𝘫𝘢' }, type: 1 }
                     ]
                     await kagura.sendButtonText(m.chat, buttons, jawab, kagura.user.name, m, {mentions: menst})
             }
@@ -1106,6 +1001,29 @@ break
                 await kagura.groupUpdateDescription(m.chat, text).then((res) => m.reply(mess.success)).catch((err) => m.reply(jsonformat(err)))
             }
             break
+
+
+case 'textmaker': {
+if (args[0] === 'glitch') {
+if (args.length < 2) return m.reply(`𝖤𝗃. 𝖽𝖾 𝗎𝗌𝗈 :\n${prefix + command + ' ' + args[0]} Felixxx`)
+let teds = await thiccysapi.textpro("https://textpro.me/create-impressive-glitch-text-effects-online-1027.html", [args[1]])
+kagura.sendMessage(m.chat, {image:{url:teds}, caption:"Espero sea de tu agrado ☑️"}, {quoted:m})
+} else if (args[0] === 'glow') {
+if (args.length < 2) return m.reply(`𝖤𝗃. 𝖽𝖾 𝗎𝗌𝗈 :\n${prefix + command + ' ' + args[0]} Felixxx`)
+let teds = await thiccysapi.textpro("https://textpro.me/create-light-glow-sliced-text-effect-online-1068.html", [args[1]])
+kagura.sendMessage(m.chat, {image:{url:teds}, caption:"Espero sea de tu agrado ☑️"}, {quoted:m})
+} else if (args[0] === 'magma') {
+if (args.length < 2) return m.reply(`𝖤𝗃. 𝖽𝖾 𝗎𝗌𝗈 :\n${prefix + command + ' ' + args[0]} Felixxx`)
+let teds = await thiccysapi.textpro("https://textpro.me/create-a-magma-hot-text-effect-online-1030.html", [args[1]])
+kagura.sendMessage(m.chat, {image:{url:teds}, caption:"Espero sea de tu agrado ☑️"}, {quoted:m})
+} else {
+m.reply(`*Lista de Diseños :*\n•> glitch\n•> glow\n•> magma`)
+}
+}
+break
+
+
+
           case 'setppbot': {
                 if (!isCreator) throw mess.owner
                 if (!quoted) throw `Menciona/Envia una Imagen con el mensaje ${prefix + command}`
@@ -1347,7 +1265,7 @@ break
              if (args[0] === 'open'){
                 await kagura.groupSettingUpdate(m.chat, 'unlocked').then((res) => m.reply(`𝘊𝘰𝘯𝘧𝘪𝘨𝘶𝘳𝘢𝘤𝘪𝘰𝘯 𝘤𝘢𝘮𝘣𝘪𝘢𝘥𝘢 𝘱𝘢𝘳𝘢 𝘲𝘶𝘦 𝘵𝘰𝘥𝘰𝘴 𝘭𝘰𝘴 𝘱𝘢𝘳𝘵𝘪𝘤𝘪𝘱𝘢𝘯𝘵𝘦𝘴 𝘱𝘶𝘦𝘥𝘢𝘯 𝘦𝘥𝘪𝘵𝘢𝘳 𝘭𝘢 𝘪𝘯𝘧𝘰 𝘥𝘦𝘭 𝘨𝘳𝘶𝘱𝘰.`)).catch((err) => m.reply(jsonformat(err)))
              } else if (args[0] === 'close'){
-                await kagura.groupSettingUpdate(m.chat, 'locked').then((res) => m.reply(`𝘊𝘰𝘯𝘧𝘪𝘨𝘶𝘳𝘢𝘤𝘪𝘰𝘯 𝘤𝘢𝘮𝘣𝘪𝘢𝘥𝘢 𝘱𝘢𝘳𝘢 𝘲𝘶𝘦 𝘯𝘪𝘯𝘨𝘶𝘯𝘰 𝘥𝘦 𝘭𝘰𝘴 𝘱𝘢𝘳𝘵𝘪𝘤𝘪𝘱𝘢𝘯𝘵𝘦𝘴 𝘱𝘶𝘦𝘥𝘢𝘯 𝘦𝘥𝘪𝘵𝘢𝘳 𝘭𝘢 𝘪𝘯𝘧𝘰 𝘥𝘦𝘭 𝘨𝘳𝘶𝘱𝘰.`)).catch((err) => m.reply(jsonformat(err)))
+                await kagura.groupSettingUpdate(m.chat, 'locked').then((res) => m.reply(`𝘊𝘰𝘯𝘧𝘪??𝘶𝘳𝘢𝘤𝘪𝘰𝘯 𝘤𝘢𝘮𝘣𝘪𝘢𝘥𝘢 𝘱𝘢𝘳𝘢 𝘲𝘶𝘦 𝘯𝘪𝘯𝘨𝘶𝘯𝘰 𝘥𝘦 𝘭𝘰𝘴 𝘱𝘢𝘳𝘵𝘪𝘤𝘪𝘱𝘢𝘯𝘵𝘦𝘴 𝘱𝘶𝘦𝘥𝘢𝘯 𝘦𝘥𝘪𝘵𝘢𝘳 𝘭𝘢 𝘪𝘯𝘧𝘰 𝘥𝘦𝘭 𝘨𝘳𝘶𝘱𝘰.`)).catch((err) => m.reply(jsonformat(err)))
              } else {
              let buttons = [
                         { buttonId: 'editinfo open', buttonText: { displayText: '𝘗𝘦𝘳𝘮𝘪𝘵𝘪𝘳' }, type: 1 },
@@ -1400,13 +1318,51 @@ break
                 }
              }
              break
-            case 'linkgroup': case 'linkgc': {
+
+
+case 'antionce': {
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
-                let response = await kagura.groupInviteCode(m.chat)
-                kagura.sendText(m.chat, `https://chat.whatsapp.com/${response}\n\nLink Group : ${groupMetadata.subject}`, m, { detectLink: true })
-            }
-            break
+                if (!isAdmins) throw mess.admin
+                if (args[0] === "on") {
+                if (db.data.chats[m.chat].antionce) return m.reply(`¡Actualmente activo!`)
+                db.data.chats[m.chat].antionce = true
+                m.reply(`¡El Anti-UnaVista ha sido habilitado en este grupo!`)
+                } else if (args[0] === "off") {
+                if (!db.data.chats[m.chat].antionce) return m.reply(`¡No se encuentra activo!`)
+                db.data.chats[m.chat].antionce = false
+                m.reply(`¡El Anti-UnaVista ha sido deshabilitado en este grupo!`)
+                } else {
+                 let buttons = [
+                        { buttonId: 'antionce on', buttonText: { displayText: '𝘏𝘢𝘣𝘪𝘭𝘪𝘵𝘢𝘳 𝘈𝘯𝘵𝘪-𝘜𝘯𝘢𝘝𝘪𝘴𝘵𝘢' }, type: 1 },
+                        { buttonId: 'antionce off', buttonText: { displayText: '𝘋𝘦𝘴𝘩𝘢𝘣𝘪𝘭𝘪𝘵𝘢𝘳 𝘈𝘯𝘵𝘪-𝘜𝘯𝘢𝘝𝘪𝘴𝘵𝘢' }, type: 1 }
+                    ]
+                    await kagura.sendButtonText(m.chat, buttons, `El Anti-UnaVista quitara la función de "Solo Una Visualización".`, kagura.user.name, m)
+                }
+             }
+             break
+ 
+         case 'enlace': case 'linkgroup': case 'linkgc': {
+                if (!m.isGroup) throw mess.group
+                if (!isBotAdmins) throw mess.botAdmin
+let response = await kagura.groupInviteCode(m.chat)
+kagura.sendMessage(m.chat, {text:`Enlace del Grupo ${groupMetadata.subject} : \nhttps://chat.whatsapp.com/${response}l`, "contextInfo": {
+mimetype: "image/jpeg",
+text: "By FX - BOT",
+"forwardingScore": 1000000000,
+isForwarded: true,
+sendEphemeral: true,
+"externalAdReply": {
+"title": `*FX - BOT*`,
+"body": `Credits to Felixxx`,
+"previewType": "PHOTO",
+"thumbnailUrl": global.thumb,
+"thumbnail": global.thumb,
+"sourceUrl": "https://youtu.be/aAFlTR8wdd8"
+}}}, { quoted: m, detectLink: true })
+}
+break
+             
 
             case 'ephemeral': {
                 if (!m.isGroup) throw mess.group
@@ -1470,9 +1426,9 @@ break
             break
             case 'bc': case 'broadcast': case 'bcall': {
                 if (!isCreator) throw mess.owner
-                if (!text) throw `Text mana?\n\n𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} fatih-san`
+                if (!text) throw `¿Y el texto?`
                 let anu = await store.chats.all().map(v => v.id)
-                m.reply(`Mengirim Broadcast Ke ${anu.length} Chat\nWaktu Selesai ${anu.length * 1.5} detik`)
+                m.reply(`Enviando anuncio a : ${anu.length} Chats\nTiempo Estimado ${anu.length * 1.5} segundos`)
 		for (let yoi of anu) {
 		    await sleep(1500)
 		    let btn = [{
@@ -1767,6 +1723,14 @@ break
                 })
                 }
                 break
+case 'translate': {
+if (!text) throw `Uso :`
+tes = await fetchJson (`https://megayaa.herokuapp.com/api/translate?to=es&kata=${text}`)
+Infoo = tes.info
+Detek = tes.translate
+m.reply(`🌐 Traducir : ${text} \n📘Resultado : ${Infoo}`)
+}
+break
         case 'gimage': {
         if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} Anime Demon Slayer`
         let gis = require('g-i-s')
@@ -1788,18 +1752,12 @@ break
         }
         break
 	    case 'play': case 'ytplay': {
-                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} story wa anime`
-                
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} Anime Edit`
                 let yts = require('yt-search')
 let anu = await (await yts.search(text)).all[0]
-                let buttons = [
-                    {buttonId: `ytmp3 ${anu.url}`, buttonText: {displayText: '♫ Audio'}, type: 1},
-                    {buttonId: `ytmp4 ${anu.url}`, buttonText: {displayText: '► Video'}, type: 1}
-                ]
-                let buttonMessage = {
-                    image: { url: anu.thumbnail },
-                    caption: `
-🔎 *Busqueda* : ${text}                   
+                
+                    zakki = `
+🔎 *Busqueda* : ${text}
 
 📌 *Titulo* : ${anu.title}
 🧃 *Ext* : Search
@@ -1808,15 +1766,55 @@ let anu = await (await yts.search(text)).all[0]
 👁️ *Vistas* : ${anu.views}
 ⏲️ *Publicado* : ${anu.ago.replace('years', 'Años').replace('year', 'Año').replace('ago', 'Atras').replace('months', 'Meses').replace('month', 'Mes').replace('day', 'Dia').replace('days', 'Días').replace('weeks', 'Semanas').replace('week', 'Semana').replace('minutes', 'Minutos').replace('hours', 'Horas')}
 🍭 *Autor* : ${anu.author.name}
-📎 * Url* : ${anu.url}
-🏷️ *Descripcion* : ${anu.description}`,
-                    footer: kagura.user.name,
-                    buttons: buttons,
-                    headerType: 4
-                }
-                kagura.sendMessage(m.chat, buttonMessage, { quoted: m })
+🏷️ *Descripcion* : ${anu.description}`
+message = await prepareWAMessageMedia({ image : { url: anu.thumbnail } }, { upload:   kagura.waUploadToServer })
+                template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
+                    templateMessage: {
+                        hydratedTemplate: {
+                            imageMessage: message.imageMessage,
+                            hydratedContentText: zakki,
+                            hydratedFooterText: `Sᴜʙsᴄʀɪʙᴇ Tᴏ Fᴇʟɪxᴄʀᴀᴄᴋ`,
+                            hydratedButtons: [{
+                                urlButton: {
+                                    displayText: '📺 Reproducir en YouTube',
+                                    url: `${anu.url}`
+                                }
+                            }, {
+                            	urlButton: {
+                                displayText: '📌 Enlace del Canal',
+                                    url: `${anu.author.url}`
+                                }
+                            }, {
+                                quickReplyButton: {
+                                    displayText: '🎧 Audio',
+                                    id: `ytmp3 ${anu.url} 128kbps`
+                                    }
+                                },{quickReplyButton: {
+                                    displayText: '🎥 Video',
+                                    id: `ytmp4 ${anu.url}`
+                                    }
+                                },{quickReplyButton: {
+                                    displayText: '📦 Documento',
+                                    id: `maxpeso ${anu.url}`
+                                }
+                            }]
+                        }
+                    }
+                }), { userJid: m.chat, quoted: m })
+                  kagura.relayMessage(m.chat, template.message, { messageId: template.key.id })
             }
             break
+
+case 'maxpeso': {
+                let { ytv } = require('./lib/y2mate')
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 128kbps`
+                let quality = args[1] ? args[1] : '360p'
+                let media = await ytv(text, quality)
+                if (media.filesize >= 99999999) return reply('El tamaño del video es demasiado grande.'+util.format(media))
+                kagura.sendMessage(m.chat, { document: { url: media.dl_link }, mimetype: 'video/mp4', fileName: `${media.title}` }, { quoted: m });
+                          }
+            break
+
 	    case 'ytmp3': case 'ytaudio': {
                 let { yta } = require('./lib/y2mate')
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 128kbps`
@@ -1871,19 +1869,126 @@ let anu = await (await yts.search(text)).all[0]
                 kagura.sendMessage(m.chat, { image: { url: result }, caption: '⭔ Media Url : '+result }, { quoted: m })
             }
             break
+
+case 'ttdl': case 'tiktok': case 'ttmp4': case 'ttmp3': case 'tiktoknowm': {
+ 
+if (!isUrl(args[0])) return m.reply(`𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} https://vt.tiktok.com/ZSdDo97dC/`)
+let res = await aiovideodl(args[0])
+if (isUrl(args[0])) {
+texttk = `     *| TIKTOK DOWNLOADER |*
+
+📌 *Titulo* : ${res.title}
+🚀 *Tamaño* : ${res.medias[1].formattedSize}
+🪀 *Tipo* : ${res.medias[1].extension ? "video/" + res.medias[1].extension : "undefined"}
+
+_Seleccione si desea sin marca de agua o solo el audio._ `
+let buttons = [
+{buttonId: `ttvd ${args[0]}}`, buttonText: {displayText: '× 𝘞𝘢𝘵𝘦𝘳𝘮𝘢𝘳𝘬'}, type: 1},
+{buttonId: `ttad ${args[0]}`, buttonText: {displayText: '♫ 𝘈𝘶𝘥𝘪𝘰'}, type: 1}
+]
+let buttonMessage = {
+video: {url:res.medias[1].url},
+caption: texttk,
+footer: "© I'm Felixxxxxx ~ TikTok Downloader",
+buttons: buttons,
+headerType: 4,
+contextInfo:{externalAdReply:{
+title:"FX - BOT ~ Tiktok Downloader",
+body:res.title,
+thumbnail: global.visoka,
+mediaType:1,
+mediaUrl: args[0],
+sourceUrl: args[0]
+}}
+}
+kagura.sendMessage(m.chat, buttonMessage, {quoted:m})
+} else {
+m.reply("¡Enlace incorrecto!")
+}
+}
+break
+
+case 'ttad': {
+let res = await aiovideodl(args[0])
+kagura.sendMessage(m.chat, {audio:{url:res.medias[2].url}, mimetype:"audio/mp4", ptt:true, contextInfo:{externalAdReply:{
+title:"© I'm Felixxxxxx ~ TikTok Downloader",
+body:res.title,
+thumbnail: global.visoka,
+mediaType:1,
+mediaUrl: args[0],
+sourceUrl: args[0]
+}}}, {quoted:m})
+}
+break
+
+case 'ttvd': {
+let res = await aiovideodl(args[0])
+texttk = `     *| TIKTOK DOWNLOADER |*
+
+📌 *Titulo* : ${res.title}
+🚀 *Tamaño* : ${res.medias[0].formattedSize}
+🪀 *Tipo* : ${res.medias[0].extension ? "video/" + res.medias[0].extension : "undefined"}
+
+_Para ver el menu seleccioné el boton de abajo._`
+let buttons = [
+{buttonId: `menu`, buttonText: {displayText: '𝘔𝘦𝘯𝘶'}, type: 1}
+]
+let buttonMessage = {
+video: {url:res.medias[0].url},
+caption: texttk,
+footer: "© I'm Felixxxxxx ~ TikTok Downloader",
+buttons: buttons,
+headerType: 4,
+contextInfo:{externalAdReply:{
+title:"FX - BOT ~ Tiktok Downloader",
+body:res.title,
+thumbnail: global.visoka,
+mediaType:1,
+mediaUrl: args[0],
+sourceUrl: args[0]
+}}
+}
+kagura.sendMessage(m.chat, buttonMessage, {quoted:m})
+}
+break
+
+ 
+
+            case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite':case 'yeet':case 'neko':case 'bully':case 'bonk':case 'wink':case 'poke':case 'nom':case 'slap':case 'smile':case 'wave':case 'awoo':case 'blush':case 'smug':case 'glomp':case 'happy':case 'dance':case 'cringe':case 'highfive':case 'shinobu':case 'megumin':case 'handhold':
+					m.reply(mess.wait)
+					axios.get(`https://api.waifu.pics/sfw/${command}`)
+					.then(({data}) => {
+					kagura.sendVideoAsSticker(m.chat, data.url, m, { packname: global.packname, author: global.author })
+
+
+					})
+					break
+
             case 'anime': case 'waifu': case 'husbu': case 'neko': case 'shinobu': case 'megumin': case 'waifus': case 'nekos': case 'trap': case 'blowjob': {
                 m.reply(mess.wait)
                 kagura.sendMessage(m.chat, { image: { url: api('zenz', '/api/random/'+command, {}, 'apikey') }, caption: 'Generate Random ' + command }, { quoted: m })
             }
             break
-	    case 'couple': {
-                m.reply(mess.wait)
-                let anu = await fetchJson('https://raw.githubusercontent.com/iamriz7/kopel_/main/kopel.json')
-                let random = anu[Math.floor(Math.random() * anu.length)]
-                kagura.sendMessage(m.chat, { image: { url: random.male }, caption: `Couple Male` }, { quoted: m })
-                kagura.sendMessage(m.chat, { image: { url: random.female }, caption: `Couple Female` }, { quoted: m })
-            }
-	    break
+	    case 'couple': case 'ppcp': {
+                
+            let anu = await fetchJson('https://raw.githubusercontent.com/iamriz7/kopel_/main/kopel.json')
+            let random = anu[Math.floor(Math.random() * anu.length)]
+		    let buttons = [
+            {buttonId: `ttttest`, buttonText: {displayText: '𝘚𝘐𝘎𝘜𝘐𝘌𝘕𝘛𝘌 ⏩'}, type: 1}
+             ]
+             let buttonMessage = {
+             image: { url: random.male },
+             caption: `𝑃𝑎𝑟𝑎 𝑒𝑙 ℎ𝑜𝑚𝑏𝑟𝑒`,
+             footer: kagura.user.name,
+             buttons: buttons,
+             headerType: 4
+             }
+             kagura.sendMessage(m.chat, { image: { url: random.female }, caption: `𝑃𝑎𝑟𝑎 𝑙𝑎 𝑚𝑢𝑗𝑒𝑟` }, { quoted: m })
+             kagura.sendMessage(m.chat, buttonMessage, { quoted: m })
+             
+             }
+             break
+
             case 'coffe': case 'kopi': {
             let buttons = [
                     {buttonId: `coffe`, buttonText: {displayText: 'Next Image'}, type: 1}
@@ -1899,16 +2004,16 @@ let anu = await (await yts.search(text)).all[0]
             }
             break
             case 'wallpaper': {
-                if (!text) throw 'Masukkan Query Title'
+                if (!text) throw '¿Que deseas buscar?'
 		let { wallpaper } = require('./lib/scraper')
                 anu = await wallpaper(text)
                 result = anu[Math.floor(Math.random() * anu.length)]
 		let buttons = [
-                    {buttonId: `wallpaper ${text}`, buttonText: {displayText: 'Next Image'}, type: 1}
+                    {buttonId: `wallpaper ${text}`, buttonText: {displayText: '𝘚𝘐𝘎𝘜𝘐𝘌𝘕𝘛𝘌 ⏩'}, type: 1}
                 ]
                 let buttonMessage = {
                     image: { url: result.image[0] },
-                    caption: `⭔ Title : ${result.title}\n⭔ Category : ${result.type}\n⭔ Detail : ${result.source}\n⭔ Media Url : ${result.image[2] || result.image[1] || result.image[0]}`,
+                    caption: `き⃟🍟 Título : ${result.title}\nき⃟🍟 Categoría : ${result.type}\nき⃟🍟 Detalles : ${result.source}\nき⃟🍟 Enlace : ${result.image[2] || result.image[1] || result.image[0]}`,
                     footer: kagura.user.name,
                     buttons: buttons,
                     headerType: 4
@@ -1917,16 +2022,16 @@ let anu = await (await yts.search(text)).all[0]
             }
             break
             case 'wikimedia': {
-                if (!text) throw 'Masukkan Query Title'
+                if (!text) throw '¿Que deseas buscar?'
 		let { wikimedia } = require('./lib/scraper')
                 anu = await wikimedia(text)
                 result = anu[Math.floor(Math.random() * anu.length)]
                 let buttons = [
-                    {buttonId: `wikimedia ${text}`, buttonText: {displayText: 'Next Image'}, type: 1}
+                    {buttonId: `wikimedia ${text}`, buttonText: {displayText: '𝘚𝘐𝘎𝘜𝘐𝘌𝘕𝘛𝘌 ⏩'}, type: 1}
                 ]
                 let buttonMessage = {
                     image: { url: result.image },
-                    caption: `⭔ Title : ${result.title}\n⭔ Source : ${result.source}\n⭔ Media Url : ${result.image}`,
+                    caption: `き⃟🏷️ Titulo : ${result.title}\nき⃟🏷️ Fuente : ${result.source}\nき⃟🏷️ Enlace : ${result.image}`,
                     footer: kagura.user.name,
                     buttons: buttons,
                     headerType: 4
@@ -2084,24 +2189,7 @@ let anu = await (await yts.search(text)).all[0]
                 }
             }
             break
-	        case 'tiktok': case 'tiktoknowm': {
-                if (!text) throw 'Masukkan Query Link!'
-                m.reply(mess.wait)
-                let anu = await fetchJson(api('zenz', '/downloader/tiktok', { url: text }, 'apikey'))
-                let buttons = [
-                    {buttonId: `tiktokwm ${text}`, buttonText: {displayText: '► With Watermark'}, type: 1},
-                    {buttonId: `tiktokmp3 ${text}`, buttonText: {displayText: '♫ Audio'}, type: 1}
-                ]
-                let buttonMessage = {
-                    video: { url: anu.result.nowatermark },
-                    caption: `Download From ${text}`,
-                    footer: 'Press The Button Below',
-                    buttons: buttons,
-                    headerType: 5
-                }
-                kagura.sendMessage(m.chat, buttonMessage, { quoted: m })
-            }
-            break
+	       
             case 'tiktokwm': case 'tiktokwatermark': {
                 if (!text) throw 'Masukkan Query Link!'
                 m.reply(mess.wait)
@@ -2149,103 +2237,7 @@ let anu = await (await yts.search(text)).all[0]
                     kagura.sendFileUrl(m.chat, anu.media[0].url, `Download Url Instagram From ${isUrl(text)[0]}`, m)
                 }
             }
-            break
-            case 'joox': case 'jooxdl': {
-                if (!text) throw 'No Query Title'
-                m.reply(mess.wait)
-                let anu = await fetchJson(api('zenz', '/downloader/joox', { query: text }, 'apikey'))
-                let msg = await kagura.sendImage(m.chat, anu.result.img, `⭔ Title : ${anu.result.lagu}\n⭔ Album : ${anu.result.album}\n⭔ Singer : ${anu.result.penyanyi}\n⭔ Publish : ${anu.result.publish}\n⭔ Lirik :\n${anu.result.lirik.result}`, m)
-                kagura.sendMessage(m.chat, { audio: { url: anu.result.mp4aLink }, mimetype: 'audio/mpeg', fileName: anu.result.lagu+'.m4a' }, { quoted: msg })
-            }
-            break
-            case 'soundcloud': case 'scdl': {
-                if (!text) throw 'No Query Title'
-                m.reply(mess.wait)
-                let anu = await fetchJson(api('zenz', '/downloader/soundcloud', { url: isUrl(text)[0] }, 'apikey'))
-                let msg = await kagura.sendImage(m.chat, anu.result.thumb, `⭔ Title : ${anu.result.title}\n⭔ Url : ${isUrl(text)[0]}`)
-                kagura.sendMessage(m.chat, { audio: { url: anu.result.url }, mimetype: 'audio/mpeg', fileName: anu.result.title+'.m4a' }, { quoted: msg })
-            }
-            break
-	        case 'twitdl': case 'twitter': {
-                if (!text) throw 'Masukkan Query Link!'
-                m.reply(mess.wait)
-                let anu = await fetchJson(api('zenz', '/api/downloader/twitter', { url: text }, 'apikey'))
-                let buttons = [
-                    {buttonId: `twittermp3 ${text}`, buttonText: {displayText: '► Audio'}, type: 1}
-                ]
-                let buttonMessage = {
-                    video: { url: anu.result.HD || anu.result.SD },
-                    caption: util.format(anu.result),
-                    footer: 'Press The Button Below',
-                    buttons: buttons,
-                    headerType: 5
-                }
-                kagura.sendMessage(m.chat, buttonMessage, { quoted: m })
-            }
-            break
-            case 'twittermp3': case 'twitteraudio': {
-                if (!text) throw 'Masukkan Query Link!'
-                m.reply(mess.wait)
-                let anu = await fetchJson(api('zenz', '/api/downloader/twitter', { url: text }, 'apikey'))
-                let buttons = [
-                    {buttonId: `twitter ${text}`, buttonText: {displayText: '► Video'}, type: 1}
-                ]
-                let buttonMessage = {
-		    image: { url: anu.result.thumb },
-                    caption: util.format(anu.result),
-                    footer: 'Press The Button Below',
-                    buttons: buttons,
-                    headerType: 4
-                }
-                let msg = await kagura.sendMessage(m.chat, buttonMessage, { quoted: m })
-                kagura.sendMessage(m.chat, { audio: { url: anu.result.audio } }, { quoted: msg })
-            }
-            break
-	        case 'fbdl': case 'fb': case 'facebook': {
-                if (!text) throw 'Masukkan Query Link!'
-                m.reply(mess.wait)
-                let anu = await fetchJson(api('zenz', '/api/downloader/facebook', { url: text }, 'apikey'))
-                kagura.sendMessage(m.chat, { video: { url: anu.result.url }, caption: `⭔ Title : ${anu.result.title}`}, { quoted: m })
-            }
-            break
-	        case 'pindl': case 'pinterestdl': {
-                if (!text) throw 'Masukkan Query Link!'
-                m.reply(mess.wait)
-                let anu = await fetchJson(api('zenz', '/api/downloader/pinterestdl', { url: text }, 'apikey'))
-                kagura.sendMessage(m.chat, { video: { url: anu.result }, caption: `Download From ${text}` }, { quoted: m })
-            }
-            break
-            case 'umma': case 'ummadl': {
-	        if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} https://umma.id/channel/video/post/gus-arafat-sumber-kecewa-84464612933698`
-                let { umma } = require('./lib) scraper')
-		let anu = await umma(isUrl(text)[0])
-		if (anu.type == 'video') {
-		    let buttons = [
-                        {buttonId: `ytmp3 ${anu.media[0]} 128kbps`, buttonText: {displayText: '♫ Audio'}, type: 1},
-                        {buttonId: `ytmp4 ${anu.media[0]} 360p`, buttonText: {displayText: '► Video'}, type: 1}
-                    ]
-		    let buttonMessage = {
-		        image: { url: anu.author.profilePic },
-			caption: `
-⭔ Title : ${anu.title}
-⭔ Author : ${anu.author.name}
-⭔ Like : ${anu.like}
-⭔ Caption : ${anu.caption}
-⭔ Url : ${anu.media[0]}
-Untuk Download Media Silahkan Klik salah satu Button dibawah ini atau masukkan command ytmp3/ytmp4 dengan url diatas
-`,
-			footer: kagura.user.name,
-			buttons,
-			headerType: 4
-		    }
-		    kagura.sendMessage(m.chat, buttonMessage, { quoted: m })
-		} else if (anu.type == 'image') {
-		    anu.media.map(async (url) => {
-		        kagura.sendMessage(m.chat, { image: { url }, caption: `⭔ Title : ${anu.title}\n⭔ Author : ${anu.author.name}\n⭔ Like : ${anu.like}\n⭔ Caption : ${anu.caption}` }, { quoted: m })
-		    })
-		}
-	    }
-	    break
+            break 
         case 'ringtone': {
 		if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} DBS`
         let { ringtone } = require('./lib/scraper')
@@ -2308,9 +2300,9 @@ Format yang tersedia : pdf, docx, pptx, xlsx`)
                 }
                 break
             case 'setcmd': {
-                if (!m.quoted) throw 'Reply Pesan!'
-                if (!m.quoted.fileSha256) throw 'SHA256 Hash Missing'
-                if (!text) throw `Untuk Command Apa?`
+                if (!m.quoted) throw '¡Responde a un sticker!'
+                if (!m.quoted.fileSha256) throw 'SHA256 Erróneo'
+                if (!text) throw `¿Que comando sera?`
                 let hash = m.quoted.fileSha256.toString('base64')
                 if (global.db.data.sticker[hash] && global.db.data.sticker[hash].locked) throw 'You have no permission to change this sticker command'
                 global.db.data.sticker[hash] = {
@@ -2325,7 +2317,7 @@ Format yang tersedia : pdf, docx, pptx, xlsx`)
             break
             case 'delcmd': {
                 let hash = m.quoted.fileSha256.toString('base64')
-                if (!hash) throw `Tidak ada hash`
+                if (!hash) throw `None.`
                 if (global.db.data.sticker[hash] && global.db.data.sticker[hash].locked) throw 'You have no permission to delete this sticker command'              
                 delete global.db.data.sticker[hash]
                 m.reply(`Done!`)
@@ -2333,8 +2325,8 @@ Format yang tersedia : pdf, docx, pptx, xlsx`)
             break
             case 'listcmd': {
                 let teks = `
-*List Hash*
-Info: *bold* hash is Locked
+*Lista de Comandos*
+
 ${Object.entries(global.db.data.sticker).map(([key, value], index) => `${index + 1}. ${value.locked ? `*${key}*` : key} : ${value.text}`).join('\n')}
 `.trim()
                 kagura.sendText(m.chat, teks, m, { mentions: Object.values(global.db.data.sticker).map(x => x.mentionedJid).reduce((a,b) => [...a, ...b], []) })
@@ -2351,16 +2343,16 @@ ${Object.entries(global.db.data.sticker).map(([key, value], index) => `${index +
             }
             break
             case 'addmsg': {
-                if (!m.quoted) throw 'Reply Message Yang Ingin Disave Di Database'
-                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} nama file`
+                if (!m.quoted) throw 'Menciona el mensaje que quieras guardar en la base de datos.'
+                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} nombre del archivo`
                 let msgs = global.db.data.database
-                if (text.toLowerCase() in msgs) throw `'${text}' telah terdaftar di list pesan`
+                if (text.toLowerCase() in msgs) throw `'${text}' ha sido registrado en la lista de mensajes.`
                 msgs[text.toLowerCase()] = quoted.fakeObj
-m.reply(`Berhasil menambahkan pesan di list pesan sebagai '${text}'
+m.reply(`Mensaje agregado con éxito en la lista de mensajes como '${text}'
     
-Akses dengan ${prefix}getmsg ${text}
+Acceso con ${prefix}getmsg ${text}
 
-Lihat list Pesan Dengan ${prefix}listmsg`)
+Ver lista de mensajes con ${prefix}listmsg`)
             }
             break
             case 'getmsg': {
@@ -2468,120 +2460,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 kagura.sendContact(m.chat, global.owner, m)
             }
             break
-            case 'playstore': {
-            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} clash of clans`
-            let res = await fetchJson(api('zenz', '/webzone/playstore', { query: text }, 'apikey'))
-            let teks = `⭔ Playstore Search From : ${text}\n\n`
-            for (let i of res.result) {
-            teks += `⭔ Name : ${i.name}\n`
-            teks += `⭔ Link : ${i.link}\n`
-            teks += `⭔ Developer : ${i.developer}\n`
-            teks += `⭔ Link Developer : ${i.link_dev}\n\n──────────────────────\n`
-            }
-            m.reply(teks)
-            }
-            break
-            case 'gsmarena': {
-            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} samsung`
-            let res = await fetchJson(api('zenz', '/webzone/gsmarena', { query: text }, 'apikey'))
-            let { judul, rilis, thumb, ukuran, type, storage, display, inchi, pixel, videoPixel, ram, chipset, batrai, merek_batre, detail } = res.result
-let capt = `⭔ Title: ${judul}
-⭔ Realease: ${rilis}
-⭔ Size: ${ukuran}
-⭔ Type: ${type}
-⭔ Storage: ${storage}
-⭔ Display: ${display}
-⭔ Inchi: ${inchi}
-⭔ Pixel: ${pixel}
-⭔ Video Pixel: ${videoPixel}
-⭔ Ram: ${ram}
-⭔ Chipset: ${chipset}
-⭔ Battery: ${batrai}
-⭔ Battery Brand: ${merek_batre}
-⭔ Detail: ${detail}`
-            kagura.sendImage(m.chat, thumb, capt, m)
-            }
-            break
-            case 'jadwalbioskop': {
-            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈: ${prefix + command} jakarta`
-            let res = await fetchJson(api('zenz', '/webzone/jadwalbioskop', { kota: text }, 'apikey'))
-            let capt = `Jadwal Bioskop From : ${text}\n\n`
-            for (let i of res.result){
-            capt += `⭔ Title: ${i.title}\n`
-            capt += `⭔ Thumbnail: ${i.thumb}\n`
-            capt += `⭔ Url: ${i.url}\n\n──────────────────────\n`
-            }
-            kagura.sendImage(m.chat, res.result[0].thumb, capt, m)
-            }
-            break
-            case 'nowplayingbioskop': {
-            let res = await fetchJson(api('zenz', '/webzone/nowplayingbioskop', {}, 'apikey'))
-            let capt = `Now Playing Bioskop\n\n`
-            for (let i of res.result){
-            capt += `⭔ Title: ${i.title}\n`
-            capt += `⭔ Url: ${i.url}\n`
-            capt += `⭔ Img Url: ${i.img}\n\n──────────────────────\n`
-            }
-            kagura.sendImage(m.chat, res.result[0].img, capt, m)
-            }
-            break
-            case 'aminio': {
-            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈: ${prefix + command} free fire`
-            let res = await fetchJson(api('zenz', '/webzone/amino', { query: text }, 'apikey'))
-            let capt = `Amino Search From : ${text}\n\n`
-            for (let i of res.result){
-            capt += `⭔ Community: ${i.community}\n`
-            capt += `⭔ Community Link: ${i.community_link}\n`
-            capt += `⭔ Thumbnail: ${i.community_thumb}\n`
-            capt += `⭔ Description: ${i.community_desc}\n`
-            capt += `⭔ Member Count: ${i.member_count}\n\n──────────────────────\n`
-            }
-            kagura.sendImage(m.chat, 'https://'+res.result[0].community_thumb, capt, m)
-            }
-            break
-            case 'wattpad': {
-            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} love`
-            let res = await fetchJson(api('zenz', '/webzone/wattpad', { query: text }, 'apikey'))
-            let { judul, dibaca, divote, bab, waktu, url, thumb, description } = res.result[0]
-            let capt = `Wattpad From ${text}\n\n`
-            capt += `⭔ Judul: ${judul}\n`
-            capt += `⭔ Dibaca: ${dibaca}\n`
-            capt += `⭔ Divote: ${divote}\n`
-            capt += `⭔ Bab: ${bab}\n`
-            capt += `⭔ Waktu: ${waktu}\n`
-            capt += `⭔ Url: ${url}\n`
-            capt += `⭔ Deskripsi: ${description}`
-            kagura.sendImage(m.chat, thumb, capt, m)
-            }
-            break
-            case 'webtoons': {
-            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} love`
-            let res = await fetchJson(api('zenz', '/webzone/webtoons', { query: text }, 'apikey'))
-            let capt = `Webtoons Search From : ${text}\n\n`
-            for (let i of res.result) {
-            capt += `⭔ Judul: ${i.judul}\n`
-            capt += `⭔ Like: ${i.like}\n`
-            capt += `⭔ Creator: ${i.creator}\n`
-            capt += `⭔ Genre: ${i.genre}\n`
-            capt += `⭔ Url: ${i.url}\n\n──────────────────────\n`
-            }
-            m.reply(capt)
-            }
-            break
-            case 'drakor': {
-            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} love`
-            let res = await fetchJson(api('zenz', '/webzone/drakor', { query: text }, 'apikey'))
-            let capt = `Drakor Search From : ${text}\n\n`
-            for (let i of res.result) {
-            capt += `⭔ Judul: ${i.judul}\n`
-            capt += `⭔ Years: ${i.years}\n`
-            capt += `⭔ Genre: ${i.genre}\n`
-            capt += `⭔ Url: ${i.url}\n`
-            capt += `⭔ Thumbnail Url: ${i.thumbnail}\n\n──────────────────────\n`
-            }
-            kagura.sendImage(m.chat, res.result[0].thumbnail, capt, m)
-            }
-            break
+             
             case 'setmenu': {
             if (!isCreator) throw mess.owner
             let setbot = db.data.settings[botNumber]
@@ -2658,13 +2537,13 @@ case 'fiturlist': {
             break
             case 'list': case 'menu': case 'help': case '?': {
                 anu = `
-¡Hola! ${salam} ${pushname} 👋
+¡Hola! ${pushname} 👋
 
 Bienvenido al menu, mi nombre es ${botname}.
 
 𝑭𝒆𝒍𝒊𝒛 𝒆𝒔 𝒂𝒒𝒖𝒆𝒍 𝒒𝒖𝒆 𝒂 𝒂𝒑𝒓𝒆𝒏𝒅𝒊𝒅𝒐 𝒂 𝒂𝒅𝒎𝒊𝒓𝒂𝒓 𝒚 𝒏𝒐 𝒂 𝒆𝒏𝒗𝒊𝒅𝒊𝒂𝒓... 🥀
 ──────────────
-                    _<𝖨𝗇𝖿𝗈 𝖣𝖾𝗅 𝖡𝗈𝗍>_
+                 _<𝖨𝗇𝖿𝗈 𝖣𝖾𝗅 𝖡𝗈𝗍>_
                     
 👑 Creator : *𝘐𝘮 𝘍𝘦𝘭𝘪𝘹*
 👤 Owner : *${ownername}*
@@ -2787,6 +2666,7 @@ Bienvenido al menu, mi nombre es ${botname}.
  ▢ *𝖢𝗋𝖾𝖺𝗍𝗈𝗋 𝖬𝖾𝗇𝗎*
 • #attp
 • #ttp
+• #textmaker
 • #toimage
 • #removebg
 • #sticker
@@ -2813,7 +2693,7 @@ Bienvenido al menu, mi nombre es ${botname}.
 • #getmsg
 • #delmsg
 
- ▢ *𝖤𝖽𝗂𝗍𝗈𝗋 𝖣𝖾 𝖵𝗈𝗓*
+ ▢ *𝖤𝖿𝖾𝖼𝗍𝗈𝗌*
 • #bass
 • #blown
 • #deep
@@ -2900,7 +2780,18 @@ Bienvenido al menu, mi nombre es ${botname}.
                         if (stdout) return m.reply(stdout)
                     })
                 }
-			
+			if (m.mtype == 'viewOnceMessage') {
+	 if (!db.data.chats[m.chat].antionce) return
+ teks = `「 *Anti ViewOnce Message* 」
+ 
+⭔ Nombre : ${m.pushName}
+⭔ Usuario : @${m.sender.split("@")[0]}
+⭔ Hora : ${moment.tz('America/Mexico_City').format('HH:mm')}
+⭔ MessageType : ${m.mtype}`
+kagura.sendTextWithMentions(m.chat, teks, m)
+await sleep(500)
+m.copyNForward(m.chat, true, { readViewOnce: true }).catch(_ => reply('El archivo ya ha sido abierto.'))
+}
 		if (m.chat.endsWith('@s.whatsapp.net') && isCmd) {
                     this.anonymous = this.anonymous ? this.anonymous : {}
                     let room = Object.values(this.anonymous).find(room => [room.a, room.b].includes(m.sender) && room.state === 'CHATTING')

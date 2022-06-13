@@ -324,6 +324,8 @@ async function startkagura() {
      * @param {*} options
      * @returns
      */
+     
+     
     kagura.send5ButImg = async (jid , text = '' , footer = '', img, but = [], options = {}) =>{
         let message = await prepareWAMessageMedia({ image: img }, { upload: kagura.waUploadToServer })
         var template = generateWAMessageFromContent(jid, proto.Message.fromObject({
