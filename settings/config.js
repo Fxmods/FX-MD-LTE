@@ -37,7 +37,7 @@ premium: "Infinity",
 free: 20
 }
 global.thumb = fs.readFileSync('./media/thumb.jpg')
-global.visoka = { url: 'https://a.uguu.se/HiazyDcR.mp4' }
+global.visoka = { url: 'https://a.uguu.se/osSbSGMy.mp4' }
 
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {
