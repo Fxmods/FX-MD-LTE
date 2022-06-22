@@ -2424,6 +2424,42 @@ case 'fiturlist': {
                 }
             }
             break
+
+case 'redessociales': {
+                 
+kagura.sendMessage(m.chat, {text:`────────────────
+𝘾𝙧𝙚𝙖𝙙𝙤𝙧 :
+
+< 𝑰𝒎` 𝑭𝒆𝒍𝒊𝒙𝒙𝒙𝒙𝒙 >
+
+────────────────
+𝘾𝙤𝙡𝙖𝙗𝙤𝙧𝙖𝙙𝙤𝙧𝙚𝙨 :
+
+< 𝑻𝒂𝒅𝒂𝒔𝒉𝒊 >
+< 𝑲𝒉𝒂𝒍𝒐𝒗 >
+< 𝑴𝒊𝒕𝒐 >
+────────────────
+𝙂𝙧𝙪𝙥𝙤 𝘿𝙚 𝙒𝙝𝙖𝙩𝙨𝘼𝙥𝙥 :
+ https://chat.whatsapp.com/F8a1wlFtr5z9WY92Wde1zN
+
+────────────────
+𝙏𝙝𝙖𝙣𝙠𝙨 𝙏𝙤 : < 𝘽𝙖𝙞𝙡𝙚𝙮𝙨 >`, "contextInfo": {
+mimetype: "image/jpeg",
+text: "By FX - BOT",
+"forwardingScore": 1000000000,
+isForwarded: true,
+sendEphemeral: true,
+"externalAdReply": {
+"title": `*FX - BOT*`,
+"body": `Credits to Felixxx`,
+"previewType": "PHOTO",
+"thumbnailUrl": global.thumb,
+"thumbnail": global.thumb,
+"sourceUrl": "https://youtu.be/aAFlTR8wdd8"
+}}}, { quoted: m, detectLink: true })
+}
+break
+
             case 'list': case 'menu': case 'help': case '?': {
                 anu = `
 ¡Hola! ${pushname} 👋
@@ -2607,7 +2643,7 @@ Bienvenido al menu, mi nombre es ${botname}.
                                 }  
                             }, {
                                 quickReplyButton: {
-                                    displayText: '📌 𝘚𝘤𝘳𝘪𝘱𝘵',
+                                    displayText: '📌 𝘊𝘳𝘦𝘥𝘪𝘵𝘰𝘴',
                                     id: 'redessociales'
                                 }
                             }]
