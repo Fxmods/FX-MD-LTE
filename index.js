@@ -197,7 +197,7 @@ async function startkagura() {
 	for (let i of kon) {
 	    list.push({
 	    	displayName: await kagura.getName(i + '@s.whatsapp.net'),
-	    	vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await kagura.getName(i + '@s.whatsapp.net')}\nFN:${await kagura.getName(i + '@s.whatsapp.net')}\nitem1.TEL;waid=${i}:${i}\nitem1.X-ABLabel:Ponsel\nitem2.EMAIL;type=INTERNET:pebrikito0@gmail.com\nitem2.X-ABLabel:Email\nitem3.URL:https://github.com/Lexxy24\nitem3.X-ABLabel:Instagram\nitem4.ADR:;;Indonesia;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`
+	    	vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await kagura.getName(i + '@s.whatsapp.net')}\nFN:${await kagura.getName(i + '@s.whatsapp.net')}\nitem1.TEL;waid=${i}:${i}\nitem1.X-ABLabel:Creador\nitem2.EMAIL;type=INTERNET:fxbotteam@gmail.com\nitem2.X-ABLabel:Email\nitem3.URL:https://github.com/Fxmods\nitem3.X-ABLabel:Instagram\nitem4.ADR:;;Mexico;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`
 	    })
 	}
 	kagura.sendMessage(jid, { contacts: { displayName: `${list.length} Kontak`, contacts: list }, ...opts }, { quoted })
