@@ -12,8 +12,8 @@ global.APIKeys = {
 }
 
 // Other
-global.owner = ['529984646983']
-global.premium = ['529984646983']
+global.owner = ['18138999999']
+global.premium = ['1813899-9999']
 global.botname = '🚀 ᭄𝐹𝑋 𝐵𝑜𝑡'
 global.ownername = '✨ 𝘐𝘮 𝘍𝘦𝘭𝘪𝘹 ✨'
 global.packname = '✨ 𝘐𝘮 𝘍𝘦𝘭𝘪𝘹 ✨'
