@@ -1896,7 +1896,7 @@ break
  
 
 case 'tiktok':{
-let { TiktokDownloader } = require('./scrape/tiktokdl')
+let { TiktokDownloader } = require('./lib/tiktokdl')
 if (args.length < 1) return m.reply(`*Ejemplo de uso* :\n#tiktok https://vm.tiktok.com/ZMNMrkGrR/?k=1`)
 if (!args[0].includes('tiktok')) return m.reply(`Link is not valid`)
   m.reply(mess.wait)
@@ -1911,7 +1911,7 @@ if (!args[0].includes('tiktok')) return m.reply(`Link is not valid`)
 break
 
 case 'tiktokwm':{
-let { TiktokDownloader } = require('./scrape/tiktokdl')
+let { TiktokDownloader } = require('./lib/tiktokdl')
 if (args.length < 1) return m.reply(`*Ejemplo de uso* :\n#tiktok https://vm.tiktok.com/ZMNMrkGrR/?k=1`)
 if (!args[0].includes('tiktok')) return m.reply(`Link is not valid`)
   m.reply(mess.wait)
