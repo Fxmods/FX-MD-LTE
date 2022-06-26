@@ -1890,39 +1890,39 @@ if (!args[0].includes('tiktok')) return m.reply(`Link is not valid`)
    const musim_duren_a = musim_rambutan.result.nowatermark
     kagura.sendMessage(m.chat, { audio: { url: musim_duren_a }, mimetype: 'audio/mp4' }, { quoted: m })
    }
- m.reply(`*1*`)
+ m.reply(`*Archivo obtenido ☑️*`)
 break
 
  
 
 case 'tiktok':{
-let { TiktokDownloader } = require('./lib/tiktokdl')
-if (args.length < 1) return m.reply(`*Ejemplo de uso* :\n#tiktok https://vt.tiktok.com/ZSdGcA6MK/?k=1`)
+let { TiktokDownloader } = require('./scrape/tiktokdl')
+if (args.length < 1) return m.reply(`*Ejemplo de uso* :\n#tiktok https://vm.tiktok.com/ZMNMrkGrR/?k=1`)
 if (!args[0].includes('tiktok')) return m.reply(`Link is not valid`)
   m.reply(mess.wait)
-   const res = await TiktokDownloader(`${q}`).catch(e => {
+   const musim_rambutan = await TiktokDownloader(`${q}`).catch(e => {
  m.reply('err') 
 } )
-   console.log(result)
-   const results = res.result.nowatermark
-   kagura.sendMessage(m.chat, { video: { url: results }, caption: "Done!" }, { quoted: m })
+   console.log(musim_rambutan)
+   const musim_duren_v = musim_rambutan.result.nowatermark
+   kagura.sendMessage(m.chat, { video: { url: musim_duren_v }, caption: "Done!" }, { quoted: m })
    }
-  m.reply(`*1*`)
+  m.reply(`*Archivo obtenido ☑️*`)
 break
 
 case 'tiktokwm':{
-let { TiktokDownloader } = require('./lib/tiktokdl')
-if (args.length < 1) return m.reply(`*Ejemplo de uso* :\n#tiktok https://vt.tiktok.com/ZSdGcA6MK/?k=1`)
+let { TiktokDownloader } = require('./scrape/tiktokdl')
+if (args.length < 1) return m.reply(`*Ejemplo de uso* :\n#tiktok https://vm.tiktok.com/ZMNMrkGrR/?k=1`)
 if (!args[0].includes('tiktok')) return m.reply(`Link is not valid`)
   m.reply(mess.wait)
-   const res = await TiktokDownloader(`${q}`).catch(e => {
+   const musim_rambutan = await TiktokDownloader(`${q}`).catch(e => {
  m.reply('err') 
 } )
-   console.log(result)
-   const results = res.result.watermark
-   kagura.sendMessage(m.chat, { video: { url: results }, caption: "Done!" }, { quoted: m })
+   console.log(musim_rambutan)
+   const musim_duren_v = musim_rambutan.result.watermark
+   kagura.sendMessage(m.chat, { video: { url: musim_duren_v }, caption: "Done!" }, { quoted: m })
    }
-  m.reply(`*1*`)
+  m.reply(`*Archivo obtenido ☑️*`)
 break
 
 
