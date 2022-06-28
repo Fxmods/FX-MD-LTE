@@ -1932,15 +1932,20 @@ let { mediafireDl } = require('./lib/mediafireDl')
 if (!args[0].includes('mediafire')) return m.reply(`Link is not valid`)
 const teks1 = args.join(' ')
 const baby1 = await mediafireDl(teks1)
-const result4 = `*DATOS OBTENIDOS*				
-📌 Titulo : ${baby1[0].nama}
-📎 Enlace : ${baby1[0].link}
-🎲 Peso : ${baby1[0].size}				
-_Enviando archivo..._`
+const result4 = `
+                     「 *MEDIAFIRE* 」
+
+▢ Nombre : ${baby1[0].nama}
+▢ Enlace : ${baby1[0].link}
+▢ Peso : ${baby1[0].size}				
+
+📌 Espere un momento, enviando archivo.`
 m.reply(result4)
 kagura.sendMessage(m.chat, { document : { url : baby1[0].link}, fileName : baby1[0].nama, mimetype: baby1[0].mime }, { quoted : m }) 
 m.reply(`*1*`)
 break
+
+ 
 
 case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite':case 'yeet':case 'neko':case 'bully':case 'bonk':case 'wink':case 'poke':case 'nom':case 'slap':case 'smile':case 'wave':case 'awoo':case 'blush':case 'smug':case 'glomp':case 'happy':case 'dance':case 'cringe':case 'highfive':case 'shinobu':case 'megumin':case 'handhold':
 					m.reply(mess.wait)
