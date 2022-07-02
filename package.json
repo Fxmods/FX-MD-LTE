@@ -37,6 +37,7 @@
     "g-i-s": "^2.1.6",
     "google-it": "^1.6.2",
     "human-readable": "^0.2.1",
+    "@bochilteam/scraper": "^2.0.0",
     "jimp": "^0.16.1",
     "jsdom": "^16.4.0",
     "lowdb": "^2.1.0",
