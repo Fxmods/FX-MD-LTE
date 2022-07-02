@@ -13,6 +13,7 @@ const { exec, spawn, execSync } = require("child_process")
 const axios = require('axios')
 const path = require('path')
 const os = require('os')
+ 
 const { aiovideodl } = require('./lib/scraper.js')
 const thiccysapi = require('textmaker-thiccy')
 const moment = require('moment-timezone')
@@ -22,7 +23,7 @@ const { performance } = require('perf_hooks')
 const { Primbon } = require('scrape-primbon')
 const primbon = new Primbon()
 const { smsg, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom, getGroupAdmins } = require('./lib/myfunc')
-
+const { hentai } = require('./lib/scraper2.js')
 // read database
 let tebaklagu = db.data.game.tebaklagu = []
 let _family100 = db.data.game.family100 = []
@@ -35,7 +36,11 @@ let tebakkalimat = db.data.game.kalimat = []
 let tebaklirik = db.data.game.lirik = []
 let tebaktebakan = db.data.game.tebakan = []
 let vote = db.data.others.vote = []
-
+let ban = JSON.parse(fs.readFileSync('./src/ban.json'))
+let banUser = JSON.parse(fs.readFileSync('./src/banUser.json'));
+let banchat = JSON.parse(fs.readFileSync('./src/banChat.json'));
+let autosticker = JSON.parse(fs.readFileSync('./src/autosticker.json'))
+const _autostick = JSON.parse(fs.readFileSync('./src/autostickpc.json'))
 module.exports = kagura = async (kagura, m, chatUpdate, store) => {
     try {
         var body = (m.mtype === 'conversation') ? m.message.conversation : (m.mtype == 'imageMessage') ? m.message.imageMessage.caption : (m.mtype == 'videoMessage') ? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage') ? m.message.extendedTextMessage.text : (m.mtype == 'buttonsResponseMessage') ? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage') ? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage') ? m.message.templateButtonReplyMessage.selectedId : (m.mtype === 'messageContextInfo') ? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ''
@@ -55,7 +60,7 @@ module.exports = kagura = async (kagura, m, chatUpdate, store) => {
         const quoted = m.quoted ? m.quoted : m
         const mime = (quoted.msg || quoted).mimetype || ''
         const isMedia = /image|video|sticker|audio/.test(mime)
-	
+	const from = m.chat
         // Group
         const groupMetadata = m.isGroup ? await kagura.groupMetadata(m.chat).catch(e => {}) : ''
         const groupName = m.isGroup ? groupMetadata.subject : ''
@@ -64,7 +69,10 @@ module.exports = kagura = async (kagura, m, chatUpdate, store) => {
     	const isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
     	const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
     	const isPremium = isCreator || global.premium.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
-	
+const isAutoStick = _autostick.includes(from)
+	const isAutoSticker = m.isGroup ? autosticker.includes(from) : true
+const isBan = banUser.includes(m.sender)
+const isBanChat = m.isGroup ? banchat.includes(from) : false
 	
 	try {
             let isNumber = x => typeof x === 'number' && !isNaN(x)
@@ -121,7 +129,7 @@ module.exports = kagura = async (kagura, m, chatUpdate, store) => {
         // Push Message To Console && Auto Read
         if (m.message) {
             kagura.sendReadReceipt(m.chat, m.sender, [m.key.id])
-            console.log(chalk.black(chalk.bgWhite('[ PESAN ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> Dari'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> Di'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
+            console.log(chalk.black(chalk.bgWhite('[ MSJ ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> De'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> De'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
         }
 	
 	// reset limit every 12 hours
@@ -146,6 +154,29 @@ module.exports = kagura = async (kagura, m, chatUpdate, store) => {
 	    }
 	}
 	    
+	if (isAutoSticker) {
+            if (/image/.test(mime) && !/webp/.test(mime)) {
+                let mediac = await quoted.download()
+                await kagura.sendImageAsSticker(from, mediac, m, { packname: global.packname, author: global.author })
+                console.log(`Auto sticker detected`)
+            } else if (/video/.test(mime)) {
+                if ((quoted.msg || quoted).seconds > 11) return
+                let mediac = await quoted.download()
+                await kagura.sendVideoAsSticker(from, mediac, m, { packname: global.packname, author: global.author })
+            }
+        }
+	  //Autosticker pc
+                if (isAutoStick) {
+            if (/image/.test(mime) && !/webp/.test(mime)) {
+                let mediac = await quoted.download()
+                await kagura.sendImageAsSticker(from, mediac, m, { packname: global.packname, author: global.author })
+                console.log(`Auto sticker detected`)
+            } else if (/video/.test(mime)) {
+                if ((quoted.msg || quoted).seconds > 11) return
+                let mediac = await quoted.download()
+                await kagura.sendVideoAsSticker(from, mediac, m, { packname: global.packname, author: global.author })
+            }
+        }
 	  // Anti Link
         if (db.data.chats[m.chat].antilink) {
         if (budy.match(`chat.whatsapp.com`)) {
@@ -446,6 +477,8 @@ Selama ${clockString(new Date - user.afkTime)}
 	    
         switch(command) {
 	    case 'afk': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 let user = global.db.data.users[m.sender]
                 user.afkTime = + new Date
                 user.afkReason = text
@@ -453,6 +486,8 @@ Selama ${clockString(new Date - user.afkTime)}
             }
             break	
         case 'ttc': case 'ttt': case 'tictactoe': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             let TicTacToe = require("./lib/tictactoe")
             this.game = this.game ? this.game : {}
             if (Object.values(this.game).find(room => room.id.startsWith('tictactoe') && [room.game.playerX, room.game.playerO].includes(m.sender))) throw 'Kamu masih didalam game'
@@ -503,6 +538,8 @@ Ketik *nyerah* untuk menyerah dan mengakui kekalahan`
             }
             break
             case 'delttc': case 'delttt': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             this.game = this.game ? this.game : {}
             try {
             if (this.game) {
@@ -517,6 +554,8 @@ Ketik *nyerah* untuk menyerah dan mengakui kekalahan`
             }
             break
             case 'suitpvp': case 'suit': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             this.suit = this.suit ? this.suit : {}
             let poin = 10
             let poin_lose = 10
@@ -545,15 +584,21 @@ Silahkan @${m.mentionedJid[0].split`@`[0]} untuk ketik terima/tolak`
             }
             break
 	    case 'donddasi': case 'sedddwabot': case 'sewdda': case 'buypreddddmium': case 'donddate': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 kagura.sendMessage(m.chat, { image: { url: 'https://telegra.ph/file/74fd634010128be37972c.jpg' }, caption: `*Hai Kak ${m.pushName}*\n\n Bot Rental Prices\n⭔ 13k Per Group via E-Walet 1 Month\n⭔ 18k via pulsa 1 Month\n\n Premium Price Bot\n⭔ 8k per User 1 bulan\n\nPayment can be via Paypal/link aja/pulsa\n\nFor more details, you can chat with the owner\nhttps://wa.me/6288292024190 (Owner)\n\nDonate For Me : \n\n⭔ Paypal : https://www.paypal.me/Cakhaho\n⭔ Saweria : https://saweria.co/DikaArdnt` }, { quoted: m })
             }
             break
             case 'sddddsdc': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 m.reply('*Script Bot :*\nhttps://youtu.be/tbWY5hncgwc')
             }
             break
 
 case 'mn1': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(` ❏ *Group Menu*
  › #linkgroup
  › #ephemeral [option]
@@ -578,6 +623,8 @@ m.reply(` ❏ *Group Menu*
 }
 break
 case 'mn2': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Main Menu*
  › #ping
  › #owner
@@ -593,6 +640,8 @@ m.reply(`  ❏ *Main Menu*
 }
 break
 case 'mn3': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Owner Menu*
  › #react [emoji]
  › #chat [option]
@@ -608,6 +657,8 @@ m.reply(`  ❏ *Owner Menu*
 }
 break
 case 'mn4': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Webzone Menu*
  › #playstore
  › #gsmarena
@@ -620,6 +671,8 @@ m.reply(`  ❏ *Webzone Menu*
 }
 break
 case 'mn5': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Downloader Menu*
  › #tiktoknowm [url]
  › #tiktokwm [url]
@@ -639,6 +692,8 @@ m.reply(`  ❏ *Downloader Menu*
 }
 break
 case 'mn6': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Search Menu*
  › #play [query]
  › #yts [query]
@@ -653,6 +708,8 @@ m.reply(`  ❏ *Search Menu*
 }
 break
 case 'mn7': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Random Menu*
  › #coffe
  › #quotesanime
@@ -674,6 +731,8 @@ m.reply(`  ❏ *Random Menu*
 }
 break
 case 'mn8': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Text Pro Menu*
  › #3dchristmas
  › #3ddeepsea
@@ -709,6 +768,8 @@ m.reply(`  ❏ *Text Pro Menu*
 }
 break
 case 'mn9': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Photo Oxy Menu*
  › #shadow
  › #romantic
@@ -725,6 +786,8 @@ m.reply(`  ❏ *Photo Oxy Menu*
 }
 break
 case 'mn10': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Ephoto Menu*
  › #ffcover
  › #crossfire
@@ -738,6 +801,8 @@ m.reply(`  ❏ *Ephoto Menu*
 }
 break
 case 'mn11': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Fun Menu*
  › #simih
  › #halah
@@ -756,6 +821,8 @@ m.reply(`  ❏ *Fun Menu*
 }
 break
 case 'mn12': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Primbon Menu*
  › #nomorhoki
  › #artimimpi
@@ -790,6 +857,8 @@ m.reply(`  ❏ *Primbon Menu*
 }
 break
 case 'mn13': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Convert Menu*
  › #attp
  › #ttp
@@ -811,6 +880,8 @@ m.reply(`  ❏ *Convert Menu*
 }
 break
 case 'mn14': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Database Menu*
  › #setcmd
  › #listcmd
@@ -823,6 +894,8 @@ m.reply(`  ❏ *Database Menu*
 }
 break
 case 'mn15': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Anonymous Menu*
  › #anonymous
  › #start
@@ -831,6 +904,8 @@ m.reply(`  ❏ *Anonymous Menu*
 }
 break
 case 'mn16': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Islamic Menu*
  › #iqra
  › #hadist
@@ -840,6 +915,8 @@ m.reply(`  ❏ *Islamic Menu*
 }
 break
 case 'mn17': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 m.reply(`  ❏ *Voice Changer*
  › #bass
  › #blown
@@ -855,6 +932,7 @@ m.reply(`  ❏ *Voice Changer*
 }
 break
             case 'chat': {
+	 
                 if (!isCreator) throw mess.owner
                 if (!q) throw 'Option : 1. mute\n2. unmute\n3. archive\n4. unarchive\n5. read\n6. unread\n7. delete'
                 if (args[0] === 'mute') {
@@ -876,6 +954,8 @@ break
             break
 	     
             case 'kuismath': case 'math': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (kuismath.hasOwnProperty(m.sender.split('@')[0])) throw "¡Aun no se responde la pregunta anterior!"
                 let { genMath, modes } = require('./src/math')
                 if (!text) throw `Seleccione un modo de juego : ${Object.keys(modes).join(' | ')}\n𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix}math medium`
@@ -894,6 +974,8 @@ break
 
 
             case 'ship': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!m.isGroup) throw mess.group
             let member = participants.map(u => u.id)
             let orang = member[Math.floor(Math.random() * member.length)]
@@ -909,7 +991,7 @@ break
             }
             break
             case 'react': {
-                if (!isCreator) throw mess.owner
+	if (!isCreator) throw mess.owner
                 reactionMessage = {
                     react: {
                         text: args[0],
@@ -920,7 +1002,8 @@ break
             }
             break  
             case 'join': {
-                if (!isCreator) throw mess.owner
+	if (!isCreator) throw mess.owner
+                 
                 if (!text) throw '¡Ingrese un enlace de un grupo de WhatsApp!'
                 if (!isUrl(args[0]) && !args[0].includes('whatsapp.com')) throw 'Enlace invalido.'
                 m.reply(mess.wait)
@@ -929,12 +1012,14 @@ break
             }
             break
             case 'leave': {
+	 
                 if (!isCreator) throw mess.owner
                 await kagura.groupLeave(m.chat).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
             }
             break
             case 'setexif': {
-               if (!isCreator) throw mess.owner
+	if (!isCreator) throw mess.owner
+                
                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} packname|author`
           global.packname = text.split("|")[0]
           global.author = text.split("|")[1]
@@ -942,6 +1027,8 @@ break
             }
             break
 	case 'kick': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 		if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -950,6 +1037,8 @@ break
 	}
 	break
 	case 'add': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 		if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -958,6 +1047,8 @@ break
 	}
 	break
 	case 'promote': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 		if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -966,6 +1057,8 @@ break
 	}
 	break
 	case 'demote': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 		if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -974,18 +1067,22 @@ break
 	}
 	break
         case 'block': {
+	 
 		if (!isCreator) throw mess.owner
 		let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
 		await kagura.updateBlockStatus(users, 'block').then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
 	}
 	break
         case 'unblock': {
+	 
 		if (!isCreator) throw mess.owner
 		let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
 		await kagura.updateBlockStatus(users, 'unblock').then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
 	}
 	break
 	    case 'setname': case 'setsubject': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -994,6 +1091,8 @@ break
             }
             break
           case 'setdesc': case 'setdesk': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -1004,6 +1103,8 @@ break
 
 
 case 'textmaker': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 if (args[0] === 'glitch') {
 if (args.length < 2) return m.reply(`𝖤𝗃. 𝖽𝖾 𝗎𝗌𝗈 :\n${prefix + command + ' ' + args[0]} Felixxx`)
 let teds = await thiccysapi.textpro("https://textpro.me/create-impressive-glitch-text-effects-online-1027.html", [args[1]])
@@ -1022,9 +1123,28 @@ m.reply(`*Lista de Diseños :*\n•> glitch\n•> glow\n•> magma`)
 }
 break
 
+case 'glicttt': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
+if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
+let teds = await thiccysapi.textpro("https://textpro.me/create-impressive-glitch-text-effects-online-1027.html", [text])
+kagura.sendMessage(m.chat, {image:{url:teds}, caption:"Espero sea de tu agrado ☑️"}, {quoted:m})
+}
+break
+
+case 'naranja': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
+if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
+let teds = await thiccysapi.textpro("https://textpro.me/create-a-3d-orange-juice-text-effect-online-1084.html", [text])
+kagura.sendMessage(m.chat, {image:{url:teds}, caption:"Espero sea de tu agrado ☑️"}, {quoted:m})
+}
+break
+
 
 
           case 'setppbot': {
+	 
                 if (!isCreator) throw mess.owner
                 if (!quoted) throw `Menciona/Envia una Imagen con el mensaje ${prefix + command}`
                 if (!/image/.test(mime)) throw `Menciona/Envia una Imagen con el mensaje ${prefix + command}`
@@ -1035,6 +1155,8 @@ break
                 }
                 break
            case 'setppgroup': case 'setppgrup': case 'setppgc': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.isGroup) throw mess.group
                 if (!isAdmins) throw mess.admin
                 if (!quoted) throw `Menciona/Envia una Imagen con el mensaje ${prefix + command}`
@@ -1046,6 +1168,8 @@ break
                 }
                 break
             case 'tagall': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -1059,6 +1183,8 @@ let teks = `▢ *Grupo : ${groupName}*
                 }
                 break
                 case 'hidetag': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!m.isGroup) throw mess.group
             if (!isBotAdmins) throw mess.botAdmin
             if (!isAdmins) throw mess.admin
@@ -1066,6 +1192,8 @@ let teks = `▢ *Grupo : ${groupName}*
             }
             break
 	    case 'style': case 'styletext': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 	        if (!isPremium && global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // respon ketika limit habis
 		db.data.users[m.sender].limit -= 1 // -1 limit
 		let { styletext } = require('./lib/scraper')
@@ -1079,6 +1207,8 @@ let teks = `▢ *Grupo : ${groupName}*
 	    }
 	    break
                case 'vote': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!m.isGroup) throw mess.group
             if (m.chat in vote) throw `_Masih ada vote di chat ini!_\n\n*${prefix}hapusvote* - untuk menghapus vote`
             if (!text) throw `Masukkan Alasan Melakukan Vote, 𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈: *${prefix + command} Owner Ganteng*`
@@ -1121,6 +1251,8 @@ let buttonsVote = [
 	    }
             break
                case 'upvote': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!m.isGroup) throw mess.group
             if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
             isVote = vote[m.chat][1].concat(vote[m.chat][2])
@@ -1163,6 +1295,8 @@ ${vote[m.chat][2].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 	    }
              break
                 case 'devote': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!m.isGroup) throw mess.group
             if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
             isVote = vote[m.chat][1].concat(vote[m.chat][2])
@@ -1234,6 +1368,8 @@ ${vote[m.chat][2].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 kagura.sendTextWithMentions(m.chat, teks_vote, m)
 break
 		case 'deletevote': case'delvote': case 'hapusvote': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!m.isGroup) throw mess.group
             if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
             delete vote[m.chat]
@@ -1241,6 +1377,8 @@ break
 	    }
             break
                case 'group': case 'grupo': case 'grup': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -1259,6 +1397,8 @@ break
             }
             break
             case 'editinfo': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -1277,6 +1417,8 @@ break
             }
             break
             case 'antilink': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -1298,6 +1440,8 @@ break
              }
              break
              case 'mute': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -1321,6 +1465,8 @@ break
 
 
 case 'antionce': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -1341,8 +1487,59 @@ case 'antionce': {
                 }
              }
              break
- 
+ case 'autosticker':
+            case 'autostiker': {
+   if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
+                if (!m.isGroup) throw mess.group
+                if (!isBotAdmins) throw mess.botAdmin
+                if (!isAdmins) throw mess.admin
+if (args[0] === "on") {
+if (isAutoSticker) return m.reply('*_Ya esta activado en este grupo._*')
+autosticker.push(from)
+fs.writeFileSync('./src/autosticker.json', JSON.stringify(autosticker))
+m.reply('_*La función de stickers automáticos se ha habilitado en este grupo.*_')
+} else if (args[0] === "off") {
+if (!isAutoSticker) return m.reply('*_No ha sido activado en este grupo._*')
+let anu = autosticker.indexOf(from)
+autosticker.splice(anu, 1)
+m.reply('*_La función de stickers automáticos se ha deshabilitado en este grupo._*')
+} else {
+  let buttonsntnsfw = [
+  { buttonId: `${command} on`, buttonText: { displayText: '𝗛𝗮𝗯𝗶𝗹𝗶𝘁𝗮𝗿 ☑️' }, type: 1 },
+  { buttonId: `${command} off`, buttonText: { displayText: '𝗗𝗲𝘀𝗵𝗮𝗯𝗶𝗹𝗶𝘁𝗮𝗿 ❎' }, type: 1 }
+  ]
+  await kagura.sendButtonText(m.chat, buttonsntnsfw, `Seleccione una opción.`, `${global.botname}`, m)
+  }
+  }
+  break
+
+case 'autostickerpc':
+            case 'autostikerpc': {
+   if (!isCreator) throw mess.owner
+if (args[0] === "on") {
+if (isAutoStick) return m.reply('*_Ya esta activado en chats privados._*')
+_autostick.push(from)
+fs.writeFileSync('./src/autosticker.json', JSON.stringify(autosticker))
+m.reply('_*La función de stickers automáticos se ha habilitado en chats privados.*_')
+} else if (args[0] === "off") {
+if (!isAutoStick) return m.reply('*_No ha sido activado._*')
+let anu = autosticker.indexOf(from)
+_autostick.splice(anu, 1)
+m.reply('*_La función de stickers automáticos se ha deshabilitado en chats privados._*')
+} else {
+  let buttonsntnsfw = [
+  { buttonId: `${command} on`, buttonText: { displayText: '𝗛𝗮𝗯𝗶𝗹𝗶𝘁𝗮𝗿 ☑️' }, type: 1 },
+  { buttonId: `${command} off`, buttonText: { displayText: '𝗗𝗲𝘀𝗵𝗮𝗯𝗶𝗹𝗶𝘁𝗮𝗿 ❎' }, type: 1 }
+  ]
+  await kagura.sendButtonText(m.chat, buttonsntnsfw, `Seleccione una opción.`, `${global.botname}`, m)
+  }
+  }
+  break
+
          case 'enlace': case 'linkgroup': case 'linkgc': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
 let response = await kagura.groupInviteCode(m.chat)
@@ -1365,6 +1562,8 @@ break
              
 
             case 'ephemeral': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -1377,6 +1576,8 @@ break
             }
             break
             case 'delete': case 'del': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.quoted) throw false 
                 let { chat, fromMe, id, isBaileys } = m.quoted
                 if (!isBaileys) throw 'Este mensaje no ha sido enviado por un bot.'
@@ -1384,6 +1585,7 @@ break
             }
             break
             case 'bcgc': case 'bcgroup': {
+	 
                 if (!isCreator) throw mess.owner
                 if (!text) throw `¿Que desea anunciar?`
                 let getGroups = await kagura.groupFetchAllParticipating()
@@ -1425,6 +1627,7 @@ break
             }
             break
             case 'bc': case 'broadcast': case 'bcall': {
+	 
                 if (!isCreator) throw mess.owner
                 if (!text) throw `¿Y el texto?`
                 let anu = await store.chats.all().map(v => v.id)
@@ -1464,6 +1667,8 @@ break
             }
             break
             case 'infochat': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.quoted) m.reply('¡Menciona un mensaje!')
                 let msg = await m.getQuotedObj()
                 if (!m.quoted.isBaileys) throw '¡El mensaje no fue enviado por un bot!'
@@ -1480,6 +1685,8 @@ break
             break
             
             case 'listpc': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                  let anu = await store.chats.all().filter(v => v.id.endsWith('.net')).map(v => v.id)
                  let teks = `▢ *CHATS PERSONALES*\n\nTotal Chat : ${anu.length} Chats\n\n`
                  for (let i of anu) {
@@ -1490,6 +1697,8 @@ break
              }
              break
                 case 'listgc': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                  let anu = await store.chats.all().filter(v => v.id.endsWith('@g.us')).map(v => v.id)
                  let teks = `▢ *CHATS DE GRUPOS*\n\nTotal Group : ${anu.length} Group\n\n`
                  for (let i of anu) {
@@ -1500,12 +1709,16 @@ break
              }
              break
              case 'listonline': case 'liston': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                     let id = args && /\d+\-\d+@g.us/.test(args[0]) ? args[0] : m.chat
                     let online = [...Object.keys(store.presences[id]), botNumber]
                     kagura.sendText(m.chat, 'Personas en linea :\n\n' + online.map(v => '▢ @' + v.replace(/@.+/, '')).join`\n`, m, { mentions: online })
              }
              break
             case 'sticker': case 's': case 'stickergif': case 'sgif': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!quoted) throw `Menciona un Video/Image Con el mensaje : ${prefix + command}`
             m.reply(mess.wait)
                     if (/image/.test(mime)) {
@@ -1523,6 +1736,8 @@ break
             }
             break
             case 'ebinary': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
             let { eBinary } = require('./lib/binary')
             let eb = await eBinary(text)
@@ -1530,6 +1745,8 @@ break
         }
         break
             case 'dbinary': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
             let { dBinary } = require('./lib/binary')
             let db = await dBinary(text)
@@ -1537,6 +1754,8 @@ break
         }
         break
             case 'emojimix': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 		let [emoji1, emoji2] = text.split`+`
 		if (!emoji1) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 😅+🤔`
 		if (!emoji2) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 😅+🤔`
@@ -1548,6 +1767,8 @@ break
 	    }
 	    break
 	    case 'emojimix2': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 	    if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 😅`
 		let anu = await fetchJson(`https://tenor.googleapis.com/v2/featured?key=AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ&contentfilter=high&media_filter=png_transparent&component=proactive&collection=emoji_kitchen_v5&q=${encodeURIComponent(text)}`)
 		for (let res of anu.results) {
@@ -1557,12 +1778,16 @@ break
 	    }
 	    break
 	       case 'attp': case 'ttp': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
            if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
            await kagura.sendMedia(m.chat, `https://xteam.xyz/${command}?file&text=${text}`, 'kagura', 'morou', m, {asSticker: true})
 
          }
          break
 	       case 'smeme': case 'stickmeme': case 'stikmeme': case 'stickermeme': case 'stikermeme': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 	        let respond = `Menciona una imagen/sticker con el mensaje ${prefix + command} text1|text2`
 	        if (!/image/.test(mime)) throw respond
             if (!text) throw respond
@@ -1578,12 +1803,16 @@ break
             }
 	       break     
 	        case 'simih': case 'simisimi': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
             hm = await fetchJson(api('zenz', '/api/simisimi', { text : text }, 'apikey'))
             m.reply(hm.result.message)
             }
             break
             case 'toimage': case 'toimg': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!quoted) throw 'Responde a una imagen.'
                 if (!/webp/.test(mime)) throw `Menciona un sticker con el mensaje *${prefix + command}*`
                 m.reply(mess.wait)
@@ -1599,6 +1828,8 @@ break
             }
             break
 	        case 'tomp4': case 'tovideo': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!quoted) throw 'Responde a una imagen.'
                 if (!/webp/.test(mime)) throw `Menciona un sticker con el mensaje *${prefix + command}*`
                 m.reply(mess.wait)
@@ -1610,6 +1841,8 @@ break
             }
             break
             case 'toaud': case 'toaudio': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!/video/.test(mime) && !/audio/.test(mime)) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
             if (!quoted) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
             m.reply(mess.wait)
@@ -1620,6 +1853,8 @@ break
             }
             break
             case 'tomp3': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (/document/.test(mime)) throw `Responde a un Video/Audio que quieras convertir en MP3`
             if (!/video/.test(mime) && !/audio/.test(mime)) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
             if (!quoted) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
@@ -1631,6 +1866,8 @@ break
             }
             break
             case 'tovn': case 'toptt': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!/video/.test(mime) && !/audio/.test(mime)) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
             if (!quoted) throw `Responde a un Video/Audio con el mensaje ${prefix + command}`
             m.reply(mess.wait)
@@ -1641,6 +1878,8 @@ break
             }
             break
             case 'togif': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!quoted) throw 'Responde a una imagen'
                 if (!/webp/.test(mime)) throw `Responde a*${prefix + command}*`
                 m.reply(mess.wait)
@@ -1652,6 +1891,8 @@ break
             }
             break
 	        case 'tourl': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 m.reply(mess.wait)
 		let { UploadFileUgu, webp2mp4File, TelegraPh } = require('./lib/uploader')
                 let media = await kagura.downloadAndSaveMediaMessage(quoted)
@@ -1666,6 +1907,8 @@ break
             }
             break
             case 'imagenobg': case 'removebg': case 'remove-bg': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 	    if (!quoted) throw `Responde a una Imagen con el mensaje ${prefix + command}`
 	    if (!/image/.test(mime)) throw `Responde a una Imagen con el mensaje ${prefix + command}`
 	    if (/webp/.test(mime)) throw `Responde a una Imagen con el mensaje ${prefix + command}`
@@ -1692,6 +1935,8 @@ break
 	    break
 	    
 	    case 'yts': case 'ytsearch': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} Anime edit`
                 let yts = require("yt-search")
                 let search = await yts(text)
@@ -1704,6 +1949,8 @@ break
             }
             break
         case 'google': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} Anime`
                 let google = require('google-it')
                 google({'query': text}).then(res => {
@@ -1718,6 +1965,8 @@ break
                 }
                 break
 case 'translate': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 if (!text) throw `Uso :`
 tes = await fetchJson (`https://megayaa.herokuapp.com/api/translate?to=es&kata=${text}`)
 Infoo = tes.info
@@ -1726,6 +1975,8 @@ m.reply(`🌐 Traducir : ${text} \n📘Resultado : ${Infoo}`)
 }
 break
         case 'gimage': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
         if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} Anime Demon Slayer`
         let gis = require('g-i-s')
         gis(text, async (error, result) => {
@@ -1746,6 +1997,8 @@ break
         }
         break
 	    case 'play': case 'ytplay': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} Anime Edit`
                 let yts = require('yt-search')
 let anu = await (await yts.search(text)).all[0]
@@ -1800,6 +2053,8 @@ message = await prepareWAMessageMedia({ image : { url: anu.thumbnail } }, { uplo
             break
 
 case 'maxpeso': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 let { ytv } = require('./lib/y2mate')
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 128kbps`
                 let quality = args[1] ? args[1] : '360p'
@@ -1810,6 +2065,8 @@ case 'maxpeso': {
             break
 
 	    case 'ytmp3': case 'ytaudio': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 let { yta } = require('./lib/y2mate')
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 128kbps`
                 let quality = args[1] ? args[1] : '128kbps'
@@ -1820,6 +2077,8 @@ case 'maxpeso': {
             }
             break
             case 'ytmp4': case 'ytvideo': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 let { ytv } = require('./lib/y2mate')
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 360p`
                 let quality = args[1] ? args[1] : '360p'
@@ -1829,6 +2088,8 @@ case 'maxpeso': {
             }
             break
 	    case 'getmusic': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 let { yta } = require('./lib/y2mate')
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 1`
                 if (!m.quoted) return m.reply('Reply Pesan')
@@ -1843,6 +2104,8 @@ case 'maxpeso': {
             }
             break
             case 'getvideo': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 let { ytv } = require('./lib/y2mate')
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 1`
                 if (!m.quoted) return m.reply('Reply Pesan')
@@ -1855,7 +2118,12 @@ case 'maxpeso': {
                 kagura.sendMessage(m.chat, { video: { url: media.dl_link }, mimetype: 'video/mp4', fileName: `${media.title}.mp4`, caption: `⭔ Title : ${media.title}\n⭔ File Size : ${media.filesizeF}\n⭔ Url : ${urls[text - 1]}\n⭔ Ext : MP3\n⭔ Resolusi : ${args[1] || '360p'}` }, { quoted: m })
             }
             break
+
+
+
             case 'pinterest': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 m.reply(mess.wait)
 		let { pinterest } = require('./lib/scraper')
                 anu = await pinterest(text)
@@ -1864,91 +2132,150 @@ case 'maxpeso': {
             }
             break
 
-case 'ttdl': case 'tiktok': case 'ttmp4': case 'ttmp3': case 'tiktoknowm': {
+case 'tiktokaudio':{
+if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
+let { TiktokDownloader } = require('./lib/tiktokdl')
+if (args.length < 1) return m.reply(`*Ejemplo de uso* :\n#tiktok https://vt.tiktok.com/ZSdGcA6MK/?k=1`)
+if (!args[0].includes('tiktok')) return m.reply(`Link is not valid`)
+  m.reply(mess.wait)
+   const musim_rambutan = await TiktokDownloader(`${q}`).catch(e => {
+ m.reply('err') 
+} )
+   console.log(musim_rambutan)
+   const musim_duren_a = musim_rambutan.result.nowatermark
+    kagura.sendMessage(m.chat, { audio: { url: musim_duren_a }, mimetype: 'audio/mp4' }, { quoted: m })
+   }
+ m.reply(`*Archivo obtenido ☑️*`)
+break
+
  
-if (!isUrl(args[0])) return m.reply(`𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} https://vt.tiktok.com/ZSdDo97dC/`)
-let res = await aiovideodl(args[0])
-if (isUrl(args[0])) {
-texttk = `     *| TIKTOK DOWNLOADER |*
 
-📌 *Titulo* : ${res.title}
-🚀 *Tamaño* : ${res.medias[1].formattedSize}
-🪀 *Tipo* : ${res.medias[1].extension ? "video/" + res.medias[1].extension : "undefined"}
-
-_Seleccione si desea sin marca de agua o solo el audio._ `
-let buttons = [
-{buttonId: `ttvd ${args[0]}}`, buttonText: {displayText: '× 𝘞𝘢𝘵𝘦𝘳𝘮𝘢𝘳𝘬'}, type: 1},
-{buttonId: `ttad ${args[0]}`, buttonText: {displayText: '♫ 𝘈𝘶𝘥𝘪𝘰'}, type: 1}
-]
-let buttonMessage = {
-video: {url:res.medias[1].url},
-caption: texttk,
-footer: "© I'm Felixxxxxx ~ TikTok Downloader",
-buttons: buttons,
-headerType: 4,
-contextInfo:{externalAdReply:{
-title:"FX - BOT ~ Tiktok Downloader",
-body:res.title,
-thumbnail: global.visoka,
-mediaType:1,
-mediaUrl: args[0],
-sourceUrl: args[0]
-}}
-}
-kagura.sendMessage(m.chat, buttonMessage, {quoted:m})
-} else {
-m.reply("¡Enlace incorrecto!")
-}
-}
+case 'tiktok':{
+if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
+let { TiktokDownloader } = require('./lib/tiktokdl')
+if (args.length < 1) return m.reply(`*Ejemplo de uso* :\n#tiktok https://vm.tiktok.com/ZMNMrkGrR/?k=1`)
+if (!args[0].includes('tiktok')) return m.reply(`Link is not valid`)
+  m.reply(mess.wait)
+   const musim_rambutan = await TiktokDownloader(`${q}`).catch(e => {
+ m.reply('err') 
+} )
+   console.log(musim_rambutan)
+   const musim_duren_v = musim_rambutan.result.nowatermark
+   kagura.sendMessage(m.chat, { video: { url: musim_duren_v }, caption: "Done!" }, { quoted: m })
+   }
+  m.reply(`*Archivo obtenido ☑️*`)
 break
 
-case 'ttad': case 'tiktokmp3': {
-let res = await aiovideodl(args[0])
-kagura.sendMessage(m.chat, {audio:{url:res.medias[2].url}, mimetype:"audio/mp4", ptt:true, contextInfo:{externalAdReply:{
-title:"© I'm Felixxxxxx ~ TikTok Downloader",
-body:res.title,
-thumbnail: global.visoka,
-mediaType:1,
-mediaUrl: args[0],
-sourceUrl: args[0]
-}}}, {quoted:m})
-}
+case 'tiktokwm':{
+if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
+let { TiktokDownloader } = require('./lib/tiktokdl')
+if (args.length < 1) return m.reply(`*Ejemplo de uso* :\n#tiktok https://vm.tiktok.com/ZMNMrkGrR/?k=1`)
+if (!args[0].includes('tiktok')) return m.reply(`Link is not valid`)
+  m.reply(mess.wait)
+   const musim_rambutan = await TiktokDownloader(`${q}`).catch(e => {
+ m.reply('err') 
+} )
+   console.log(musim_rambutan)
+   const musim_duren_v = musim_rambutan.result.watermark
+   kagura.sendMessage(m.chat, { video: { url: musim_duren_v }, caption: "Done!" }, { quoted: m })
+   }
+  m.reply(`*Archivo obtenido ☑️*`)
 break
 
-case 'ttvd': case 'tiktokwm': {
-let res = await aiovideodl(args[0])
-texttk = `     *| TIKTOK DOWNLOADER |*
 
-📌 *Titulo* : ${res.title}
-🚀 *Tamaño* : ${res.medias[0].formattedSize}
-🪀 *Tipo* : ${res.medias[0].extension ? "video/" + res.medias[0].extension : "undefined"}
+case 'mediafire':
+if (args.length < 1) return m.reply('¿Enlace? ')
+let { mediafireDl } = require('./lib/mediafireDl')
+if (!args[0].includes('mediafire')) return m.reply(`Link is not valid`)
+const teks1 = args.join(' ')
+const baby1 = await mediafireDl(teks1)
+const result4 = `
+                     「 *MEDIAFIRE* 」
 
-_Para ver el menu seleccioné el boton de abajo._`
-let buttons = [
-{buttonId: `menu`, buttonText: {displayText: '𝘔𝘦𝘯𝘶'}, type: 1}
-]
-let buttonMessage = {
-video: {url:res.medias[0].url},
-caption: texttk,
-footer: "© I'm Felixxxxxx ~ TikTok Downloader",
-buttons: buttons,
-headerType: 4,
-contextInfo:{externalAdReply:{
-title:"FX - BOT ~ Tiktok Downloader",
-body:res.title,
-thumbnail: global.visoka,
-mediaType:1,
-mediaUrl: args[0],
-sourceUrl: args[0]
-}}
-}
-kagura.sendMessage(m.chat, buttonMessage, {quoted:m})
-}
+▢ Nombre : ${baby1[0].nama}
+▢ Enlace : ${baby1[0].link}
+▢ Peso : ${baby1[0].size}				
+
+📌 Espere un momento, enviando archivo.`
+m.reply(result4)
+kagura.sendMessage(m.chat, { document : { url : baby1[0].link}, fileName : baby1[0].nama, mimetype: baby1[0].mime }, { quoted : m }) 
+m.reply(`*1*`)
+break
+case 'masturbation': case 'jahy': case 'hentai': case 'glasses': case 'gangbang': case 'foot': 
+case 'femdom': case 'cum': case 'ero': case 'cuckold': case 'blowjob': case 'bdsm': 
+case 'ahegao': case 'ass': case 'orgy': case 'panties': case 'pussy': case 'thighs': case 'yuri': case 'tentacles':
+if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
+if (!m.isGroup) return replay(mess.group)
+ 
+try{
+m.reply(mess.wait)
+NoHorny = await fetchJson(`https://myselfff.herokuapp.com/docs/nsfw/${command}`)
+YesHorny = await getBuffer(NoHorny.result)
+kagura.sendMessage(from, {image:YesHorny},{quoted:m})
+} catch (e) {error("Error")}	
 break
 
+case 'hentai-neko' :
+case 'hneko' :
+   if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
+if (!m.isGroup) return replay(mess.group)
+ 
+    waifudd = await axios.get(`https://waifu.pics/api/nsfw/neko`)
+ let hnekobot = [
+    {buttonId: `.hneko`, buttonText: {displayText: `Next ⚡`}, type: 1},
+    ]
+  let button3Messages = {
+   image: {url:waifudd.data.url},
+   caption:  `Here you go!`,
+  buttons: hnekobot,
+  headerType: 1
+  }      
+            await kagura.sendMessage(m.chat, button3Messages, { quoted:m }).catch(err => {
+                    return('Error!')
+                })
+break
+case 'hentai-waifu' :
+case 'nwaifu' :
+   if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
+if (!m.isGroup) return replay(mess.group)
+ 
+m.reply(mess.wait)
+    waifudd = await axios.get(`https://waifu.pics/api/nsfw/waifu`)         
+ let nwaifubot = [
+    {buttonId: `.hneko`, buttonText: {displayText: `Next ⚡`}, type: 1},
+    ]
+  let button4Messages = {
+   image: {url:waifudd.data.url},
+   caption:  `Here you go!`,
+  buttons: nwaifubot,
+  headerType: 1
+  }      
+            await kagura.sendMessage(m.chat, button4Messages, { quoted:m }).catch(err => {
+                    return('Error!')
+                })
+break
+
+  case 'hentaivid': case 'hentaivideo': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
+ 
+               m.reply(mess.wait)
+                anu = await hentai()
+                result912 = anu[Math.floor(Math.random(), anu.length)]
+                kagura.sendMessage(m.chat, { video: { url: result912.video_1 }, caption: ` Title : ${result912.title}\n Category : ${result912.category}\n Mimetype : ${result912.type}\n Views : ${result912.views_count}\n Shares : ${result912.share_count}\n Source : ${result912.link}\n Media Url : ${result912.video_1}` }, { quoted: m })
+            }
+            break
 
 case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite':case 'yeet':case 'neko':case 'bully':case 'bonk':case 'wink':case 'poke':case 'nom':case 'slap':case 'smile':case 'wave':case 'awoo':case 'blush':case 'smug':case 'glomp':case 'happy':case 'dance':case 'cringe':case 'highfive':case 'shinobu':case 'megumin':case 'handhold':
-					m.reply(mess.wait)
+					if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
+m.reply(mess.wait)
 					axios.get(`https://api.waifu.pics/sfw/${command}`)
 					.then(({data}) => {
 					kagura.sendVideoAsSticker(m.chat, data.url, m, { packname: global.packname, author: global.author })
@@ -1959,6 +2286,8 @@ case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite'
 
             
 	    case 'couple': case 'ppcp': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 
             let anu = await fetchJson('https://raw.githubusercontent.com/iamriz7/kopel_/main/kopel.json')
             let random = anu[Math.floor(Math.random() * anu.length)]
@@ -1979,6 +2308,8 @@ case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite'
              break
 
             case 'coffe': case 'kopi': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             let buttons = [
                     {buttonId: `coffe`, buttonText: {displayText: 'Next Image'}, type: 1}
                 ]
@@ -1993,6 +2324,8 @@ case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite'
             }
             break
             case 'wallpaper': {
+if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!text) throw '¿Que deseas buscar?'
 		let { wallpaper } = require('./lib/scraper')
                 anu = await wallpaper(text)
@@ -2011,6 +2344,8 @@ case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite'
             }
             break
             case 'wikimedia': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!text) throw '¿Que deseas buscar?'
 		let { wikimedia } = require('./lib/scraper')
                 anu = await wikimedia(text)
@@ -2029,6 +2364,8 @@ case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite'
             }
             break
             case 'quotesanime': case 'quoteanime': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 		let { quotesAnime } = require('./lib/scraper')
                 let anu = await quotesAnime()
                 result = anu[Math.floor(Math.random() * anu.length)]
@@ -2045,6 +2382,8 @@ case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite'
             }
             break
 	        case 'motivasi': case 'dilanquote': case 'bucinquote': case 'katasenja': case 'puisi': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 let anu = await fetchJson(api('zenz', '/api/'+command, {}, 'apikey'))
                 let buttons = [
                     {buttonId: `motivasi`, buttonText: {displayText: 'Next'}, type: 1}
@@ -2059,24 +2398,32 @@ case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite'
             }
             break
             case '3dchristmas': case '3ddeepsea': case 'americanflag': case '3dscifi': case '3drainbow': case '3dwaterpipe': case 'halloweenskeleton': case 'sketch': case 'bluecircuit': case 'space': case 'metallic': case 'fiction': case 'greenhorror': case 'transformer': case 'berry': case 'thunder': case 'magma': case '3dcrackedstone': case '3dneonlight': case 'impressiveglitch': case 'naturalleaves': case 'fireworksparkle': case 'matrix': case 'dropwater':  case 'harrypotter': case 'foggywindow': case 'neondevils': case 'christmasholiday': case '3dgradient': case 'blackpink': case 'gluetext': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
                 m.reply(mess.wait)
                 kagura.sendMessage(m.chat, { image: { url: api('zenz', '/textpro/' + command, { text: text }, 'apikey') }, caption: `Text Pro ${command}` }, { quoted: m})
 	    }
             break
 	    case 'shadow': case 'romantic': case 'smoke': case 'burnpapper': case 'naruto': case 'lovemsg': case 'grassmsg': case 'lovetext': case 'coffecup': case 'butterfly': case 'harrypotter': case 'retrolol': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!text) throw 'No Query Text'
                 m.reply(mess.wait)
                 kagura.sendMessage(m.chat, { image: { url: api('zenz', '/photooxy/' + command, { text: text }, 'apikey') }, caption: `Photo Oxy ${command}` }, { quoted: m })
             }
             break
             case 'ffcover': case 'crossfire': case 'galaxy': case 'glass': case 'neon': case 'beach': case 'blackpink': case 'igcertificate': case 'ytcertificate': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!text) throw 'No Query Text'
                 m.reply(mess.wait)
                 kagura.sendMessage(m.chat, { image: { url: api('zenz', '/ephoto/' + command, { text: text }, 'apikey') }, caption: `Ephoto ${command}` }, { quoted: m })
             }
             break
 	    case 'nomerhoki': case 'nomorhoki': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!Number(text)) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} 6288292024190`
                 let anu = await primbon.nomer_hoki(Number(text))
                 if (anu.status == false) return m.reply(anu.message)
@@ -2085,6 +2432,8 @@ case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite'
             break
             
             case 'zodiak': case 'zodiac': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix+ command} 7 7 2005`
                 let zodiak = [
                     ["capricorn", new Date(1970, 0, 1)],
@@ -2120,6 +2469,8 @@ case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite'
             }
             break
             case 'shio': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} tikus\n\nNote : For Detail https://primbon.com/shio.htm`
                 let anu = await primbon.shio(text)
                 if (anu.status == false) return m.reply(anu.message)
@@ -2128,6 +2479,8 @@ case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite'
             break 
 	         
         case 'ringtone': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 		if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} DBS`
         let { ringtone } = require('./lib/scraper')
 		let anu = await ringtone(text)
@@ -2137,6 +2490,8 @@ case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite'
 	    break
 		 
 		case 'juzamma': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 		if (args[0] === 'pdf') {
 		m.reply(mess.wait)
 		kagura.sendMessage(m.chat, {document: {url: 'https://fatiharridho.my.id/database/islam/juz-amma-arab-latin-indonesia.pdf'}, mimetype: 'application/pdf', fileName: 'juz-amma-arab-latin-indonesia.pdf'}, {quoted:m})
@@ -2189,6 +2544,8 @@ Format yang tersedia : pdf, docx, pptx, xlsx`)
                 }
                 break
             case 'setcmd': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.quoted) throw '¡Responde a un sticker!'
                 if (!m.quoted.fileSha256) throw 'SHA256 Erróneo'
                 if (!text) throw `¿Que comando sera?`
@@ -2205,6 +2562,8 @@ Format yang tersedia : pdf, docx, pptx, xlsx`)
             }
             break
             case 'delcmd': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 let hash = m.quoted.fileSha256.toString('base64')
                 if (!hash) throw `None.`
                 if (global.db.data.sticker[hash] && global.db.data.sticker[hash].locked) throw 'You have no permission to delete this sticker command'              
@@ -2213,6 +2572,8 @@ Format yang tersedia : pdf, docx, pptx, xlsx`)
             }
             break
             case 'listcmd': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 let teks = `
 *Lista de Comandos*
 
@@ -2222,6 +2583,7 @@ ${Object.entries(global.db.data.sticker).map(([key, value], index) => `${index +
             }
             break
             case 'lockcmd': {
+	 
                 if (!isCreator) throw mess.owner
                 if (!m.quoted) throw 'Reply Pesan!'
                 if (!m.quoted.fileSha256) throw 'SHA256 Hash Missing'
@@ -2232,6 +2594,8 @@ ${Object.entries(global.db.data.sticker).map(([key, value], index) => `${index +
             }
             break
             case 'addmsg': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!m.quoted) throw 'Menciona el mensaje que quieras guardar en la base de datos.'
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} nombre del archivo`
                 let msgs = global.db.data.database
@@ -2245,6 +2609,8 @@ Ver lista de mensajes con ${prefix}listmsg`)
             }
             break
             case 'getmsg': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} file name\n\n𝖯𝖺𝗋𝖺 𝗏𝖾𝗋 𝗅𝗈𝗌 𝗆𝖾𝗇𝗌𝖺𝗃𝖾𝗌 𝗀𝗎𝖺𝗋𝖽𝖺𝖽𝗈𝗌 𝗎𝗌𝖺 : ${prefix}listmsg`
                 let msgs = global.db.data.database
                 if (!(text.toLowerCase() in msgs)) throw `'${text}' tidak terdaftar di list pesan`
@@ -2252,6 +2618,8 @@ Ver lista de mensajes con ${prefix}listmsg`)
             }
             break
             case 'listmsg': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
 	        let seplit = Object.entries(global.db.data.database).map(([nama, isi]) => { return { nama, ...isi } })
 		let teks = '「 BASE DE DATOS 」\n\n'
@@ -2262,6 +2630,8 @@ Ver lista de mensajes con ${prefix}listmsg`)
 	    }
 	    break
             case 'delmsg': case 'deletemsg': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 	        let msgs = global.db.data.database
 	        if (!(text.toLowerCase() in msgs)) return m.reply(`'${text}' tidak terdaftar didalam list pesan`)
 		delete msgs[text.toLowerCase()]
@@ -2270,18 +2640,22 @@ Ver lista de mensajes con ${prefix}listmsg`)
 	    break
 	     
             case 'public': {
+	 
                 if (!isCreator) throw mess.owner
                 kagura.public = true
                 m.reply('Se ha cambiado al modo público.')
             }
             break
             case 'self': {
+	 
                 if (!isCreator) throw mess.owner
                 kagura.public = false
                 m.reply('Se ha cambiado al modo privado.')
             }
             break
             case 'ping': case 'botstatus': case 'statusbot': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 const used = process.memoryUsage()
                 const cpus = os.cpus().map(cpu => {
                     cpu.total = Object.keys(cpu.times).reduce((last, type) => last + cpu.times[type], 0)
@@ -2329,6 +2703,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
             }
             break
             case 'speedtest': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             m.reply('Testing Speed...')
             let cp = require('child_process')
             let { promisify } = require('util')
@@ -2346,11 +2722,14 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
             }
             break
             case 'owner': case 'creator': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 kagura.sendContact(m.chat, global.owner, m)
             }
             break
              
             case 'setmenu': {
+	 
             if (!isCreator) throw mess.owner
             let setbot = db.data.settings[botNumber]
                if (args[0] === 'templateImage'){
@@ -2395,6 +2774,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
             break
 break
 case 'fiturlist': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
  {
                 let sections = [
                 {
@@ -2425,10 +2806,96 @@ case 'fiturlist': {
             }
             break
 
+case 'mailxxx': {
+	
+	if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
+	m.reply('ML6TEST')
+	}
+	break
+
+case 'ban': {
+	    
+if (!isCreator) return m.reply(mess.owner)
+if (!args[0]) return m.reply(`Select add or del(add to ban, del to unban), For Example: Reply *${prefix}ban add* to the user u want to ban`)
+if (args[1]) {
+orgnye = args[1] + "@s.whatsapp.net"
+} else if (m.quoted) {
+orgnye = m.quoted.sender
+}
+const isBane = banUser.includes(orgnye)
+if (args[0] === "add") {
+if (isBane) return m.reply('User was already banned')
+banUser.push(orgnye)
+m.reply(`Successfully banned the user`)
+} else if (args[0] === "del") {
+if (!isBane) return m.reply('User was already unbanned')
+let delbans = banUser.indexOf(orgnye)
+banUser.splice(delbans, 1)
+m.reply(`Successfully unbanned the user`)
+} else {
+m.reply("Error")
+}
+}
+break
+
+case 'banchat': {
+	 
+ if (!isCreator) throw mess.owner
+if (args[0] === "on") {
+if (isBanChat) return m.reply('*_Este grupo ya ha sido baneado._*')
+banchat.push(from)
+m.reply('*_Este grupo ha sido baneado con exito del bot._*')
+var groupe = await kagura.groupMetadata(from)
+var members = groupe['participants']
+var mems = []
+members.map(async adm => {
+mems.push(adm.id.replace('c.us', 's.whatsapp.net'))
+})
+kagura.sendMessage(from, {text: `\`\`\`「 ⚠️Advertencia⚠️ 」\`\`\`\n\nEl bot ha sido deshabilitado en este grupo, ¡ahora nadie podrá usar el bot en este grupo!`, contextInfo: { mentionedJid : mems }}, {quoted:m})
+} else if (args[0] === "off") {
+if (!isBanChat) return m.reply('*_Este grupo no esta baneado._*')
+let off = banchat.indexOf(from)
+banchat.splice(off, 1)
+m.reply('*_Este grupo ha sido desbaneado con exito del bot._*')
+} else {
+  let buttonsntnsfw = [
+  { buttonId: `${command} on`, buttonText: { displayText: '𝗕𝗮𝗻𝗲𝗮𝗿 𝗚𝗿𝘂𝗽𝗼' }, type: 1 },
+  { buttonId: `${command} off`, buttonText: { displayText: '𝗗𝗲𝘀𝗯𝗮𝗻𝗲𝗮𝗿 𝗚𝗿𝘂𝗽𝗼' }, type: 1 }
+  ]
+  await kagura.sendButtonText(m.chat, buttonsntnsfw, `Seleccione una opción.`, `${global.botname}`, m)
+  }
+  }
+  break
+
 case 'redessociales': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
 	
 
-kagura.sendMessage(m.chat, {text:'────────────────\n𝘾𝙧𝙚𝙖𝙙𝙤𝙧 :\n\n< 𝑰𝒎` 𝑭𝒆𝒍𝒊𝒙𝒙𝒙𝒙𝒙 >\n\n────────────────\n𝘾𝙤𝙡𝙖𝙗𝙤𝙧𝙖𝙙𝙤𝙧𝙚𝙨 :\n\n< 𝑻𝒂𝒅𝒂𝒔𝒉𝒊 >\n< 𝑲𝒉𝒂𝒍𝒐𝒗 >\n< 𝑴𝒊𝒕𝒐 >\n\n────────────────\n𝙂𝙧𝙪𝙥𝙤 𝘿𝙚 𝙒𝙝𝙖𝙩𝙨𝘼𝙥𝙥 :\n\nhttps://chat.whatsapp.com/F8a1wlFtr5z9WY92Wde1zN\n\n────────────────\n\n𝙏𝙝𝙖𝙣𝙠𝙨 𝙏𝙤 : < 𝘽𝙖𝙞𝙡𝙚𝙮𝙨 >\n', "contextInfo": {
+kagura.sendMessage(m.chat, {text:`────────────────
+_*Creador :*_
+
+< 𝑰𝒎 𝑭𝒆𝒍𝒊𝒙𝒙𝒙𝒙𝒙 >
+
+────────────────
+_*Colaboradores :*_
+
+< 𝑻𝒂𝒅𝒂𝒔𝒉𝒊 >
+< 𝑲𝒉𝒂𝒍𝒐𝒗 >
+< 𝑴𝒊𝒕𝒐 >
+
+────────────────
+_*Grupo de WhatsApp :*_
+https://chat.whatsapp.com/F8a1wlFtr5z9WY92Wde1zN
+
+_*Instagram : @im.felix409*_
+
+_*PayPal :*_ https://www.paypal.me/felixcrack409
+────────────────
+
+_*Thanks To : < 𝘽𝙖𝙞𝙡𝙚𝙮𝙨 >*_`, "contextInfo": {
 mimetype: "image/jpeg",
 text: "By FX - BOT",
 "forwardingScore": 1000000000,
@@ -2446,6 +2913,8 @@ sendEphemeral: true,
 break
 
             case 'list': case 'menu': case 'help': case '?': {
+	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
+if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
                 anu = `
 ¡Hola! ${pushname} 👋
 
@@ -2511,21 +2980,16 @@ Bienvenido al menu, mi nombre es ${botname}.
 • #setmenu [option]
 
  ▢ *𝖬𝖾𝗇𝗎 𝖣𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗌*
-• #tiktoknowm [url]
+• #tiktok [url]
 • #tiktokwm [url]
-• #tiktokmp3 [url]
+• #tiktokaudio [url]
+• #mediafire [url]
 • #instagram [url]
-• #twitter [url]
-• #twittermp3 [url]
-• #facebook [url]
-• #pinterestdl [url]
 • #ytmp3 [url]
 • #ytmp4 [url]
 • #getmusic [query]
 • #getvideo [query]
-• #umma [url]
-• #joox [query]
-• #soundcloud [url]
+
 
  ▢ *𝖬𝖾𝗇𝗎 𝖡𝗎𝗌𝗊𝗎𝖾𝖽𝖺*
 • #play [query]
@@ -2537,16 +3001,10 @@ Bienvenido al menu, mi nombre es ${botname}.
 • #wikimedia [query]
 • #ytsearch [query]
 • #ringtone [query]
-• #stalk [option] [query]
 
  ▢ *𝖱𝖺𝗇𝖽𝗈𝗆 𝖬𝖾𝗇𝗎*
 • #coffe
 • #quotesanime
-• #motivasi
-• #dilanquote
-• #bucinquote
-• #katasenja
-• #puisi
 • #couple
 • #anime
 • #waifu
