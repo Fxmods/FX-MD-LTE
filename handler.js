@@ -1022,20 +1022,6 @@ m.reply(`*Lista de Diseños :*\n•> glitch\n•> glow\n•> magma`)
 }
 break
 
-case 'glicttt': {
-if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
-let teds = await thiccysapi.textpro("https://textpro.me/create-impressive-glitch-text-effects-online-1027.html", [text])
-kagura.sendMessage(m.chat, {image:{url:teds}, caption:"Espero sea de tu agrado ☑️"}, {quoted:m})
-}
-break
-
-case 'naranja': {
-if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} text`
-let teds = await thiccysapi.textpro("https://textpro.me/create-a-3d-orange-juice-text-effect-online-1084.html", [text])
-kagura.sendMessage(m.chat, {image:{url:teds}, caption:"Espero sea de tu agrado ☑️"}, {quoted:m})
-}
-break
-
 
 
           case 'setppbot': {
@@ -1878,74 +1864,88 @@ case 'maxpeso': {
             }
             break
 
-case 'tiktokaudio':{
-let { TiktokDownloader } = require('./lib/tiktokdl')
-if (args.length < 1) return m.reply(`*Ejemplo de uso* :\n#tiktok https://vt.tiktok.com/ZSdGcA6MK/?k=1`)
-if (!args[0].includes('tiktok')) return m.reply(`Link is not valid`)
-  m.reply(mess.wait)
-   const musim_rambutan = await TiktokDownloader(`${q}`).catch(e => {
- m.reply('err') 
-} )
-   console.log(musim_rambutan)
-   const musim_duren_a = musim_rambutan.result.nowatermark
-    kagura.sendMessage(m.chat, { audio: { url: musim_duren_a }, mimetype: 'audio/mp4' }, { quoted: m })
-   }
- m.reply(`*Archivo obtenido ☑️*`)
-break
-
+case 'ttdl': case 'tiktok': case 'ttmp4': case 'ttmp3': case 'tiktoknowm': {
  
+if (!isUrl(args[0])) return m.reply(`𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} https://vt.tiktok.com/ZSdDo97dC/`)
+let res = await aiovideodl(args[0])
+if (isUrl(args[0])) {
+texttk = `     *| TIKTOK DOWNLOADER |*
 
-case 'tiktok':{
-let { TiktokDownloader } = require('./lib/tiktokdl')
-if (args.length < 1) return m.reply(`*Ejemplo de uso* :\n#tiktok https://vm.tiktok.com/ZMNMrkGrR/?k=1`)
-if (!args[0].includes('tiktok')) return m.reply(`Link is not valid`)
-  m.reply(mess.wait)
-   const musim_rambutan = await TiktokDownloader(`${q}`).catch(e => {
- m.reply('err') 
-} )
-   console.log(musim_rambutan)
-   const musim_duren_v = musim_rambutan.result.nowatermark
-   kagura.sendMessage(m.chat, { video: { url: musim_duren_v }, caption: "Done!" }, { quoted: m })
-   }
-  m.reply(`*Archivo obtenido ☑️*`)
+📌 *Titulo* : ${res.title}
+🚀 *Tamaño* : ${res.medias[1].formattedSize}
+🪀 *Tipo* : ${res.medias[1].extension ? "video/" + res.medias[1].extension : "undefined"}
+
+_Seleccione si desea sin marca de agua o solo el audio._ `
+let buttons = [
+{buttonId: `ttvd ${args[0]}}`, buttonText: {displayText: '× 𝘞𝘢𝘵𝘦𝘳𝘮𝘢𝘳𝘬'}, type: 1},
+{buttonId: `ttad ${args[0]}`, buttonText: {displayText: '♫ 𝘈𝘶𝘥𝘪𝘰'}, type: 1}
+]
+let buttonMessage = {
+video: {url:res.medias[1].url},
+caption: texttk,
+footer: "© I'm Felixxxxxx ~ TikTok Downloader",
+buttons: buttons,
+headerType: 4,
+contextInfo:{externalAdReply:{
+title:"FX - BOT ~ Tiktok Downloader",
+body:res.title,
+thumbnail: global.visoka,
+mediaType:1,
+mediaUrl: args[0],
+sourceUrl: args[0]
+}}
+}
+kagura.sendMessage(m.chat, buttonMessage, {quoted:m})
+} else {
+m.reply("¡Enlace incorrecto!")
+}
+}
 break
 
-case 'tiktokwm':{
-let { TiktokDownloader } = require('./lib/tiktokdl')
-if (args.length < 1) return m.reply(`*Ejemplo de uso* :\n#tiktok https://vm.tiktok.com/ZMNMrkGrR/?k=1`)
-if (!args[0].includes('tiktok')) return m.reply(`Link is not valid`)
-  m.reply(mess.wait)
-   const musim_rambutan = await TiktokDownloader(`${q}`).catch(e => {
- m.reply('err') 
-} )
-   console.log(musim_rambutan)
-   const musim_duren_v = musim_rambutan.result.watermark
-   kagura.sendMessage(m.chat, { video: { url: musim_duren_v }, caption: "Done!" }, { quoted: m })
-   }
-  m.reply(`*Archivo obtenido ☑️*`)
+case 'ttad': case 'tiktokmp3': {
+let res = await aiovideodl(args[0])
+kagura.sendMessage(m.chat, {audio:{url:res.medias[2].url}, mimetype:"audio/mp4", ptt:true, contextInfo:{externalAdReply:{
+title:"© I'm Felixxxxxx ~ TikTok Downloader",
+body:res.title,
+thumbnail: global.visoka,
+mediaType:1,
+mediaUrl: args[0],
+sourceUrl: args[0]
+}}}, {quoted:m})
+}
 break
 
+case 'ttvd': case 'tiktokwm': {
+let res = await aiovideodl(args[0])
+texttk = `     *| TIKTOK DOWNLOADER |*
 
-case 'mediafire':
-if (args.length < 1) return m.reply('¿Enlace? ')
-let { mediafireDl } = require('./lib/mediafireDl')
-if (!args[0].includes('mediafire')) return m.reply(`Link is not valid`)
-const teks1 = args.join(' ')
-const baby1 = await mediafireDl(teks1)
-const result4 = `
-                     「 *MEDIAFIRE* 」
+📌 *Titulo* : ${res.title}
+🚀 *Tamaño* : ${res.medias[0].formattedSize}
+🪀 *Tipo* : ${res.medias[0].extension ? "video/" + res.medias[0].extension : "undefined"}
 
-▢ Nombre : ${baby1[0].nama}
-▢ Enlace : ${baby1[0].link}
-▢ Peso : ${baby1[0].size}				
-
-📌 Espere un momento, enviando archivo.`
-m.reply(result4)
-kagura.sendMessage(m.chat, { document : { url : baby1[0].link}, fileName : baby1[0].nama, mimetype: baby1[0].mime }, { quoted : m }) 
-m.reply(`*1*`)
+_Para ver el menu seleccioné el boton de abajo._`
+let buttons = [
+{buttonId: `menu`, buttonText: {displayText: '𝘔𝘦𝘯𝘶'}, type: 1}
+]
+let buttonMessage = {
+video: {url:res.medias[0].url},
+caption: texttk,
+footer: "© I'm Felixxxxxx ~ TikTok Downloader",
+buttons: buttons,
+headerType: 4,
+contextInfo:{externalAdReply:{
+title:"FX - BOT ~ Tiktok Downloader",
+body:res.title,
+thumbnail: global.visoka,
+mediaType:1,
+mediaUrl: args[0],
+sourceUrl: args[0]
+}}
+}
+kagura.sendMessage(m.chat, buttonMessage, {quoted:m})
+}
 break
 
- 
 
 case 'cry':case 'kill':case 'hug':case 'pat':case 'lick':case 'kiss':case 'bite':case 'yeet':case 'neko':case 'bully':case 'bonk':case 'wink':case 'poke':case 'nom':case 'slap':case 'smile':case 'wave':case 'awoo':case 'blush':case 'smug':case 'glomp':case 'happy':case 'dance':case 'cringe':case 'highfive':case 'shinobu':case 'megumin':case 'handhold':
 					m.reply(mess.wait)
@@ -2428,28 +2428,7 @@ case 'fiturlist': {
 case 'redessociales': {
 	
 
-kagura.sendMessage(m.chat, {text:`────────────────
-_*Creador :*_
-
-< 𝑰𝒎 𝑭𝒆𝒍𝒊𝒙𝒙𝒙𝒙𝒙 >
-
-────────────────
-_*Colaboradores :*_
-
-< 𝑻𝒂𝒅𝒂𝒔𝒉𝒊 >
-< 𝑲𝒉𝒂𝒍𝒐𝒗 >
-< 𝑴𝒊𝒕𝒐 >
-
-────────────────
-_*Grupo de WhatsApp :*_
-https://chat.whatsapp.com/F8a1wlFtr5z9WY92Wde1zN
-
-_*Instagram : @im.felix409*_
-
-_*PayPal :*_ https://www.paypal.me/felixcrack409
-────────────────
-
-_*Thanks To : < 𝘽𝙖𝙞𝙡𝙚𝙮𝙨 >*_`, "contextInfo": {
+kagura.sendMessage(m.chat, {text:'────────────────\n𝘾𝙧𝙚𝙖𝙙𝙤𝙧 :\n\n< 𝑰𝒎` 𝑭𝒆𝒍𝒊𝒙𝒙𝒙𝒙𝒙 >\n\n────────────────\n𝘾𝙤𝙡𝙖𝙗𝙤𝙧𝙖𝙙𝙤𝙧𝙚𝙨 :\n\n< 𝑻𝒂𝒅𝒂𝒔𝒉𝒊 >\n< 𝑲𝒉𝒂𝒍𝒐𝒗 >\n< 𝑴𝒊𝒕𝒐 >\n\n────────────────\n𝙂𝙧𝙪𝙥𝙤 𝘿𝙚 𝙒𝙝𝙖𝙩𝙨𝘼𝙥𝙥 :\n\nhttps://chat.whatsapp.com/F8a1wlFtr5z9WY92Wde1zN\n\n────────────────\n\n𝙏𝙝𝙖𝙣𝙠𝙨 𝙏𝙤 : < 𝘽𝙖𝙞𝙡𝙚𝙮𝙨 >\n', "contextInfo": {
 mimetype: "image/jpeg",
 text: "By FX - BOT",
 "forwardingScore": 1000000000,
@@ -2532,16 +2511,21 @@ Bienvenido al menu, mi nombre es ${botname}.
 • #setmenu [option]
 
  ▢ *𝖬𝖾𝗇𝗎 𝖣𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗌*
-• #tiktok [url]
+• #tiktoknowm [url]
 • #tiktokwm [url]
-• #tiktokaudio [url]
-• #mediafire [url]
+• #tiktokmp3 [url]
 • #instagram [url]
+• #twitter [url]
+• #twittermp3 [url]
+• #facebook [url]
+• #pinterestdl [url]
 • #ytmp3 [url]
 • #ytmp4 [url]
 • #getmusic [query]
 • #getvideo [query]
-
+• #umma [url]
+• #joox [query]
+• #soundcloud [url]
 
  ▢ *𝖬𝖾𝗇𝗎 𝖡𝗎𝗌𝗊𝗎𝖾𝖽𝖺*
 • #play [query]
@@ -2553,10 +2537,16 @@ Bienvenido al menu, mi nombre es ${botname}.
 • #wikimedia [query]
 • #ytsearch [query]
 • #ringtone [query]
+• #stalk [option] [query]
 
  ▢ *𝖱𝖺𝗇𝖽𝗈𝗆 𝖬𝖾𝗇𝗎*
 • #coffe
 • #quotesanime
+• #motivasi
+• #dilanquote
+• #bucinquote
+• #katasenja
+• #puisi
 • #couple
 • #anime
 • #waifu
