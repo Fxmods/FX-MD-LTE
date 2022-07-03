@@ -60,7 +60,7 @@ module.exports = kagura = async (kagura, m, chatUpdate, store) => {
         const quoted = m.quoted ? m.quoted : m
         const mime = (quoted.msg || quoted).mimetype || ''
         const isMedia = /image|video|sticker|audio/.test(mime)
-	const from = m.chat
+	    const from = m.chat
         // Group
         const groupMetadata = m.isGroup ? await kagura.groupMetadata(m.chat).catch(e => {}) : ''
         const groupName = m.isGroup ? groupMetadata.subject : ''
@@ -68,11 +68,12 @@ module.exports = kagura = async (kagura, m, chatUpdate, store) => {
         const groupAdmins = m.isGroup ? await getGroupAdmins(participants) : ''
     	const isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
     	const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
+
     	const isPremium = isCreator || global.premium.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
-const isAutoStick = _autostick.includes(from)
-	const isAutoSticker = m.isGroup ? autosticker.includes(from) : true
-const isBan = banUser.includes(m.sender)
-const isBanChat = m.isGroup ? banchat.includes(from) : false
+        const isAutoStick = _autostick.includes(from)
+	    const isAutoSticker = m.isGroup ? autosticker.includes(from) : true
+        const isBan = banUser.includes(m.sender)
+        const isBanChat = m.isGroup ? banchat.includes(from) : false
 	
 	try {
             let isNumber = x => typeof x === 'number' && !isNaN(x)
@@ -127,11 +128,34 @@ const isBanChat = m.isGroup ? banchat.includes(from) : false
         }
 
         // Push Message To Console && Auto Read
-        if (m.message) {
-            kagura.sendReadReceipt(m.chat, m.sender, [m.key.id])
-            console.log(chalk.black(chalk.bgWhite('[ MSJ ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> De'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> De'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
+       
+if (m.message) {
+console.log(chalk.black(chalk.bgWhite('[ MESSAGE ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> From'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> In'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
         }
-	
+
+const sendOrder = async(jid, text, orid, img, itcount, title, sellers, tokens, ammount) => {
+const order = generateWAMessageFromContent(jid, proto.Message.fromObject({
+"orderMessage": {
+"orderId": orid, // Change ID
+"thumbnail": img, // Change the Image
+"itemCount": itcount, // Change the Item Count
+"status": "INQUIRY", // Don't Replace
+"surface": "CATALOG", // Don't Replace
+"orderTitle": title, // Change the title
+"message": text, // Change Message
+"sellerJid": sellers, // Change the seller
+"token": tokens, // Change the token
+"totalAmount1000": ammount, // Change the Total Amount
+"totalCurrencyCode": "IDR", // Up to you
+}
+}), { userJid: jid })
+kagura.relayMessage(jid, order.message, { messageId: order.key.id})
+}
+
+	if (m.mtype === 'groupInviteMessage') {
+teks = '• *No se permite agregar al bot a grupos sin permiso del desarrollador.*\n\n```Comuniquese con el desarrollador con el comando #owner```'
+sendOrder(m.chat, teks, "5123658817728409", fs.readFileSync('./media/thumb.jpg'), `${watermark}`, `${botname}`, "916909137213@s.whatsapp.net", "AR7zJt8MasFx2Uir/fdxhkhPGDbswfWrAr2gmoyqNZ/0Wg==", "99999999999999999999")
+}
 	// reset limit every 12 hours
         let cron = require('node-cron')
         cron.schedule('00 12 * * *', () => {
@@ -358,7 +382,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
 	    isWin = true
 	    }
 	    let winner = isSurrender ? room.game.currentTurn : room.game.winner
-	    let str = `Room ID: ${room.id}
+	    let str = `*ID de la sala : ${room.id}*
 
 ${arr.slice(0, 3).join('')}
 ${arr.slice(3, 6).join('')}
@@ -460,7 +484,7 @@ klik https://wa.me/${botNumber.split`@`[0]}`, m, { mentions: [roof.p, roof.p2] }
             let reason = user.afkReason || ''
             m.reply(`
 Jangan tag dia!
-Dia sedang AFK ${reason ? 'dengan alasan ' + reason : 'tanpa alasan'}
+Dia sedang AFK ${reason ? 'dengan Motivo ' + reason : 'tanpa Motivo'}
 Selama ${clockString(new Date - afkTime)}
 `.trim())
         }
@@ -475,6 +499,8 @@ Selama ${clockString(new Date - user.afkTime)}
             user.afkReason = ''
         }
 	    
+	 
+	
         switch(command) {
 	    case 'afk': {
 	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
@@ -596,341 +622,6 @@ if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')
             }
             break
 
-case 'mn1': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(` ❏ *Group Menu*
- › #linkgroup
- › #ephemeral [option]
- › #setppgc [image]
- › #setname [text]
- › #setdesc [text]
- › #group [option]
- › #editinfo [option]
- › #add @user
- › #kick @user
- › #hidetag [text]
- › #tagall [text]
- › #antilink [on/off]
- › #mute [on/off]
- › #promote @user
- › #demote @user
- › #vote [text]
- › #devote
- › #upvote
- › #cekvote
- › #hapusvote`)
-}
-break
-case 'mn2': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Main Menu*
- › #ping
- › #owner
- › #menu
- › #help
- › #delete
- › #infochat
- › #quoted
- › #listpc
- › #listgc
- › #listonline
- › #speedtest`)
-}
-break
-case 'mn3': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Owner Menu*
- › #react [emoji]
- › #chat [option]
- › #join [link]
- › #leave
- › #block @user
- › #unblock @user
- › #bcgroup [text]
- › #bcall [text]
- › #setppbot [image]
- › #setexif
- › #setmenu [option]`)
-}
-break
-case 'mn4': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Webzone Menu*
- › #playstore
- › #gsmarena
- › #jadwalbioskop
- › #nowplayingbioskop
- › #aminio
- › #wattpad
- › #webtoons
- › #drakor`)
-}
-break
-case 'mn5': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Downloader Menu*
- › #tiktoknowm [url]
- › #tiktokwm [url]
- › #tiktokmp3 [url]
- › #instagram [url]
- › #twitter [url]
- › #twittermp3 [url]
- › #facebook [url]
- › #pinterestdl [url]
- › #ytmp3 [url]
- › #ytmp4 [url]
- › #getmusic [query]
- › #getvideo [query]
- › #umma [url]
- › #joox [query]
- › #soundcloud [url]`)
-}
-break
-case 'mn6': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Search Menu*
- › #play [query]
- › #yts [query]
- › #google [query]
- › #gimage [query]
- › #pinterest [query]
- › #wallpaper [query]
- › #wikimedia [query]
- › #ytsearch [query]
- › #ringtone [query]
- › #stalk [option] [query]`)
-}
-break
-case 'mn7': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Random Menu*
- › #coffe
- › #quotesanime
- › #motivasi
- › #dilanquote
- › #bucinquote
- › #katasenja
- › #puisi
- › #couple
- › #anime
- › #waifu
- › #husbu
- › #neko
- › #shinobu
- › #waifus (nsfw)
- › #nekos (nsfw)
- › #trap (nsfw)
- › #blowjob (nsfw)`)
-}
-break
-case 'mn8': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Text Pro Menu*
- › #3dchristmas
- › #3ddeepsea
- › #americanflag
- › #3dscifi
- › #3drainbow
- › #3dwaterpipe
- › #halloweenskeleton
- › #sketch
- › #bluecircuit
- › #space
- › #metallic
- › #fiction
- › #greenhorror
- › #transformer
- › #berry
- › #thunder
- › #magma
- › #3dcrackedstone
- › #3dneonlight
- › #impressiveglitch
- › #naturalleaves
- › #fireworksparkle
- › #matrix
- › #dropwater
- › #harrypotter
- › #foggywindow
- › #neondevils
- › #christmasholiday
- › #3dgradient
- › #blackpink
- › #gluetext`)
-}
-break
-case 'mn9': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Photo Oxy Menu*
- › #shadow
- › #romantic
- › #smoke
- › #burnpapper
- › #naruto
- › #lovemsg
- › #grassmsg
- › #lovetext
- › #coffecup
- › #butterfly
- › #harrypotter
- › #retrolol`)
-}
-break
-case 'mn10': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Ephoto Menu*
- › #ffcover
- › #crossfire
- › #galaxy
- › #glass
- › #neon
- › #beach
- › #blackpink
- › #igcertificate
- › #ytcertificate`)
-}
-break
-case 'mn11': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Fun Menu*
- › #simih
- › #halah
- › #hilih
- › #huluh
- › #heleh
- › #holoh
- › #ship
- › #jodohku
- › #delttt
- › #tictactoe
- › #family100
- › #tebak [option]
- › #math [mode]
- › #suitpvp [@tag]`)
-}
-break
-case 'mn12': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Primbon Menu*
- › #nomorhoki
- › #artimimpi
- › #artinama
- › #ramaljodoh
- › #ramaljodohbali
- › #suamiistri
- › #ramalcinta
- › #cocoknama
- › #pasangan
- › #shipnikah
- › #sifatusaha
- › #rezeki
- › #pekerjaan
- › #nasib
- › #penyakit
- › #tarot
- › #fengshui
- › #haribaik
- › #harisangar
- › #harisial
- › #nagahari
- › #arahrezeki
- › #peruntungan
- › #weton
- › #karakter
- › #keberuntungan
- › #memancing
- › #masasubur
- › #zodiak
- › #shio`)
-}
-break
-case 'mn13': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Convert Menu*
- › #attp
- › #ttp
- › #toimage
- › #removebg
- › #sticker
- › #emojimix
- › #emojimix2
- › #tovideo
- › #togif
- › #tourl
- › #tovn
- › #tomp3
- › #toaudio
- › #ebinary
- › #dbinary
- › #styletext
- › #smeme`)
-}
-break
-case 'mn14': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Database Menu*
- › #setcmd
- › #listcmd
- › #delcmd
- › #lockcmd
- › #addmsg
- › #listmsg
- › #getmsg
- › #delmsg`)
-}
-break
-case 'mn15': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Anonymous Menu*
- › #anonymous
- › #start
- › #next
- › #keluar`)
-}
-break
-case 'mn16': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Islamic Menu*
- › #iqra
- › #hadist
- › #alquran
- › #juzamma
- › #tafsirsurah`)
-}
-break
-case 'mn17': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-m.reply(`  ❏ *Voice Changer*
- › #bass
- › #blown
- › #deep
- › #earrape
- › #fast
- › #fat
- › #nightcore
- › #reverse
- › #robot
- › #slow
- › #tupai`)
-}
-break
             case 'chat': {
 	 
                 if (!isCreator) throw mess.owner
@@ -1210,35 +901,35 @@ if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')
 	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
 if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!m.isGroup) throw mess.group
-            if (m.chat in vote) throw `_Masih ada vote di chat ini!_\n\n*${prefix}hapusvote* - untuk menghapus vote`
-            if (!text) throw `Masukkan Alasan Melakukan Vote, 𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈: *${prefix + command} Owner Ganteng*`
-            m.reply(`Vote dimulai!\n\n*${prefix}upvote* - untuk ya\n*${prefix}devote* - untuk tidak\n*${prefix}cekvote* - untuk mengecek vote\n*${prefix}hapusvote* - untuk menghapus vote`)
+            if (m.chat in vote) throw ` _*Aún no se finaliza la sesión de votos anterior.*_ \n\n• #hapusvote - para eliminar la sesión.`
+            if (!text) throw `_*Ingrese un motivo de la votación.*_ \n\n• *Ejemplo* : ${prefix + command} ¿Es bueno el bot?`
+            m.reply(`_*¡Comienza la votación!*_ \n\n*${prefix}upvote* - a favor.\n*${prefix}devote* - en contra.\n*${prefix}checkvotes* - para verificar los votos.\n*${prefix}delvote* - para eliminar los votos.`)
             vote[m.chat] = [q, [], []]
             await sleep(1000)
             upvote = vote[m.chat][1]
             devote = vote[m.chat][2]
             teks_vote = `*「 VOTE 」*
 
-*Alasan:* ${vote[m.chat][0]}
+*Motivo:* ${vote[m.chat][0]}
 
-┌〔 UPVOTE 〕
+┌〔 A FAVOR 〕
 │ 
 ├ Total: ${vote[m.chat][1].length}
 │
 │ 
 └────
 
-┌〔 DEVOTE 〕
+┌〔 EN CONTRA 〕
 │ 
 ├ Total: ${vote[m.chat][2].length}
 │
 │ 
 └────
 
-*${prefix}hapusvote* - untuk menghapus vote`
+*${prefix}delvote* - para eliminar los votos.`
 let buttonsVote = [
-  {buttonId: `${prefix}upvote`, buttonText: {displayText: '𝚄𝙿𝚅𝙾𝚃𝙴'}, type: 1},
-  {buttonId: `${prefix}devote`, buttonText: {displayText: '𝙳𝙴𝚅𝙾𝚃𝙴'}, type: 1}
+  {buttonId: `${prefix}upvote`, buttonText: {displayText: '𝖴𝖯𝖵𝖮𝖳𝖤'}, type: 1},
+  {buttonId: `${prefix}devote`, buttonText: {displayText: '𝖣𝖤𝖵𝖮𝖳𝖤'}, type: 1}
 ]
 
             let buttonMessageVote = {
@@ -1254,34 +945,34 @@ let buttonsVote = [
 	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
 if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!m.isGroup) throw mess.group
-            if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
+            if (!(m.chat in vote)) throw `_*No se ha iniciado una sesión de votación en este grupo.*_\n\n*${prefix}vote* - para crear una sesión.`
             isVote = vote[m.chat][1].concat(vote[m.chat][2])
             wasVote = isVote.includes(m.sender)
-            if (wasVote) throw 'Kamu Sudah Vote'
+            if (wasVote) throw '```Ya has votado, no puedes votar dos veces.```'
             vote[m.chat][1].push(m.sender)
             menvote = vote[m.chat][1].concat(vote[m.chat][2])
             teks_vote = `*「 VOTE 」*
 
-*Alasan:* ${vote[m.chat][0]}
+*Motivo:* ${vote[m.chat][0]}
 
-┌〔 UPVOTE 〕
+┌〔 A FAVOR 〕
 │ 
 ├ Total: ${vote[m.chat][1].length}
 ${vote[m.chat][1].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 │ 
 └────
 
-┌〔 DEVOTE 〕
+┌〔 EN CONTRA 〕
 │ 
 ├ Total: ${vote[m.chat][2].length}
 ${vote[m.chat][2].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 │ 
 └────
 
-*${prefix}hapusvote* - untuk menghapus vote`
+*${prefix}delvote* - para eliminar los votos.`
             let buttonsUpvote = [
-              {buttonId: `${prefix}upvote`, buttonText: {displayText: '𝚄𝙿𝚅𝙾𝚃𝙴'}, type: 1},
-              {buttonId: `${prefix}devote`, buttonText: {displayText: '𝙳𝙴𝚅𝙾𝚃𝙴'}, type: 1}
+              {buttonId: `${prefix}upvote`, buttonText: {displayText: '𝖴𝖯𝖵𝖮𝖳𝖤'}, type: 1},
+              {buttonId: `${prefix}devote`, buttonText: {displayText: '𝖣𝖤𝖵𝖮𝖳𝖤'}, type: 1}
             ]
 
             let buttonMessageUpvote = {
@@ -1298,34 +989,34 @@ ${vote[m.chat][2].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
 if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!m.isGroup) throw mess.group
-            if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
+            if (!(m.chat in vote)) throw `_*No se ha iniciado una sesión de votación en este grupo.*_\n\n*${prefix}vote* - para crear una sesión.`
             isVote = vote[m.chat][1].concat(vote[m.chat][2])
             wasVote = isVote.includes(m.sender)
-            if (wasVote) throw 'Kamu Sudah Vote'
+            if (wasVote) throw '```Ya has votado, no puedes votar dos veces.```'
             vote[m.chat][2].push(m.sender)
             menvote = vote[m.chat][1].concat(vote[m.chat][2])
             teks_vote = `*「 VOTE 」*
 
-*Alasan:* ${vote[m.chat][0]}
+*Motivo:* ${vote[m.chat][0]}
 
-┌〔 UPVOTE 〕
+┌〔 A FAVOR 〕
 │ 
 ├ Total: ${vote[m.chat][1].length}
 ${vote[m.chat][1].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 │ 
 └────
 
-┌〔 DEVOTE 〕
+┌〔 EN CONTRA 〕
 │ 
 ├ Total: ${vote[m.chat][2].length}
 ${vote[m.chat][2].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 │ 
 └────
 
-*${prefix}hapusvote* - untuk menghapus vote`
+*${prefix}delvote* - para eliminar los votos.`
             let buttonsDevote = [
-              {buttonId: `${prefix}upvote`, buttonText: {displayText: '𝚄𝙿𝚅𝙾𝚃𝙴'}, type: 1},
-              {buttonId: `${prefix}devote`, buttonText: {displayText: '𝙳𝙴𝚅𝙾𝚃𝙴'}, type: 1}
+              {buttonId: `${prefix}upvote`, buttonText: {displayText: '𝖴𝖯𝖵𝖮𝖳𝖤'}, type: 1},
+              {buttonId: `${prefix}devote`, buttonText: {displayText: '𝖣𝖤𝖵𝖮𝖳𝖤'}, type: 1}
             ]
 
             let buttonMessageDevote = {
@@ -1339,28 +1030,28 @@ ${vote[m.chat][2].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 	}
             break
                  
-case 'cekvote':
+case 'checkvotes':
 if (!m.isGroup) throw mess.group
-if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
+if (!(m.chat in vote)) throw `_*No se ha iniciado una sesión de votación en este grupo.*_\n\n*${prefix}vote* - para crear una sesión.`
 teks_vote = `*「 VOTE 」*
 
-*Alasan:* ${vote[m.chat][0]}
+*Motivo:* ${vote[m.chat][0]}
 
-┌〔 UPVOTE 〕
+┌〔 A FAVOR 〕
 │ 
 ├ Total: ${upvote.length}
 ${vote[m.chat][1].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 │ 
 └────
 
-┌〔 DEVOTE 〕
+┌〔 EN CONTRA 〕
 │ 
 ├ Total: ${devote.length}
 ${vote[m.chat][2].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 │ 
 └────
 
-*${prefix}hapusvote* - untuk menghapus vote
+*${prefix}delvote* - para eliminar los votos.
 
 
 ©${kagura.user.id}
@@ -1371,9 +1062,9 @@ break
 	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
 if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
             if (!m.isGroup) throw mess.group
-            if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
+            if (!(m.chat in vote)) throw `_*No se ha iniciado una sesión de votación en este grupo.*_\n\n*${prefix}vote* - para crear una sesión.`
             delete vote[m.chat]
-            m.reply('Berhasil Menghapus Sesi Vote Di Grup Ini')
+            m.reply('*La sesión se ha eliminado con éxito de este grupo.*')
 	    }
             break
                case 'group': case 'grupo': case 'grup': {
@@ -1620,7 +1311,7 @@ if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')
                                     id: 'menu'
                                 }
                             }]
-                      let txt = `「 𝗔𝗻𝘂𝗻𝗰𝗶𝗼 𝗗𝗲𝗹 𝗕𝗼𝘁 」\n\n${text}`
+                      let txt = `「 𝗔𝗻𝘂𝗻𝗰𝗶?? 𝗗𝗲𝗹 𝗕𝗼𝘁 」\n\n${text}`
                       kagura.send5ButImg(i, txt, kagura.user.name, global.thumb, btn)
                     }
                 m.reply(`Se ha enviado correctam el anuncio a ${anu.length} grupos.`)
@@ -2284,7 +1975,6 @@ m.reply(mess.wait)
 					})
 					break
 
-            
 	    case 'couple': case 'ppcp': {
 	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
 if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
@@ -2431,52 +2121,8 @@ if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')
             }
             break
             
-            case 'zodiak': case 'zodiac': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix+ command} 7 7 2005`
-                let zodiak = [
-                    ["capricorn", new Date(1970, 0, 1)],
-                    ["aquarius", new Date(1970, 0, 20)],
-                    ["pisces", new Date(1970, 1, 19)],
-                    ["aries", new Date(1970, 2, 21)],
-                    ["taurus", new Date(1970, 3, 21)],
-                    ["gemini", new Date(1970, 4, 21)],
-                    ["cancer", new Date(1970, 5, 22)],
-                    ["leo", new Date(1970, 6, 23)],
-                    ["virgo", new Date(1970, 7, 23)],
-                    ["libra", new Date(1970, 8, 23)],
-                    ["scorpio", new Date(1970, 9, 23)],
-                    ["sagittarius", new Date(1970, 10, 22)],
-                    ["capricorn", new Date(1970, 11, 22)]
-                ].reverse()
-
-                function getZodiac(month, day) {
-                    let d = new Date(1970, month - 1, day)
-                    return zodiak.find(([_,_d]) => d >= _d)[0]
-                }
-                let date = new Date(text)
-                if (date == 'Invalid Date') throw date
-                let d = new Date()
-                let [tahun, bulan, tanggal] = [d.getFullYear(), d.getMonth() + 1, d.getDate()]
-                let birth = [date.getFullYear(), date.getMonth() + 1, date.getDate()]
-
-                let zodiac = await getZodiac(birth[1], birth[2])
-                
-                let anu = await primbon.zodiak(zodiac)
-                if (anu.status == false) return m.reply(anu.message)
-                kagura.sendText(m.chat, `⭔ *Zodiak :* ${anu.message.zodiak}\n⭔ *Nomor :* ${anu.message.nomor_keberuntungan}\n⭔ *Aroma :* ${anu.message.aroma_keberuntungan}\n⭔ *Planet :* ${anu.message.planet_yang_mengitari}\n⭔ *Bunga :* ${anu.message.bunga_keberuntungan}\n⭔ *Warna :* ${anu.message.warna_keberuntungan}\n⭔ *Batu :* ${anu.message.batu_keberuntungan}\n⭔ *Elemen :* ${anu.message.elemen_keberuntungan}\n⭔ *Pasangan Zodiak :* ${anu.message.pasangan_zodiak}\n⭔ *Catatan :* ${anu.message.catatan}`, m)
-            }
-            break
-            case 'shio': {
-	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
-if (isBan) return m.reply('_*Lo siento, estas bloqueado del bot.*_ ')		
-                if (!text) throw `𝖤𝗃𝖾𝗆𝗉𝗅𝗈 𝖽𝖾 𝗎𝗌𝗈 : ${prefix + command} tikus\n\nNote : For Detail https://primbon.com/shio.htm`
-                let anu = await primbon.shio(text)
-                if (anu.status == false) return m.reply(anu.message)
-                kagura.sendText(m.chat, `⭔ *Hasil :* ${anu.message}`, m)
-            }
-            break 
+            
+             
 	         
         case 'ringtone': {
 	if (isBanChat) return m.reply('_*Lo siento, el bot esta bloqueado en este grupo.*_ ')
@@ -2963,8 +2609,8 @@ Bienvenido al menu, mi nombre es ${botname}.
 • #vote [text]
 • #devote
 • #upvote
-• #cekvote
-• #hapusvote
+• #checkvote
+• #delvote
  
  ▢ *𝖣𝗎𝖾𝗇̃𝗈𝗌 & 𝖣𝖾𝗌𝖺𝗋𝗋𝖺𝗅𝗅𝖺𝖽𝗈𝗋𝖾𝗌*
 • #react [emoji]

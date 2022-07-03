@@ -130,6 +130,8 @@ async function startkagura() {
     kagura.ev.on('group-participants.update', async (anu) => {
         console.log(anu)
         try {
+        	
+       
             let metadata = await kagura.groupMetadata(anu.id)
             let participants = anu.participants
             for (let num of participants) {
