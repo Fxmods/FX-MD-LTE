@@ -18,6 +18,7 @@ global.botname = '🚀 ᭄𝐹𝑋 𝐵𝑜𝑡'
 global.ownername = '✨ 𝘐𝘮 𝘍𝘦𝘭𝘪𝘹 ✨'
 global.packname = '✨ 𝘐𝘮 𝘍𝘦𝘭𝘪𝘹 ✨'
 global.author = 'FX - BOT'
+global.watermark = "Felixxxx" //ur watermark
 global.sessionName = 'session'
 global.prefa = ['','!','.','🐦','🐤','🗿']
 global.sp = '⭔'
