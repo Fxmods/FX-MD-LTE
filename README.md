@@ -2,7 +2,7 @@
 ## Beta Multi Device 
 
 <p align="center">
-<img src="https://telegra.ph/file/33c0b09ce1f21c91f8f90.mp4" alt="FX - BOT" width="200"/>
+<img src="https://telegra.ph/file/235a0e5ddfa5f45f5d913.jpg" alt="FX - BOT" width="200"/>
 
 <p align="center">
     <a href="https://Fxmods.github.io">
@@ -48,7 +48,7 @@ Click the deploy icon below !
 > npm start
 ```
 
-# My Sosial
+# My Social 
 - [Grupo de WhatsApp](https://chat.whatsapp.com/J6GuXns23L9IzgrUqWfUj7)
 - [Grupo de WhatsApp](https://chat.whatsapp.com/F8a1wlFtr5z9WY92Wde1zN)
 - [Instagram](https://instagram.com/im.felix409)
