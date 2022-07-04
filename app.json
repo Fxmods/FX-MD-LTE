@@ -3,5 +3,22 @@
 	"description": "Bot de WhatsApp con Baileys-md",
 	"repository": "https://github.com/Fxmods/FX-MD-LTE",
 	"logo": "https://telegra.ph/file/235a0e5ddfa5f45f5d913.jpg",
-	"keywords": ["multi-device"]
+	"keywords": ["nodejs", "bot", "whatsapp bot", "whatsapp automation", "multi device"],
+    "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+    },
+    {
+      "url": "https://github.com/clhuang/heroku-buildpack-webp-binaries.git"
+    }
+  ],
+   "formation": {
+        "worker": {
+            "quantity": 1,
+            "size": "free"
+        }
+    }
 }
