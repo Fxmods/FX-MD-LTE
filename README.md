@@ -2,13 +2,13 @@
 ## Beta Multi Device 
 
 <p align="center">
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGJDcHPHsij7anNGZCHUw3xdzpsjSOWm17d_U7rFrXxpoxESk1tEbwJ_Zk&s=10" alt="LEXXY BOT" width="200"/>
+<img src="https://telegra.ph/file/33c0b09ce1f21c91f8f90.mp4" alt="FX - BOT" width="200"/>
 
 <p align="center">
-    <a href="https://Lexxy24.github.io">
+    <a href="https://Fxmods.github.io">
         <img
-            src="https://readme-typing-svg.herokuapp.com?size=15&width=280&lines=Created+By+Lexxy+Official+🙏"
-            alt="YT Lexxy Official"
+            src="https://readme-typing-svg.herokuapp.com?size=15&width=280&lines=Created+By+FXTeam+Official+🙏"
+            alt="YT Felixxxx Official"
         />
     </a>
 </p>
@@ -17,7 +17,7 @@
 
 Click the deploy icon below !
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Lexxy24/BOTMD)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Fxmods/FX-MD-LTE)
 
 ```bash
  > heroku/nodejs
@@ -34,7 +34,7 @@ Click the deploy icon below !
 > pkg install ffmpeg
 > pkg install yarn
 > termux-setup-storage
-> git clone https://github.com/Lexxy24/BOTMD.git
+> git clone https://github.com/Fxmods/FX-MD-LTE.git
 > cd BOTMD
 > yarn
 > npm start
@@ -42,15 +42,15 @@ Click the deploy icon below !
 
 ## RDP/VPS USER
 ```bash 
-> git clone https://github.com/Lexxy24/BOTMD.git
+> git clone https://github.com/Fxmods/FX-MD-LTE.git
 > cd BOTMD
 > npm install
 > npm start
 ```
 
 # My Sosial
-- [Group Bot Wa 1](https://chat.whatsapp.com/CT5mUKSNRmMB3yuNfjGPso)
-- [Group Bot Wa 2](https://chat.whatsapp.com/E3zewfxrc5pKE6Rzb3BuqG)
-- [Group Bot Wa 3](https://chat.whatsapp.com/EDYV3OK6wHaDAb6J1iMnUa)
-- [YouTube ](https://youtube.com/c/LEX4YOUU)
-- [Whatsapp ](https://wa.me/6285789004732)
+- [Grupo de WhatsApp](https://chat.whatsapp.com/J6GuXns23L9IzgrUqWfUj7)
+- [Grupo de WhatsApp](https://chat.whatsapp.com/F8a1wlFtr5z9WY92Wde1zN)
+- [Instagram](https://instagram.com/im.felix409)
+- [YouTube ](https://youtube.com/c/Felixcrack409)
+- [Whatsapp ](https://wa.me/18138999999)
