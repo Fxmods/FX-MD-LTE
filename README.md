@@ -35,7 +35,7 @@ Click the deploy icon below !
 > pkg install yarn
 > termux-setup-storage
 > git clone https://github.com/Fxmods/FX-MD-LTE.git
-> cd BOTMD
+> cd FX-MD-LTE
 > yarn
 > npm start
 ```
@@ -43,7 +43,7 @@ Click the deploy icon below !
 ## RDP/VPS USER
 ```bash 
 > git clone https://github.com/Fxmods/FX-MD-LTE.git
-> cd BOTMD
+> cd FX-MD-LTE
 > npm install
 > npm start
 ```
