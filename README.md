@@ -38,6 +38,9 @@ Click the deploy icon below !
 > cd FX-MD-LTE
 > yarn
 > npm start
+
+Si no quieres que se apague usa bash start.sh
+
 ```
 
 ## RDP/VPS USER
