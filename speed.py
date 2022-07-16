@@ -267,7 +267,7 @@ else:
             if i:
                 write(sep)
             write(arg)
-        write(end)
+        write(end) 
 
 # Exception "constants" to support Python 2 through Python 3
 try:
