@@ -1,12 +1,12 @@
 {
-	"name": "FX-BOT",
+	"name": "꧁ʚ𝔾𝕠𝕜𝕦❖𝔹𝕆𝕋ɞ꧂",
 	"description": "Bot de WhatsApp con Baileys-md",
 	"repository": "https://github.com/Fxmods/FX-MD-LTE",
 	"logo": "https://telegra.ph/file/235a0e5ddfa5f45f5d913.jpg",
 	"keywords": ["nodejs", "bot", "whatsapp bot", "whatsapp automation", "multi device"],
     "buildpacks": [
     {
-      "url": "heroku/nodejs"
+      "url": "꧁ʚ𝔾𝕠𝕜𝕦❖𝔹𝕆𝕋ɞ꧂/⊰𝚐𝚘𝚔𝚞༒𝚋𝚘𝚝"
     },
     {
       "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
